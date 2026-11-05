@@ -4,6 +4,22 @@
 
 Формат раздела строгий: заголовок `## ГГГГ-ММ-ДД | Рилс: название`, строки `video:` и `cover:`, подпись в блоке ```text```. Ссылки привязаны к SHA коммита. Опубликованные рилсы не удалять: по ним монтажёр следит, чтобы темы не повторялись, а SMM-агент — чтобы не опубликовать дважды (сверка по первой строке подписи).
 
+## 2026-11-05 | Рилс: Знакомьтесь, Deploy Studio (интро аккаунта)
+
+status: опубликовано вручную по просьбе Бато (media id 18154418845542301)
+video: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@35e2deaea281da63c382c489a72c8509e3e8c954/public/reels/reel5-intro-s-trekom.mp4
+cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@35e2deaea281da63c382c489a72c8509e3e8c954/public/reels/reel5-intro-akkaunta-cover.jpg
+
+```text
+Знакомьтесь: Deploy Studio 👋
+
+Делаем сайты с онлайн-записью для детейлинга, массажа, барбершопов и бьюти-студий. Клиент записывается сам, а вы получаете уведомление в Telegram.
+
+Напишите ДЕМО в комментариях — покажем, как это будет выглядеть для вашей студии 📩
+
+#онлайнзапись #сайтдлябизнеса #улануде
+```
+
 ## 2026-11-07 | Рилс: Сайт с онлайн-записью
 
 video: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@739da1183663a68c0794b0d64221fb3c438b72cf/public/reels/reel1-sait-za-vecher.mp4
