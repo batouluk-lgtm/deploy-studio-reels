@@ -8,11 +8,31 @@ from playwright.sync_api import sync_playwright
 LIB = os.path.dirname(os.path.abspath(__file__))
 FPS = 30
 
+_server = None
+
+def serve(root):
+    """Serve `root` over http on a free port (needed when a reel embeds a site in a same-origin iframe)."""
+    global _server
+    import http.server, threading, functools
+    h = functools.partial(http.server.SimpleHTTPRequestHandler, directory=root)
+    h.log_message = lambda *a, **k: None
+    _server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), h)
+    threading.Thread(target=_server.serve_forever, daemon=True).start()
+    return _server.server_address[1]
+
 def open_page(p, html):
     b = p.chromium.launch(executable_path="/usr/bin/google-chrome", args=["--force-color-profile=srgb"])
     pg = b.new_page(viewport={"width": 1080, "height": 1920}, device_scale_factor=1)
-    pg.goto("file://" + os.path.abspath(html))
+    # Block anything not local (e.g. Google Fonts in embedded sites): the sandbox has no network.
+    pg.route("**/*", lambda r: r.continue_() if r.request.url.startswith(("file:", "http://127.0.0.1", "data:")) else r.abort())
+    if os.environ.get("SERVE") == "1":
+        root = os.path.dirname(os.path.abspath(html))
+        pg.goto(f"http://127.0.0.1:{serve(root)}/{os.path.basename(html)}")
+    else:
+        pg.goto("file://" + os.path.abspath(html))
     pg.evaluate("document.fonts.ready")
+    # reels with embedded pages set window.READY = false until they are ready
+    pg.wait_for_function("window.READY !== false", timeout=30000)
     return b, pg
 
 def stills(html, ts):
