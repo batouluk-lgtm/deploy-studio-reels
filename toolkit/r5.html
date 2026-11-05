@@ -1,0 +1,173 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Ролик 5 — интро аккаунта</title>
+<link rel="stylesheet" href="lib/ds.css">
+<style>
+#light{position:absolute;inset:0;background:#E7E7E3}
+#dark{position:absolute;inset:0;background:#0B0C0F;opacity:0}
+#limebg{position:absolute;inset:0;background:var(--lime);transform:translateX(100%)}
+.ctr{position:absolute;left:60px;right:60px;top:0;text-align:center;color:#111}
+.bw{display:inline-block;margin:0 .12em;will-change:filter,opacity,transform}
+.mk{background:var(--lime);border-radius:16px;padding:0 .22em .04em;color:#0F1115;white-space:nowrap}
+#mark{position:absolute;left:540px;top:900px;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:34px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-family:"Inter Display";font-weight:900;font-size:66px;color:var(--ink)}
+#t1{top:880px;font-family:"Inter Display";font-weight:800;font-size:96px;letter-spacing:-.04em}
+#roll{position:absolute;left:0;right:0;top:820px;height:300px;overflow:visible}
+.rw{position:absolute;left:0;right:0;text-align:center;font-family:"Inter Display";font-weight:800;font-size:110px;letter-spacing:-.04em;color:#111}
+#t3{top:770px;font-family:"Inter Display";font-weight:800;font-size:84px;line-height:1.08;letter-spacing:-.035em}
+#card{position:absolute;left:150px;top:690px;width:780px;height:470px;border-radius:44px;background:#0B0C0F;color:#F4F4F0;padding:44px 46px;transform-origin:50% 50%;box-shadow:0 40px 100px rgba(0,0,0,.25)}
+#card .nm{text-align:center;font-size:40px;font-weight:700;margin-bottom:34px}
+#card .row{display:flex;align-items:center;gap:34px}
+.av{width:170px;height:170px;border-radius:50%;background:#F4F4F0;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.av .lg{width:112px;height:112px;border-radius:30px;font-size:66px;font-weight:900}
+#card .who{font-size:32px;font-weight:700;margin-bottom:8px}
+#card .bio{font-size:28px;color:#A9AFBA;min-height:40px}
+#card .bio b{color:var(--lime);font-weight:600}
+#card .btns{display:flex;gap:20px;margin-top:40px}
+#card .b1,#card .b2{flex:1;height:84px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700}
+#card .b1{background:var(--lime);color:var(--ink)}
+#card .b2{background:#22262E;color:#F4F4F0}
+#pill{position:absolute;left:540px;top:960px;height:96px;margin-top:-48px;border-radius:26px;background:var(--lime);color:var(--ink);font-size:40px;font-weight:700;display:flex;align-items:center;overflow:hidden;white-space:nowrap;opacity:0}
+#pill span{padding:0 40px 0 120px}
+#pav{position:absolute;left:0;top:960px;width:124px;height:124px;margin:-62px 0 0 -62px;opacity:0}
+#pav .av{width:124px;height:124px}
+#pav .lg{width:80px;height:80px;border-radius:22px;font-size:46px}
+#fin{position:absolute;left:0;right:0;top:860px;text-align:center;color:var(--ink);opacity:0}
+#fin .h{font-family:"Inter Display";font-weight:900;font-size:96px;letter-spacing:-.04em}
+#fin .c{margin-top:36px;font-size:46px;font-weight:700}
+#fin .c b{background:var(--ink);color:var(--lime);border-radius:16px;padding:4px 18px}
+#tapc{position:absolute;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;background:rgba(255,255,255,.3);border:3px solid rgba(255,255,255,.9);opacity:0;z-index:20}
+</style></head><body><div class="stage">
+<div id="light"></div><div id="dark"></div><div id="limebg"></div>
+<div id="mark">D</div>
+<div class="ctr" id="t1"><span class="bw" id="a0">Новый</span><span class="bw mk" id="a1">аккаунт</span></div>
+<div id="roll"></div>
+<div class="ctr" id="t3"></div>
+<div id="card"><div class="nm">deploy_studio03</div>
+  <div class="row"><div class="av"><div class="lg">D</div></div>
+   <div><div class="who">Deploy Studio</div><div class="bio" id="bio"></div></div></div>
+  <div class="btns"><div class="b1" id="fb">Подписаться</div><div class="b2">Сообщение</div></div></div>
+<div id="tapc"></div>
+<div id="pill"><span>deploy_studio03</span></div>
+<div id="pav"><div class="av"><div class="lg">D</div></div></div>
+<div id="fin"><div class="h">@deploy_studio03</div><div class="c">Напиши <b>ДЕМО</b> в комментариях</div></div>
+</div>
+<script src="lib/ds.js"></script>
+<script>
+window.DUR = 12.5; window.BPM = 120;
+window.MUSIC = { drums_from: 4.5, drums_to: 12.5, fade_out: .6 };
+const ROLL = ['Детейлинг', 'Массаж', 'Барберы', 'Бьюти'];
+$('roll').innerHTML = ROLL.map((w, i) => `<div class="rw" id="r${i}">${w}</div>`).join('');
+const U3 = [['Сайты', 0], ['с онлайн-записью', 1], ['<br>', 0], ['для', 0], ['вашей студии', 1]];
+let N3 = 0; $('t3').innerHTML = U3.map(([w, k]) => w === '<br>' ? '<br>' : `<span class="bw${k ? ' mk' : ''}" id="c${N3++}">${w}</span>`).join(' ');
+const BIO = 'сайты с онлайн-записью для студий · Улан-Удэ';
+
+// blur-in helper
+function bin(el, t, t0, d = .35, dy = 30) {
+  if (typeof el === 'string') el = $(el);
+  const p = eo(lin(t, t0, t0 + d));
+  el.style.opacity = p; el.style.filter = `blur(${(1 - p) * 18}px)`; el.style.transform = `translateY(${(1 - p) * dy}px)`;
+}
+function bout(el, t, t0, d = .3) {
+  if (typeof el === 'string') el = $(el);
+  const p = eio(lin(t, t0, t0 + d));
+  if (p <= 0) return; el.style.opacity = (+el.style.opacity || 1) * (1 - p); el.style.filter = `blur(${p * 18}px)`;
+}
+
+// sounds
+sfx(.05, 'pop', .5);
+[.55, .8].forEach(t => sfx(t, 'key', .5));
+sfx(1.5, 'whoosh', .35); [1.5, 2.0, 2.5].forEach(t => sfx(t, 'tick', .7));
+for (let i = 0; i < 4; i++) sfx(3.05 + i * .25, 'key', .45);
+sfx(4.5, 'hit', .8); sfx(4.55, 'pop', .6);
+sfx(5.0, 'swipe', .45);
+for (let i = 0; i < 14; i++) sfx(5.55 + i * .05, 'key', .15);
+sfx(6.6, 'tap', .7); sfx(6.65, 'chime', .4);
+sfx(7.3, 'whoosh', .4); sfx(7.9, 'swipe', .35);
+sfx(9.4, 'whoosh', .55); sfx(9.9, 'hit', .7); sfx(10.4, 'pop', .5);
+
+window.render = function (t) {
+  // backgrounds
+  $('dark').style.opacity = eio(lin(t, 7.2, 7.6));
+  $('limebg').style.transform = `translateX(${(1 - eio(lin(t, 9.4, 9.85))) * 100}%)`;
+
+  // 0-0.5 mark
+  const m = $('mark');
+  m.style.opacity = 0;
+  if (t < .55) { const p = back(lin(t, 0, .35)); m.style.opacity = 1 - lin(t, .4, .55); m.style.transform = `scale(${p * .5})` }
+
+  // 0.5-1.5 "Новый аккаунт"
+  $('t1').style.display = on(t, .45, 1.6) ? '' : 'none';
+  bin('a0', t, .5); bin('a1', t, .75); bout('a0', t, 1.3); bout('a1', t, 1.35);
+
+  // 1.5-3.0 roller
+  $('roll').style.display = on(t, 1.45, 3.05) ? '' : 'none';
+  const pos = eio(lin(t, 1.5, 1.85)) + eio(lin(t, 2.0, 2.35)) + eio(lin(t, 2.5, 2.85)) - .0;
+  const rin = eo(lin(t, 1.45, 1.7)), rout = eio(lin(t, 2.85, 3.05));
+  ROLL.forEach((w, i) => {
+    const d = i - 1 - pos + 1; // centre word index = pos
+    const off = (i - pos);
+    const el = $('r' + i);
+    el.style.top = `${off * 140}px`;
+    const ad = Math.abs(off);
+    el.style.opacity = clamp(1 - ad * .55) * rin * (1 - rout);
+    el.style.filter = `blur(${Math.min(14, ad * 10) + rout * 16}px)`;
+    el.style.transform = `scale(${1 - Math.min(.25, ad * .18)})`;
+  });
+
+  // 3.0-4.4 statement
+  $('t3').style.display = on(t, 2.95, 4.45) ? '' : 'none';
+  for (let i = 0; i < N3; i++) { bin('c' + i, t, 3.05 + i * .25, .3, 24); bout('c' + i, t, 4.15, .25) }
+
+  // 4.4-5.0 logo pop
+  if (on(t, 4.4, 5.05)) {
+    const p = back(lin(t, 4.45, 4.75)), o = eio(lin(t, 4.85, 5.05));
+    m.style.opacity = 1 - o; m.style.transform = `scale(${mix(.3, 1.3, p) * (1 - o * .5)}) rotate(${(1 - p) * -12}deg)`;
+  }
+
+  // 5.0-7.4 profile card
+  const card = $('card');
+  if (on(t, 4.95, 7.6)) {
+    card.style.display = '';
+    const ci = back(lin(t, 5.0, 5.45));
+    const zoom = mix(1, 1.28, eio(lin(t, 5.6, 6.4)));
+    const out = eio(lin(t, 7.0, 7.45));
+    card.style.opacity = clamp(lin(t, 5.0, 5.15)) * (1 - out);
+    card.style.transform = `scale(${mix(.7, 1, ci) * zoom * (1 + out * .3)})`;
+    card.style.filter = `blur(${out * 12}px)`;
+    typeText('bio', BIO, t, 5.55, 6.3);
+    const fol = t >= 6.62;
+    $('fb').textContent = fol ? 'Вы подписаны' : 'Подписаться';
+    $('fb').style.background = fol ? '#22262E' : 'var(--lime)'; $('fb').style.color = fol ? '#F4F4F0' : 'var(--ink)';
+    $('fb').style.transform = `scale(${1 - .06 * Math.max(0, 1 - Math.abs(t - 6.6) / .1)})`;
+    // tap cursor over the follow button (button centre ≈ card centre-left, scaled by zoom)
+    const bx = 540 + (150 + 46 + 165 - 540) * zoom, by = 960 + (690 + 470 - 44 - 42 - 960) * zoom;
+    const tc = $('tapc'); tc.style.left = bx + 'px'; tc.style.top = by + 'px';
+    tc.style.opacity = on(t, 6.25, 6.95) ? Math.min(lin(t, 6.25, 6.4), 1 - lin(t, 6.75, 6.95)) : 0;
+    tc.style.transform = `scale(${Math.abs(t - 6.6) < .08 ? .8 : 1})`;
+  } else { card.style.display = 'none'; $('tapc').style.opacity = 0 }
+
+  // 7.4-9.5 avatar + pill on dark
+  const pav = $('pav'), pill = $('pill');
+  if (on(t, 7.35, 10.0)) {
+    const ai = back(lin(t, 7.4, 7.75));
+    const slide = eio(lin(t, 7.9, 8.4));
+    const W = 560;
+    const cx = mix(540, 540 - W / 2 + 62, slide);
+    pav.style.opacity = 1; pav.style.left = cx + 'px'; pav.style.transform = `scale(${ai})`;
+    const pw = mix(0, W, eio(lin(t, 7.95, 8.5)));
+    pill.style.opacity = pw > 4 ? 1 : 0; pill.style.width = pw + 'px'; pill.style.left = (540 - W / 2) + 'px';
+    pav.style.transform = `scale(${ai})`;
+    // lime wipe swallows the pill, avatar exits right
+    const ex = eio(lin(t, 9.4, 9.9));
+    pill.style.opacity = (pw > 4 ? 1 : 0) * (1 - lin(t, 9.6, 9.8));
+    pav.style.left = mix(cx, 1300, ex) + 'px';
+  } else { pav.style.opacity = 0; pill.style.opacity = 0 }
+
+  // 9.9+ final on lime
+  const f = $('fin'); f.style.opacity = t >= 9.85 ? 1 : 0;
+  if (t >= 9.85) {
+    const h = f.querySelector('.h'), c = f.querySelector('.c');
+    bin(h, t, 9.9, .4, 40); bin(c, t, 10.4, .4, 30);
+    const s = 1 + .03 * eio(lin(t, 10.4, 12.5)); f.style.transform = `scale(${s})`;
+  }
+};
+render(0);
+</script></body></html>
