@@ -1,0 +1,22 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Обложка</title>
+<link rel="stylesheet" href="lib/ds.css">
+<style>
+#k{position:absolute;left:90px;top:560px;display:flex;align-items:center;gap:22px;font-size:38px;font-weight:700}
+#k .lg{width:72px;height:72px;border-radius:20px;font-size:36px}
+#t{position:absolute;left:90px;right:70px;top:700px;font-family:"Inter Display";font-weight:800;font-size:132px;line-height:.98;letter-spacing:-.04em}
+#tag{position:absolute;left:90px;top:1250px;height:90px;padding:0 36px;border-radius:45px;background:var(--lime);color:var(--ink);font-size:40px;font-weight:800;display:flex;align-items:center}
+#num{position:absolute;right:80px;top:560px;font-family:"Inter Display";font-weight:800;font-size:38px;color:var(--muted)}
+</style></head><body><div class="stage">
+<div class="dots"></div><div class="glow" style="left:-200px;top:350px"></div>
+<div id="k"><div class="lg">D</div>Deploy Studio</div>
+<div id="t"></div><div id="tag">Напиши ДЕМО</div>
+</div>
+<script>
+const C = {
+  1: 'Сайт <span class="lime">с онлайн-записью</span> для вашей студии',
+  2: 'Клиенты пишут <span class="lime">в&nbsp;11&nbsp;вечера?</span>',
+  3: 'Ты теряешь клиентов, <span class="lime">пока спишь</span>',
+  4: 'Сайт с&nbsp;записью <span class="lime">за&nbsp;7&nbsp;дней</span>'
+};
+window.setCover = n => { document.getElementById('t').innerHTML = C[n] };
+</script></body></html>

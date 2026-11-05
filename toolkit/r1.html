@@ -1,0 +1,143 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Ролик 1</title>
+<link rel="stylesheet" href="lib/ds.css">
+<style>
+#desk{background:linear-gradient(180deg,#14161B 0%,#0F1115 55%,#17191E 70%,#0C0D10 100%)}
+#tabletop{position:absolute;left:-100px;right:-100px;top:1330px;bottom:0;background:linear-gradient(180deg,#22252B,#101114 60%);transform:perspective(900px) rotateX(55deg);transform-origin:50% 0}
+#mon{position:absolute;left:60px;top:640px;width:960px;height:600px;border-radius:22px;background:#07080A;border:2px solid #2B2F37;box-shadow:0 50px 120px rgba(0,0,0,.7),0 0 0 1px #000}
+#monscr{position:absolute;left:16px;top:16px;right:16px;bottom:16px;border-radius:8px;overflow:hidden;background:#0F1115}
+#neck{position:absolute;left:480px;top:1238px;width:130px;height:150px;margin-left:-65px;background:linear-gradient(90deg,#1B1E24,#2A2E36,#1B1E24)}
+#base{position:absolute;left:540px;top:1370px;width:420px;height:46px;margin-left:-210px;border-radius:50%;background:radial-gradient(ellipse,#2E323A,#15171B 70%)}
+#monglow{position:absolute;left:60px;top:640px;width:960px;height:600px;box-shadow:0 0 180px 40px rgba(198,244,50,.10);border-radius:22px}
+#logo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:30px}
+#logo .lg{width:130px;height:130px;border-radius:34px;font-size:70px}
+#logo .t{font-size:72px;font-weight:800;font-family:"Inter Display";letter-spacing:-.03em}
+#site0{transform-origin:0 0;transform:scale(.58)}
+#flywrap{position:absolute;inset:0;perspective:1600px;perspective-origin:50% 45%}
+#fly{position:absolute;left:76px;top:656px;width:928px;height:568px;border-radius:14px;overflow:hidden;transform-origin:50% 50%;
+  box-shadow:0 80px 160px rgba(0,0,0,.7),0 0 0 2px rgba(255,255,255,.08)}
+#fly .site{transform-origin:0 0;transform:scale(.58)}
+#cap1{top:290px;font-size:76px}
+.eyes{display:inline-block;vertical-align:-6px;margin-left:12px}
+#cut .phone{left:220px;top:330px}
+#s3bg{background:radial-gradient(circle at 50% 40%,#1D2210,#0F1115 60%)}
+#s4 .phone{left:220px;top:420px;transform:scale(1.02)}
+#home .ico{box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+#gl{background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:62px;font-weight:800;color:var(--ink)}
+#cap2{top:270px}
+</style></head><body><div class="stage">
+
+<!-- shot A: desk + monitor (0-4) -->
+<div class="scene" id="sA">
+  <div class="full" id="desk"></div><div id="tabletop"></div>
+  <div class="glow" style="left:-110px;top:300px"></div>
+  <div id="cam" class="full">
+    <div id="monglow"></div>
+    <div id="mon"><div id="monscr">
+      <div id="logo"><div class="lg">D</div><div class="t">Deploy Studio</div></div>
+      <div id="sitebox" class="full" style="opacity:0"><div id="site0wrap"></div></div>
+    </div></div>
+    <div id="neck"></div><div id="base"></div>
+  </div>
+  <div id="flywrap"><div id="fly"><div id="flyin"></div></div></div>
+  <div class="cap" id="cap1">Это сайт<br>с онлайн-записью<svg class="eyes" width="96" height="60" viewBox="0 0 96 60"><ellipse cx="24" cy="30" rx="20" ry="27" fill="#F4F4F0"/><ellipse cx="72" cy="30" rx="20" ry="27" fill="#F4F4F0"/><circle cx="31" cy="34" r="9" fill="#0F1115"/><circle cx="79" cy="34" r="9" fill="#0F1115"/></svg></div>
+</div>
+
+<!-- shots B: beat cuts (4-8) -->
+<div class="scene" id="sB" style="display:none">
+  <div class="dots"></div><div class="glow" style="left:-110px;top:300px"></div>
+  <div id="cut"></div>
+</div>
+<div class="scene" id="sB3" style="display:none"><div class="full" id="s3bg"></div><div id="tgwrap"></div></div>
+
+<!-- shot C: PWA (8-11) -->
+<div class="scene" id="sC" style="display:none">
+  <div class="dots"></div><div class="glow" style="left:-110px;top:500px"></div>
+  <div id="s4"></div>
+  <div class="cap" id="cap2">Ставится на телефон<br><span class="lime">как приложение</span></div>
+</div>
+
+<div id="endwrap"></div>
+</div>
+<script src="lib/ds.js"></script>
+<script>
+window.DUR = 13; window.BPM = 120;
+window.MUSIC = { drums_from: 4, drums_to: 13, fade_out: .4 };
+
+$('site0wrap').innerHTML = site('st0').replace('class="site"', 'class="site" style="transform:scale(.58);transform-origin:0 0"');
+$('flyin').innerHTML = site('st1').replace('class="site"', 'class="site" style="transform:scale(.58);transform-origin:0 0"');
+$('cut').innerHTML = phone('P', bookingPages('b') + `<div id="admwrap" class="full" style="top:96px;display:none;background:#111318"></div>`);
+$('admwrap').innerHTML = admin('ad');
+$('tgwrap').innerHTML = tgCard('tg1', 640, 'Новая запись', 'Полировка кузова<br>пт, 13 ноября · 14:00');
+$('s4').innerHTML = phone('Q', `<div class="home" id="home"><div class="grid">
+ ${['#3A4BFF', '#FF7A45', '#2DBE7A', '#F2C94C', '#9B6BFF', '#2AABEE', 'GL', '#FF5A8A', '#5C6474', '#00B3A4', '#E2E2E2', '#C64BFF']
+  .map((c, i) => c === 'GL' ? `<div class="cell"><div class="ico" id="gl">Г</div><div class="lbl">Глянец</div></div>`
+   : `<div class="cell"><div class="ico" style="background:${c}"></div><div class="lbl">&nbsp;</div></div>`).join('')}
+ </div></div><div class="splash" id="spl"><div class="lg">Г</div><div class="nm">Глянец</div></div>
+ <div class="full" id="appv" style="top:0;background:#111318">${bookingPages('q')}</div>`, { time: '20:41' });
+$('endwrap').innerHTML = endCard('end', 'Покажем под вашу нишу');
+
+// sounds
+sfx(0, 'hit', .8); sfx(1.0, 'whoosh', .5); sfx(2.0, 'riser2', .45);
+[4, 5, 6, 7, 8, 11].forEach(t => sfx(t, 'swipe', .45));
+sfx(4.45, 'tap', .6); sfx(5.25, 'tap', .6); sfx(5.7, 'tap', .6); sfx(6.4, 'pop', .6); sfx(7.05, 'ping', .7);
+sfx(8.6, 'tap', .6); sfx(8.65, 'whoosh', .3); sfx(9.55, 'swipe', .3);
+endSfx(11);
+
+window.render = function (t) {
+  const A = t < 4, B = t >= 4 && t < 7, B3 = t >= 7 && t < 8, C = t >= 8 && t < 11;
+  vis('sA', A); vis('sB', B); vis('sB3', B3); vis('sC', C);
+
+  if (A) {
+    const z = 1 + .05 * eio(lin(t, 0, 4));
+    $('cam').style.transform = `scale(${z})`;
+    rise('cap1', t, 0, 40, .35);
+    $('cap1').style.opacity = 1 - lin(t, .85, 1.0);
+    $('logo').style.opacity = t < 1 ? 1 : 0;
+    $('sitebox').style.opacity = t >= 1 ? 1 : 0;
+    // 3D fly-out of the page from the monitor
+    const f = eio(lin(t, 1.25, 2.4)), g = lin(t, 2.4, 4.0);
+    $('fly').style.opacity = t < 1.25 ? 0 : 1;
+    const ry = mix(0, -24, f) + g * 14, rx = mix(0, 12, f) - g * 4;
+    const tz = mix(0, 220, f) + g * 60, ty = mix(0, -150, f) - g * 20;
+    $('fly').style.transform = `translate3d(0,${ty}px,${tz}px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    $('st1').style.transform = `scale(.58) translateY(${-mix(0, 700, eio(lin(t, 2.2, 3.8)))}px)`;
+    $('monscr').style.filter = `brightness(${1 - .55 * f})`;
+  }
+
+  if (B) {
+    const P = $('P');
+    const shot = t < 5 ? 0 : t < 6 ? 1 : 2;
+    const ts = [4, 5, 6][shot];
+    const push = 1.08 + .05 * eo(lin(t, ts, ts + 1));
+    P.style.transform = `scale(${push}) translateY(${(1 - eo(lin(t, ts, ts + .25))) * 40}px)`;
+    $('admwrap').style.display = shot === 2 ? '' : 'none';
+    for (let i = 0; i < 4; i++) $('bpg' + i).style.transform = `translateX(${(i - (shot === 0 ? 0 : 1)) * 100}%)`;
+    $('bsvc').classList.toggle('sel', t >= 4.5);
+    $('bday').classList.toggle('sel', t >= 5.3);
+    $('bslot').classList.toggle('sel', t >= 5.75);
+    pop('ad_new', t, 6.4, .45, .5);
+    drive('P', [{ t: 4.45, el: 'bsvc', dx: 120 }, { t: 5.25, el: 'bday' }, { t: 5.7, el: 'bslot' }], t,
+      () => shot === 0 ? 0 : 1, { lead: .3, tail: .25 });
+  }
+  if (B3) { tgIn('tg1', t, 7.05); $('s3bg').style.transform = `scale(${1 + .04 * lin(t, 7, 8)})` }
+
+  if (C) {
+    const Q = $('Q');
+    const fl = eo(lin(t, 8, 8.5));
+    Q.style.transform = `translateY(${(1 - fl) * 300}px) rotate(${mix(-10, -4, fl) + Math.sin(t * 1.4) * .8}deg) scale(1.02)`;
+    rise('cap2', t, 8.1, 40, .4);
+    // icon tap -> splash zoom -> app
+    const g = $('gl'); const press = Math.max(0, 1 - Math.abs(t - 8.6) / .12);
+    g.style.transform = `scale(${1 - press * .12})`;
+    const o = eio(lin(t, 8.68, 9.05));
+    const spl = $('spl');
+    spl.style.opacity = t < 8.68 ? 0 : (1 - lin(t, 9.45, 9.65));
+    spl.style.clipPath = `circle(${mix(5, 160, o)}% at 72% 41%)`;
+    $('appv').style.opacity = t < 9.45 ? 0 : 1;
+    for (let i = 0; i < 4; i++) $('qpg' + i).style.transform = `translateX(${i * 100}%)`;
+    drive('Q', [{ t: 8.6, el: 'gl' }], t, () => 0, { lead: .35, tail: .2 });
+  }
+  endAnim(t, 11);
+};
+render(0);
+</script></body></html>

@@ -1,0 +1,169 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Ролик 4</title>
+<link rel="stylesheet" href="lib/ds.css">
+<style>
+#intro{position:absolute;left:80px;right:80px;top:720px}
+#intro .a{font-family:"Inter Display";font-weight:800;font-size:118px;line-height:1;letter-spacing:-.04em;min-height:236px}
+#intro .b{font-family:"Inter Display";font-weight:800;font-size:118px;line-height:1;letter-spacing:-.04em;color:var(--lime);margin-top:20px;min-height:118px}
+.icaret{display:inline-block;width:8px;height:100px;background:var(--lime);vertical-align:-10px;margin-left:6px}
+#ctr{position:absolute;left:80px;right:80px;top:270px;display:flex;align-items:center;gap:28px;z-index:30}
+#ctr .pill{height:84px;padding:0 34px;border-radius:42px;background:var(--lime);color:var(--ink);font-family:"Inter Display";font-weight:800;font-size:44px;display:flex;align-items:center;white-space:nowrap}
+#ctr .seg{flex:1;display:flex;gap:10px}
+#ctr .seg i{flex:1;height:14px;border-radius:7px;background:var(--line)}
+#ctr .seg i.on{background:var(--lime)}
+.capd{position:absolute;left:80px;right:80px;top:400px;font-family:"Inter Display";font-weight:800;font-size:68px;letter-spacing:-.025em;line-height:1.05}
+.win{position:absolute;border-radius:36px;background:var(--panel);border:2px solid var(--line);overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.win .bar{height:64px;display:flex;align-items:center;gap:12px;padding:0 26px;border-bottom:1px solid var(--line);font-size:24px;color:var(--muted)}
+.win .bar i{width:16px;height:16px;border-radius:50%;background:#3B414C;display:inline-block}
+#notes{left:80px;right:80px;top:600px;height:820px}
+#notes .body{padding:40px 46px;font-size:40px;line-height:1.5}
+#notes h4{font-family:"Inter Display";font-size:58px;font-weight:800;margin-bottom:26px;letter-spacing:-.02em}
+#notes .li{display:flex;gap:22px;margin-bottom:14px;opacity:0}
+#notes .li b{color:var(--lime);font-weight:700;flex:0 0 auto}
+#code{left:50px;width:600px;top:560px;height:940px}
+#code pre{padding:30px 28px;font-family:"DejaVu Sans Mono",monospace;font-size:21px;line-height:1.62;white-space:pre;color:#C9CED8}
+.k{color:#C6F432}.s{color:#F2C94C}.c{color:#6B7384}.tg2{color:#7AB8FF}
+#prev .phone{left:520px;top:560px;transform:scale(.62);transform-origin:0 0}
+#prev .blk{opacity:0}
+#two .caret{opacity:0}
+#two .phone{top:600px;transform:scale(.68);transform-origin:0 0}
+.okb{position:absolute;top:1520px;height:84px;padding:0 30px;border-radius:42px;background:var(--panel);border:2px solid var(--lime);display:flex;align-items:center;gap:16px;font-size:36px;font-weight:700;opacity:0}
+.okb .ck{width:48px;height:48px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center}
+#fin .phone{left:220px;top:560px;transform:scale(.9);transform-origin:50% 0}
+#conf{position:absolute;inset:0;pointer-events:none;z-index:60}
+#conf i{position:absolute;width:18px;height:30px;border-radius:4px}
+</style></head><body><div class="stage">
+<div class="dots"></div><div class="glow" style="left:-110px;top:400px"></div>
+
+<div class="scene" id="s0"><div id="intro"><div class="a" id="ia"></div><div class="b" id="ib"></div></div></div>
+
+<div id="ctr" style="opacity:0"><div class="pill" id="pill">День 1</div><div class="seg">${''}</div></div>
+
+<div class="scene" id="s1" style="display:none">
+  <div class="capd" id="c1">День 1 — <span class="lime">бриф 30 минут</span></div>
+  <div class="win" id="notes"><div class="bar"><i></i><i></i><i></i>&nbsp;Заметки</div><div class="body">
+   <h4>Бриф · Глянец</h4>
+   <div class="li" id="n0"><b>Услуги</b><span>мойка, полировка, химчистка, керамика</span></div>
+   <div class="li" id="n1"><b>Цены</b><span>от 1 500 ₽, длительность у каждой</span></div>
+   <div class="li" id="n2"><b>График</b><span>9:00–21:00, без выходных</span></div>
+   <div class="li" id="n3"><b>Боксы</b><span>2, запись по свободному боксу</span></div>
+   <div class="li" id="n4"><b>Фото</b><span>работы, вход, парковка</span></div>
+  </div></div>
+</div>
+
+<div class="scene" id="s2" style="display:none">
+  <div class="capd" id="c2">Дни 2–5 — <span class="lime">собираем<br>под вашу нишу</span></div>
+  <div class="win" id="code"><div class="bar"><i></i><i></i><i></i>&nbsp;booking.tsx</div><pre id="pre"></pre></div>
+  <div id="prev"></div>
+</div>
+
+<div class="scene" id="s3" style="display:none">
+  <div class="capd" id="c3">День 6 — <span class="lime">тестируем</span></div>
+  <div id="two"></div>
+  <div class="okb" id="ok1" style="left:110px"><span class="ck">${''}</span>iPhone</div>
+  <div class="okb" id="ok2" style="left:600px"><span class="ck">${''}</span>Android</div>
+</div>
+
+<div class="scene" id="s4" style="display:none">
+  <div class="capd" id="c4">День 7 — <span class="lime">первая запись</span></div>
+  <div id="fin"></div>
+  <div id="tgw"></div>
+  <div id="conf"></div>
+</div>
+
+<div id="endwrap"></div>
+</div>
+<script src="lib/ds.js"></script>
+<script>
+window.DUR = 18; window.BPM = 120;
+window.MUSIC = { drums_from: 2, drums_to: 18, fade_out: .5 };
+document.querySelector('#ctr .seg').innerHTML = Array.from({ length: 7 }, (_, i) => `<i id="sg${i}"></i>`).join('');
+document.querySelectorAll('.okb .ck').forEach(e => e.innerHTML = CHECK('#0F1115', 3.4, 30));
+
+// preview phone (blocks appear as code is written)
+$('prev').innerHTML = phone('V', `<div class="blk" id="v0">${appbar()}</div><div class="pages"><div class="pg" style="padding:34px">
+  <div class="blk" id="v1"><div class="prog"><i class="on"></i><i></i><i></i></div><h3>Выберите услугу</h3></div>
+  ${['Мойка кузова|1 час|от 1 500 ₽', 'Полировка кузова|5 часов|от 8 000 ₽', 'Химчистка салона|6 часов|от 6 000 ₽', 'Керамика|2 дня|от 15 000 ₽']
+    .map((s, i) => { const [a, b, p] = s.split('|'); return `<div class="svc blk" id="v${i + 2}"><div><div class="a">${a}</div><div class="b">${b}</div></div><div class="p">${p}</div></div>` }).join('')}
+  <div class="btn blk" id="v6">Выбрать время</div></div></div>`);
+const L = [
+  ['<span class="k">export const</span> studio = {'], ['  name: <span class="s">"Глянец"</span>,'], ['  niche: <span class="s">"детейлинг"</span>,'], ['  boxes: <span class="k">2</span>,'], ['};'], [''],
+  ['<span class="k">const</span> services = ['], ['  { name: <span class="s">"Мойка кузова"</span>, from: <span class="k">1500</span>, h: <span class="k">1</span> },'],
+  ['  { name: <span class="s">"Полировка"</span>, from: <span class="k">8000</span>, h: <span class="k">5</span> },'], ['  { name: <span class="s">"Химчистка"</span>, from: <span class="k">6000</span>, h: <span class="k">6</span> },'],
+  ['  { name: <span class="s">"Керамика"</span>, from: <span class="k">15000</span>, d: <span class="k">2</span> },'], ['];'], [''],
+  ['<span class="c">// свободные окна с учётом боксов</span>'], ['<span class="k">function</span> freeSlots(day, svc) {'], ['  <span class="k">return</span> boxes.flatMap(b =&gt;'], ['    gaps(b, day).fit(svc.h));'], ['}'], [''],
+  ['<span class="tg2">&lt;Booking</span> services={services} <span class="tg2">/&gt;</span>'], ['<span class="tg2">&lt;Telegram</span> notify=<span class="s">"owner"</span> <span class="tg2">/&gt;</span>']];
+$('two').innerHTML = phone('I', bookingPages('i')).replace('class="phone"', 'class="phone" style="left:80px"') + phone('A', bookingPages('a'), { android: true }).replace('class="phone android"', 'class="phone android" style="left:570px"');
+$('fin').innerHTML = phone('Z', bookingPages('z'), { time: '10:14' });
+$('tgw').innerHTML = tgCard('tg', 580, 'Первая запись 🎉'.replace(' 🎉', ''), 'Полировка кузова<br>пт, 13 ноября · 14:00');
+$('endwrap').innerHTML = endCard('end');
+// confetti
+const conf = []; let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+for (let i = 0; i < 70; i++) conf.push({ x: 540 + (rnd() - .5) * 200, y: 900, vx: (rnd() - .5) * 1700, vy: -900 - rnd() * 1100, r: rnd() * 720, c: ['#C6F432', '#F4F4F0', '#2AABEE', '#C6F432'][i % 4] });
+$('conf').innerHTML = conf.map((_, i) => `<i id="cf${i}"></i>`).join('');
+
+// timings
+const flow = bookingFlow('Z', 'z', 13.1, .36, { sound: false });
+const INTRO_A = 'Сайт с записью за 7 дней.', INTRO_B = 'Показываю процесс';
+for (let i = 0; i < 12; i++) sfx(.15 + i * .07, 'key', .3);
+for (let i = 0; i < 9; i++) sfx(1.05 + i * .07, 'key', .3);
+sfx(1.6, 'riser', .35);
+[2, 5, 6, 7, 8, 9, 13].forEach(t => sfx(t, 'hit', .55)); [2, 5, 9, 13].forEach(t => sfx(t, 'swipe', .4));
+[2.4, 2.8, 3.2, 3.6, 4.0].forEach(t => sfx(t, 'pop', .4));
+for (let i = 0; i < 26; i++) sfx(5.1 + i * .14, 'key', .22);
+sfx(10.5, 'chime', .4); sfx(11.5, 'chime', .4);
+[13.42, 13.78, 14.04, 14.18, 14.47, 14.63, 14.88, 14.99].forEach(t => sfx(t, 'tap', .5)); sfx(15.0, 'ping', .75); sfx(15.2, 'pop', .6);
+endSfx(16);
+
+window.render = function (t) {
+  vis('s0', t < 2); vis('s1', on(t, 2, 5)); vis('s2', on(t, 5, 9)); vis('s3', on(t, 9, 13)); vis('s4', on(t, 13, 16));
+  if (t < 2) {
+    typeText('ia', INTRO_A, t, .15, .95); typeText('ib', INTRO_B, t, 1.05, 1.7);
+    const blink = Math.floor(t * 3) % 2 === 0;
+    const tgt = t < 1.05 ? 'ia' : 'ib'; const cr = document.createElement('span'); cr.className = 'icaret'; cr.style.opacity = (t > 1.7 || t < .15) ? +blink : 1; $(tgt).appendChild(cr);
+  }
+  // day counter
+  const day = t < 5 ? 1 : t < 9 ? Math.min(5, 2 + Math.floor(t - 5)) : t < 13 ? 6 : 7;
+  $('ctr').style.opacity = on(t, 2, 16) ? 1 : 0;
+  $('pill').textContent = day === 7 && t >= 15 ? 'День 7 ✓' : `День ${day}`;
+  for (let i = 0; i < 7; i++) $('sg' + i).classList.toggle('on', i < day);
+  if (on(t, 2, 5)) {
+    rise('c1', t, 2.05, 30, .35); rise('notes', t, 2.0, 120, .45);
+    [2.4, 2.8, 3.2, 3.6, 4.0].forEach((t0, i) => rise('n' + i, t, t0, 20, .3));
+  }
+  if (on(t, 5, 9)) {
+    rise('c2', t, 5.05, 30, .35);
+    const n = Math.floor(lin(t, 5.1, 8.7) * L.length * 1.0);
+    const lines = L.slice(0, n).map(l => l[0]);
+    // partial typing on current line
+    $('pre').innerHTML = lines.join('\n') + (n < L.length ? '\n<span class="icaret" style="height:24px;width:3px;vertical-align:-4px"></span>' : '');
+    for (let i = 0; i < 7; i++) pop('v' + i, t, 5.4 + i * .48, .35, .85);
+  }
+  if (on(t, 9, 13)) {
+    rise('c3', t, 9.05, 30, .35);
+    const sw = eo(lin(t, 9, 9.5));
+    $('I').style.transform = `scale(.68) translateY(${(1 - sw) * 900}px) rotate(${-3 + Math.sin(t) * .6}deg)`;
+    $('A').style.transform = `scale(.68) translateY(${(1 - eo(lin(t, 9.12, 9.62))) * 900}px) rotate(${3 - Math.sin(t) * .6}deg)`;
+    ['i', 'a'].forEach((p, k) => {
+      const pp = eio(lin(t, 10.0 + k * .2, 10.4 + k * .2)) + eio(lin(t, 11.2 + k * .2, 11.6 + k * .2));
+      for (let i = 0; i < 4; i++) $(p + 'pg' + i).style.transform = `translateX(${(i - pp) * 100}%)`;
+      $(p + 'svc').classList.toggle('sel', t >= 9.8);
+      $(p + 'day').classList.toggle('sel', t >= 10.9); $(p + 'slot').classList.toggle('sel', t >= 11.0);
+    });
+    pop('ok1', t, 10.5, .4, .6); pop('ok2', t, 11.5, .4, .6);
+  }
+  if (on(t, 13, 16)) {
+    rise('c4', t, 13.05, 30, .35);
+    $('Z').style.transform = `scale(.9) translateY(${(1 - eo(lin(t, 13, 13.4))) * 900}px)`;
+    flow(t);
+    tgIn('tg', t, 15.0);
+    conf.forEach((c, i) => {
+      const d = t - 15.2, el = $('cf' + i);
+      if (d < 0) { el.style.opacity = 0; return }
+      el.style.opacity = 1 - lin(d, .9, 1.4); el.style.background = c.c;
+      el.style.transform = `translate(${c.x + c.vx * d}px,${c.y + c.vy * d + 1500 * d * d}px) rotate(${c.r + d * 600}deg)`;
+    });
+  }
+  endAnim(t, 16);
+};
+render(0);
+</script></body></html>

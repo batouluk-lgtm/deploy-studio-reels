@@ -1,0 +1,7 @@
+toolkit/stills/
+toolkit/out/
+*.wav
+*.audio.json
+*.silent.mp4
+*.part.mp4
+__pycache__/

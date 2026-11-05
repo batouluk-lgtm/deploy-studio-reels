@@ -1,0 +1,92 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Ролик 2</title>
+<link rel="stylesheet" href="lib/ds.css">
+<style>
+#lap{position:absolute;left:40px;top:470px;width:1000px;transform-origin:50% 60%}
+#lid{position:relative;width:1000px;height:640px;border-radius:30px 30px 8px 8px;background:#0A0B0E;border:2px solid #2E333C;padding:18px}
+#ls{position:relative;width:100%;height:100%;border-radius:10px;overflow:hidden;background:#0F1115}
+#cam{position:absolute;left:50%;top:6px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#1E2229}
+#deck{width:1080px;height:34px;margin-left:-40px;border-radius:0 0 26px 26px;background:linear-gradient(180deg,#3A3F48,#1D2026);position:relative}
+#deck:after{content:"";position:absolute;left:50%;top:0;width:180px;height:12px;margin-left:-90px;border-radius:0 0 12px 12px;background:#14161A}
+#siteHold{position:absolute;left:0;top:0;transform-origin:0 0;transform:scale(.6)}
+#cur{position:absolute;left:0;top:0;z-index:40}
+#big{position:absolute;left:0;right:0;top:1140px;text-align:center;z-index:20}
+#big .p{font-family:"Inter Display";font-weight:800;font-size:110px;letter-spacing:-.03em;line-height:1}
+#big .d{font-family:"Inter Display";font-weight:900;font-size:290px;letter-spacing:-.05em;line-height:.9;color:var(--lime);text-shadow:0 20px 80px rgba(198,244,50,.25)}
+#sub{top:270px;font-size:68px}
+#tgw .tg{left:110px;right:110px}
+</style></head><body><div class="stage">
+<div class="dots"></div><div class="glow" style="left:-110px;top:200px"></div>
+<div id="lap"><div id="lid"><div id="cam"></div><div id="ls"><div id="siteHold"></div><div id="cur"></div></div></div><div id="deck"></div></div>
+<div id="tgw"></div>
+<div class="sub" id="sub"></div>
+<div id="big"><div class="p" id="bp">пиши</div><div class="d" id="bd">ДЕМО</div></div>
+<div id="endwrap"></div>
+</div>
+<script src="lib/ds.js"></script>
+<script>
+window.DUR = 20; window.BPM = 120;
+window.MUSIC = { drums_from: 3, drums_to: 20, fade_out: .5 };
+$('siteHold').innerHTML = site('S');
+$('cur').innerHTML = ARROW;
+$('tgw').innerHTML = tgCard('tg', 560, 'Новая запись', 'Полировка кузова<br>пт, 13 ноября · 14:00');
+$('endwrap').innerHTML = endCard('end');
+const SC = .6;
+const S = $('S');
+const off = el => { let x = 0, y = 0, e = el; while (e && e !== S) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent } return [x + el.offsetWidth / 2, y + el.offsetHeight / 2] };
+const yCards = off($('S_c2'))[1] - 380, yBook = off($("S_d"))[1] - 470;
+
+const SUBS = [
+  [0.05, .8, 'Твои клиенты пишут'], [.8, 1.6, 'в директ *в 11 вечера*'], [1.6, 2.3, 'Сейчас покажу,'], [2.3, 3.2, 'как это *убрать*'],
+  [3.4, 5.5, 'Клиент сам выбирает *услугу*'], [5.5, 8.6, 'и свободное *время*'], [8.6, 12.6, 'Запись за *пару кликов*'],
+  [12.8, 14.3, 'Тебе приходит уведомление'], [14.3, 15.5, 'в *Telegram*'], [15.5, 16.7, 'Никакой *переписки*'], [16.7, 18, 'и *двойных записей*']];
+// cursor path: [t, target or [x,y] in site units]
+const CLK = [5.0, 7.0, 7.7, 9.2];
+const tgts = () => [off($('S_c2')), off($('S_d')), off($('S_s')), off($('S_b'))];
+
+SUBS.forEach(s => sfx(s[0], 'key', .35));
+sfx(0, 'hit', .8); sfx(1.6, 'hit', .5); sfx(2.0, 'riser', .45);
+sfx(3, 'hit', .8); sfx(3.6, 'swipe', .35); sfx(5.6, 'swipe', .35); sfx(10.5, 'swipe', .3);
+CLK.forEach(t => sfx(t, 'tap', .6)); sfx(9.35, 'chime', .55);
+sfx(12.8, 'ping', .75); sfx(12.8, 'swipe', .3); sfx(17.6, 'whoosh_down', .3);
+endSfx(18);
+
+window.render = function (t) {
+  // laptop entrance + slow push
+  const ent = eo(lin(t, 0, .6));
+  $('lap').style.transform = `translateY(${(1 - ent) * 120}px) scale(${mix(.94, 1.02, eio(lin(t, 0, 18)))})`;
+  $('lap').style.opacity = ent;
+  // scroll
+  let sy = mix(0, yCards, eio(lin(t, 3.6, 4.3)));
+  sy = mix(sy, yBook, eio(lin(t, 5.6, 6.4)));
+  sy = mix(sy, 0, eio(lin(t, 10.5, 11.6)));
+  S.style.transform = `translateY(${-sy}px)`;
+  // selections
+  $('S_c2').classList.toggle('sel', t >= 5.05);
+  $('S_d').classList.toggle('sel', t >= 7.05);
+  $('S_s').classList.toggle('sel', t >= 7.75);
+  const done = t >= 9.3;
+  $('S_b').innerHTML = done ? CHECK('#0F1115', 3, 40) + '&nbsp;Вы записаны' : 'Записаться на 14:00';
+  $('S_b').style.transform = `scale(${1 - .05 * Math.max(0, 1 - Math.abs(t - 9.2) / .12)})`;
+  $('S_ok').textContent = done ? 'Напомним за сутки и за 2 часа' : 'Полировка · пт, 13 ноября';
+  // hero button pulse at start
+  // cursor
+  const T = tgts(); const home = [1100, 520];
+  const pts = [[3.0, [1150, 700], 0], [4.3, [1150, 700], 0], [4.9, T[0], 0], [6.4, T[0], 1], [6.9, T[1], 1], [7.25, T[1], 1], [7.6, T[2], 1], [8.6, T[2], 1], [9.1, T[3], 1], [10.4, T[3], 1], [11.6, [1250, 760], 2]];
+  let P = pts[0][1];
+  for (let i = 1; i < pts.length; i++) { if (t >= pts[i - 1][0]) { const m = eio(lin(t, pts[i - 1][0], pts[i][0])); const a = pts[i - 1][1], b = pts[i][1]; P = [mix(a[0], b[0], m), mix(a[1], b[1], m)] } }
+  const press = CLK.some(c => Math.abs(t - c) < .08) ? .85 : 1;
+  const cx = P[0] * SC, cy = (P[1] - sy) * SC;
+  $('cur').style.transform = `translate(${cx - 6}px,${cy - 4}px) scale(${press})`;
+  $('cur').style.opacity = lin(t, 3, 3.3) * (1 - lin(t, 12.3, 12.6));
+  // telegram
+  tgIn('tg', t, 12.8, 17.6);
+  // subs
+  subs('sub', SUBS, t);
+  // big overlay with beat pulse
+  const ph = (t % .5) / .5, pulse = t >= 3 ? Math.exp(-ph * 6) * .035 : 0;
+  rise('bp', t, .15, 40, .4); pop('bd', t, .3, .5, .6);
+  if (t > .8) $('bd').style.transform = `scale(${1 + pulse})`;
+  endAnim(t, 18);
+};
+render(0);
+</script></body></html>
