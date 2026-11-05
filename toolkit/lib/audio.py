@@ -133,6 +133,8 @@ def main(spec_path, out_path):
     for b in range(nbeats):
         t = b * beat
         bar = (b // 4) % 4
+        if m.get("off"):
+            continue
         if b % 4 == 0:
             put(music, pad(chords[bar], 4 * beat), t)
         if not (d0 <= t < d1) or in_break(t):
