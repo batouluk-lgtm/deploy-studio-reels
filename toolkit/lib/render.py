@@ -62,7 +62,8 @@ def video(html, out):
         spec = {"dur": dur, "bpm": pg.evaluate("window.BPM||120"), "sfx": pg.evaluate("window.SFX"),
                 "music": pg.evaluate("window.MUSIC||{}")}
         ff = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "image2pipe", "-c:v", "mjpeg", "-framerate", str(FPS), "-i", "-",
-                               "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p", silent], stdin=subprocess.PIPE)
+                               "-c:v", "libx264", "-profile:v", "high", "-level", "4.0", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p",
+                               "-r", str(FPS), "-g", str(FPS), "-keyint_min", str(FPS), "-sc_threshold", "0", silent], stdin=subprocess.PIPE)
         for i in range(int(round(dur * FPS))):
             pg.evaluate(f"render({i / FPS})")
             ff.stdin.write(pg.screenshot(type="jpeg", quality=92))
@@ -71,8 +72,12 @@ def video(html, out):
         b.close()
     json.dump(spec, open(base + ".audio.json", "w"))
     subprocess.check_call(["python3", os.path.join(LIB, "audio.py"), base + ".audio.json", base + ".wav"])
-    subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", "-i", silent, "-i", base + ".wav", "-map", "0:v", "-map", "1:a",
-                           "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", tmp])
+    # Instagram-safe mux: stereo 48 kHz AAC, audio padded/trimmed to exactly the video length (see playbook.md, section 5)
+    vdur = f"{int(round(dur * FPS)) / FPS:.6f}"
+    subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", "-i", silent, "-i", base + ".wav",
+                           "-filter_complex", f"[1:a]aresample=48000,aformat=channel_layouts=stereo,apad,atrim=0:{vdur},asetpts=N/SR/TB[a]",
+                           "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2",
+                           "-t", vdur, "-movflags", "+faststart", tmp])
     os.replace(tmp, out); os.remove(silent)
     print(out)
 
