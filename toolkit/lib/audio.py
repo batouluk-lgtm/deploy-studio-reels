@@ -129,9 +129,15 @@ def main(spec_path, out_path):
     # A minor-ish loop: Am F C G (one chord per bar)
     roots = [110.0, 87.31, 130.81, 98.0]
     chords = [(220, 261.6, 329.6), (174.6, 220, 261.6), (261.6, 329.6, 392), (196, 246.9, 293.7)]
-    nbeats = int(dur / beat) + 1
-    for b in range(nbeats):
-        t = b * beat
+    # "offset": shift the beat grid so a downbeat lands on a given time (e.g. the first hard cut of a supplied video)
+    off = m.get("offset", 0.0)
+    b0 = int(np.ceil(off / (4 * beat))) * 4  # whole bars before the offset
+    nbeats = int((dur + b0 * beat) / beat) + 1
+    for bi in range(nbeats):
+        b = bi
+        t = off + (bi - b0) * beat
+        if t < 0:
+            continue
         bar = (b // 4) % 4
         if m.get("off"):
             continue
