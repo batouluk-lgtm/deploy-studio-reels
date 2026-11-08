@@ -8,7 +8,7 @@ html,body{margin:0;width:1080px;height:1920px;background:#000;overflow:hidden}
 #say{position:absolute;left:64px;right:100px;top:560px;font-family:"Liberation Serif",serif;font-style:italic;font-size:62px;line-height:1.15;color:#F4F1EA;text-shadow:0 3px 26px rgba(0,0,0,.9)}
 #hook{position:absolute;left:60px;right:60px;top:340px;text-align:center;font-family:"Liberation Serif",serif;font-size:80px;line-height:1.1;color:#F4F1EA;text-shadow:0 4px 30px rgba(0,0,0,.9)}
 #hook i{color:#C6F432;font-style:italic}
-.card{position:absolute;left:190px;top:900px;width:700px;height:560px;border-radius:60px;background:#07090d;border:7px solid #1d2230;box-shadow:0 30px 90px rgba(0,0,0,.7);display:none;overflow:hidden;font-family:"Liberation Serif",serif;color:#F4F1EA}
+.card{position:absolute;left:190px;top:960px;width:700px;height:520px;border-radius:60px;background:#07090d;border:7px solid #1d2230;box-shadow:0 30px 90px rgba(0,0,0,.7);display:none;overflow:hidden;font-family:"Liberation Serif",serif;color:#F4F1EA}
 #phone .clock{position:absolute;left:0;right:0;top:70px;text-align:center;font-size:190px;line-height:1;font-weight:400}
 #phone .net{position:absolute;left:0;right:0;top:300px;text-align:center;font-size:62px;color:#ff6b5e;letter-spacing:.06em}
 #phone .sub{position:absolute;left:0;right:0;top:395px;text-align:center;font-size:36px;opacity:.6;letter-spacing:.08em}
@@ -289,13 +289,13 @@ function setup(S, lt, D) {
   } else if (S === 1) {
     Object.assign(c, { ro: V(.4, 1.25, mix(-14, -7, e)), ta: V(0, 1.7, 12), fov: 46, roll: -.04, pl: V(0, 1.3, mix(-14, -7, e) + 1), plc: V(.05, .06, .1), focus: 25, aper: 0 });
   } else if (S === 2) {
-    Object.assign(c, { ch: V(0, 0, 0), head: .5, yaw: -.35, ro: V(mix(1.4, 1.1, e), 1.6, mix(-3.4, -3.0, e)), ta: V(0, 1.85, 0), fov: 38, roll: .04, pl: V(.06, 1.3, -.5), plc: V(.45, .65, 1.2).map(x => x * .9), focus: 3.4, aper: .6 });
+    Object.assign(c, { ch: V(0, 0, 0), head: .5, yaw: -.35, ro: V(mix(1.4, 1.1, e), 1.6, mix(-3.4, -3.0, e)), ta: V(0, 1.5, 0), fov: 38, roll: .04, pl: V(.06, 1.3, -.5), plc: V(.45, .65, 1.2).map(x => x * .9), focus: 3.4, aper: .6 });
   } else if (S === 3) {
     const fl = (lt > 1.9 && lt < 2.05) ? .15 : 1;
     Object.assign(c, { ch: V(2.0, 0, -4.4), yaw: Math.PI, ro: V(mix(3.4, 2.4, e), mix(1.4, 1.8, e), mix(-11.5, -9, e)), ta: V(0, mix(2.6, 3.0, e), 0), fov: 50, roll: -.06,
       pl: V(-3.2, 5.3, -3.6), plc: V(1.5, 1.0, .55).map(x => x * 9 * fl), key: norm([.3, .5, -.6]), kc: V(.2, .26, .5), focus: 8, aper: 0, bloom: 1.3, thr: .7, fd: .02 });
   } else if (S === 4) {
-    Object.assign(c, { ch: V(0, 0, 0), head: -.35, yaw: .45, ro: V(mix(-1.2, -1.0, e), 1.6, mix(-3.2, -2.9, e)), ta: V(0, 1.85, 0), fov: 38, roll: -.04, pl: V(.06, 1.3, -.5), plc: V(.45, .65, 1.2).map(x => x * .9), focus: 3.2, aper: .6 });
+    Object.assign(c, { ch: V(0, 0, 0), head: -.35, yaw: .45, ro: V(mix(-1.2, -1.0, e), 1.6, mix(-3.2, -2.9, e)), ta: V(0, 1.5, 0), fov: 38, roll: -.04, pl: V(.06, 1.3, -.5), plc: V(.45, .65, 1.2).map(x => x * .9), focus: 3.2, aper: .6 });
   } else {
     Object.assign(c, { ch: V(0, -50, 0), yaw: Math.PI, ro: V(mix(-3, 3, e), mix(4.5, 3.2, e), mix(-15, -12, e)), ta: V(0, 3.0, 0), fov: 48, roll: .03,
       pl: V(-3.2, 5.3, -3.6), plc: V(1.5, 1.0, .55).map(x => x * 9), kc: V(.2, .26, .5), focus: 14, aper: 0, bloom: 1.3, thr: .7, fd: .03 });
