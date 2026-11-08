@@ -109,6 +109,78 @@ SFXF = {"tap": s_tap, "key": s_key, "whoosh": s_whoosh, "whoosh_down": lambda: s
         "chime": s_chime, "ping": s_ping, "hit": s_hit, "pop": s_pop, "riser": s_riser, "riser2": lambda: s_riser(2.0),
         "tick": s_tick, "error": s_error}
 
+# ---------------- cinematic sfx (no-music reels) ----------------
+def s_boom():
+    n = int(1.8 * SR)
+    return sine_sweep(75, 28, n, 3.5) * env(n, .002, .7) * 1.2 + lp(rng.standard_normal(n), 60) * env(n, .002, .45) * 1.6
+
+def s_impact():
+    n = int(1.0 * SR)
+    return sine_sweep(140, 40, n, 10) * env(n, .001, .3) * 1.0 + lp(hp(rng.standard_normal(n), 2), 3) * env(n, .0005, .03) * .6 + lp(rng.standard_normal(n), 25) * env(n, .002, .25) * .8
+
+def s_cash():
+    n = int(.7 * SR); x = np.zeros(n)
+    for _ in range(26):
+        i = int(rng.uniform(0, .6) * SR); L = int(.012 * SR)
+        x[i:i + L] += lp(hp(rng.standard_normal(L), 2), 2) * env(L, .0005, .004) * rng.uniform(.3, 1)
+    return x * 1.3
+
+def s_coin():
+    out = np.zeros(int(1.0 * SR))
+    for j, t0 in enumerate((0, .07)):
+        n = int(.8 * SR); t = np.arange(n) / SR; s = np.zeros(n)
+        for f, a in ((2093, 1), (2637, .7), (3520, .5), (4699, .35), (5588, .2)):
+            s += np.sin(2 * np.pi * f * (1 + .002 * j) * t) * a
+        s = s * env(n, .0008, .22) * .22
+        i = int(t0 * SR); out[i:i + n] += s[:len(out) - i]
+    return out
+
+def s_whip():
+    n = int(.22 * SR); u = np.linspace(0, 1, n); nz = rng.standard_normal(n)
+    return (lp(nz, 14) * (1 - u) + lp(nz, 3) * u) * np.sin(np.pi * u) ** 3 * 1.6
+
+def s_wind(length=3.0):
+    n = int(length * SR); u = np.linspace(0, 1, n); nz = lp(rng.standard_normal(n), 30)
+    mod = .6 + .4 * np.sin(2 * np.pi * u * 2.3 + 1) * np.sin(2 * np.pi * u * .7)
+    return nz * mod * np.minimum(1, u / .2) * np.minimum(1, (1 - u) / .3) * 2.2
+
+def s_drone(length=4.0):
+    n = int(length * SR); t = np.arange(n) / SR; u = t / length
+    x = np.sin(2 * np.pi * 55 * t) * .5 + np.sin(2 * np.pi * 82.4 * t + np.sin(2 * np.pi * .3 * t)) * .3 + np.sin(2 * np.pi * 110.5 * t) * .12
+    x += lp(rng.standard_normal(n), 80) * .4
+    return x * np.minimum(1, u / .25) * np.minimum(1, (1 - u) / .3) * .5
+
+def s_buzz():
+    n = int(.6 * SR); t = np.arange(n) / SR
+    g = ((t < .22) | ((t > .32) & (t < .54))).astype(float)
+    x = lp(np.sign(np.sin(2 * np.pi * 175 * t)) * .6 + np.sin(2 * np.pi * 350 * t) * .3, 6)
+    return x * g * .35
+
+def s_heart():
+    out = np.zeros(int(.9 * SR))
+    for t0, a in ((0, 1), (.22, .7)):
+        n = int(.3 * SR); s = sine_sweep(70, 40, n, 18) * env(n, .003, .08) * a
+        i = int(t0 * SR); out[i:i + n] += s
+    return out * 1.3
+
+def s_whomp():
+    n = int(1.2 * SR); u = np.linspace(0, 1, n)
+    return sine_sweep(220, 35, n, 6) * env(n, .01, .4) * 1.2 + lp(rng.standard_normal(n), 20) * np.sin(np.pi * np.minimum(1, u * 3)) * env(n, .01, .3) * .6
+
+def s_shimmer():
+    out = np.zeros(int(1.6 * SR))
+    for i in range(10):
+        f = rng.choice([1568, 1760, 2093, 2349, 2637, 3136]); s = s_tone(f, 1.0, .35) * .12
+        j = int(i * .08 * SR); out[j:j + len(s)] += s[:len(out) - j]
+    return out
+
+def s_swell():
+    n = int(.6 * SR); u = np.linspace(0, 1, n); nz = rng.standard_normal(n)
+    return (lp(nz, 20) * (1 - u) + lp(nz, 2) * u) * u ** 3 * 1.5
+
+SFXF.update({"boom": s_boom, "impact": s_impact, "cash": s_cash, "coin": s_coin, "whip": s_whip, "wind3": s_wind,
+             "drone4": s_drone, "buzz": s_buzz, "heart": s_heart, "whomp": s_whomp, "shimmer": s_shimmer, "swell": s_swell})
+
 def main(spec_path, out_path):
     spec = json.load(open(spec_path))
     dur, bpm = spec["dur"], spec.get("bpm", 120)

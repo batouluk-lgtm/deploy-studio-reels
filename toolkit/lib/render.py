@@ -21,7 +21,7 @@ def serve(root):
     return _server.server_address[1]
 
 def open_page(p, html):
-    b = p.chromium.launch(executable_path="/usr/bin/google-chrome", args=["--force-color-profile=srgb"])
+    b = p.chromium.launch(executable_path="/usr/bin/google-chrome", args=["--force-color-profile=srgb", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"])
     pg = b.new_page(viewport={"width": 1080, "height": 1920}, device_scale_factor=1)
     # Block anything not local (e.g. Google Fonts in embedded sites): the sandbox has no network.
     pg.route("**/*", lambda r: r.continue_() if r.request.url.startswith(("file:", "http://127.0.0.1", "data:")) else r.abort())
