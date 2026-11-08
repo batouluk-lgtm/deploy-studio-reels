@@ -20,7 +20,7 @@ html,body{margin:0;width:1080px;height:1920px;background:#000;overflow:hidden}
 #out .br{position:absolute;left:0;right:0;top:1300px;text-align:center;font:600 34px "Inter",sans-serif;color:#C6F432}
 #out .br2{position:absolute;left:0;right:0;top:1352px;text-align:center;font:400 28px "Inter",sans-serif;color:#8E95A2}
 </style></head><body>
-<canvas id="c" width="1080" height="1920"></canvas>
+<canvas id="c" width="540" height="960"></canvas>
 <div id="hud"><div id="lbl"></div><div id="num"></div><div id="cmp"></div><div id="tag">×2 КАЖДЫЙ ДЕНЬ</div></div>
 <div id="tr"></div>
 <div id="say"></div>
@@ -45,7 +45,7 @@ const cv = document.getElementById('c');
 const gl = cv.getContext('webgl2', { preserveDrawingBuffer: true, antialias: false });
 const FLOAT = !!gl.getExtension('EXT_color_buffer_float');
 gl.getExtension('OES_texture_float_linear');
-const SW = 540, SH = 960, BW = 270, BH = 480;
+const SW = 405, SH = 720, BW = 270, BH = 480;
 
 const VS = `#version 300 es
 in vec2 p; out vec2 uv; void main(){ uv=p*.5+.5; gl_Position=vec4(p,0,1); }`;
@@ -127,7 +127,7 @@ vec2 map(vec3 p){
   return r;
 }
 vec3 nor(vec3 p){ vec2 e=vec2(.0007,0); return normalize(vec3(map(p+e.xyy).x-map(p-e.xyy).x,map(p+e.yxy).x-map(p-e.yxy).x,map(p+e.yyx).x-map(p-e.yyx).x)); }
-float soft(vec3 ro, vec3 rd){ float r=1.,t=.01; for(int i=0;i<28;i++){ float h=map(ro+rd*t).x; r=min(r,10.*h/t); t+=clamp(h,.01,.6); if(h<.0005||t>30.) break; } return clamp(r,0.,1.); }
+float soft(vec3 ro, vec3 rd){ float r=1.,t=.01; for(int i=0;i<14;i++){ float h=map(ro+rd*t).x; r=min(r,10.*h/t); t+=clamp(h,.01,.6); if(h<.0005||t>30.) break; } return clamp(r,0.,1.); }
 float ao(vec3 p, vec3 n){ float o=0.,s=1.; for(int i=1;i<5;i++){ float h=.02*float(i)*float(i); o+=(h-map(p+n*h).x)*s; s*=.6; } return clamp(1.-2.*o,0.,1.); }
 
 float stars(vec3 rd){ vec3 a=abs(rd); vec2 c= a.x>a.y&&a.x>a.z? rd.yz/a.x : a.y>a.z? rd.xz/a.y : rd.xy/a.z;
@@ -205,7 +205,7 @@ void main(){
   vec3 ww=normalize(uTa-uRo), uu=normalize(cross(vec3(sin(uRoll),cos(uRoll),0),ww)), vv=cross(ww,uu);
   vec3 rd=normalize(q.x*uu+q.y*vv+(1./tan(radians(uFov)*.5))*ww), ro=uRo;
   float t=0.; vec2 h; bool hit=false; float tmax= uS>=5? 400. : 30.;
-  for(int i=0;i<160;i++){ h=map(ro+rd*t); if(h.x<.0004*t+.0002){ hit=true; break; } t+=h.x; if(t>tmax) break; }
+  for(int i=0;i<90;i++){ h=map(ro+rd*t); if(h.x<.0004*t+.0002){ hit=true; break; } t+=h.x; if(t>tmax) break; }
   vec3 col; float depth=1e4;
   if(hit){
     vec3 p=ro+rd*t; map(p); vec3 n=nor(p); vec3 emis;
@@ -280,7 +280,7 @@ const P = { scene: compile(SCENE), bright: compile(BRIGHT), copy: compile(COPY),
 const TA = target(SW, SH), TB = target(BW, BH), TC = target(BW, BH), TD = target(BW, BH), TE = target(BW, BH);
 function pass(prog, out, set) {
   gl.useProgram(prog.p); gl.bindFramebuffer(gl.FRAMEBUFFER, out ? out.fb : null);
-  gl.viewport(0, 0, out ? out.w : 1080, out ? out.h : 1920); set(prog.u); gl.drawArrays(gl.TRIANGLES, 0, 3);
+  gl.viewport(0, 0, out ? out.w : 540, out ? out.h : 960); set(prog.u); gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
 const tex = (u, name, t, unit) => { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t.tx); gl.uniform1i(u[name], unit) };
 function blur2(src, tmp, dst, r) {
