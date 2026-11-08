@@ -1,0 +1,271 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Ролик 6 — Что если зарплата удваивается</title>
+<link rel="stylesheet" href="lib/ds.css">
+<style>
+/* ---------- background layers ---------- */
+#sky{position:absolute;inset:0}
+#stars{position:absolute;inset:0}
+#stars i{position:absolute;width:6px;height:6px;background:#fff;border-radius:1px}
+#win{position:absolute;left:640px;top:560px;width:300px;height:360px;border:14px solid #2A2F38;background:linear-gradient(#0B1530,#16244A);overflow:hidden}
+#win i{position:absolute;bottom:0;background:#0A0F1E}
+#win b{position:absolute;width:8px;height:10px;background:#E8C86A}
+#city{position:absolute;left:-40px;right:-40px;height:2200px}
+#city .bd{position:absolute;bottom:0;background:#0A0F1E;border-top:6px solid #141B33}
+#city .bd b{position:absolute;width:16px;height:20px;background:#E8C86A;opacity:.85}
+#clouds{position:absolute;inset:0}
+#clouds .cl{position:absolute;height:120px;border-radius:60px;background:#E9EEF7;box-shadow:inset 0 -26px 0 #C7D0E0}
+#earth{position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 30%,#5FA8FF,#1F5FC0 45%,#0B2A66 70%);box-shadow:0 0 120px 30px rgba(95,168,255,.35)}
+#earth .land{position:absolute;background:#3FAE5A;border-radius:40% 55% 50% 45%;opacity:.9}
+#moon{position:absolute;border-radius:50%;background:radial-gradient(circle at 40% 35%,#F2F2EC,#B9B9B0 70%);box-shadow:0 0 80px rgba(255,255,255,.25)}
+#moon i{position:absolute;border-radius:50%;background:rgba(0,0,0,.12)}
+
+/* ---------- 3D world ---------- */
+#view{position:absolute;inset:0;perspective:2600px;perspective-origin:540px 1050px}
+#cam{position:absolute;left:540px;top:1430px;transform-style:preserve-3d}
+.g{position:absolute;left:0;top:0;transform-style:preserve-3d}
+.f{position:absolute;backface-visibility:hidden}
+#floor{position:absolute;left:-1400px;top:-1400px;width:2800px;height:2800px;
+  background:repeating-linear-gradient(0deg,#1A1E26 0 2px,transparent 2px 140px),repeating-linear-gradient(90deg,#1A1E26 0 2px,transparent 2px 140px),#13161C}
+.cash{background:
+  linear-gradient(90deg,transparent 42%,#F4F4F0 42% 58%,transparent 58%),
+  repeating-linear-gradient(180deg,#5DB86B 0 20px,#2F7A3E 20px 24px)}
+.cashTop{background:linear-gradient(90deg,transparent 42%,#F4F4F0 42% 58%,transparent 58%),#6CC97A}
+.face{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.eyes{display:flex;gap:30px;margin-top:6px}.eyes i{width:16px;height:22px;background:#111;display:block}
+.mouth{width:34px;height:8px;background:#7A3B2A;border-radius:2px}
+.bill{position:absolute;width:64px;height:30px;background:#5DB86B;border:3px solid #2F7A3E;border-radius:3px}
+.bill::after{content:"";position:absolute;left:24px;top:0;width:10px;height:100%;background:#F4F4F0}
+
+/* ---------- HUD ---------- */
+#hud{position:absolute;left:70px;top:270px;right:250px}
+#hud .lbl{font-size:30px;font-weight:700;letter-spacing:.14em;color:#F4F4F0;opacity:.85}
+#hud .num{font-family:"Inter Display";font-weight:800;letter-spacing:-.035em;line-height:1;margin-top:10px;white-space:nowrap;font-variant-numeric:tabular-nums}
+#hud .cmp{font-size:30px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:16px}
+#hud .tag{display:inline-block;margin-top:18px;padding:8px 18px;border-radius:10px;background:var(--lime);color:var(--ink);font-size:26px;font-weight:800;letter-spacing:.08em}
+#say{position:absolute;left:70px;right:120px;top:680px;font-family:"Inter Display";font-style:italic;font-weight:500;font-size:56px;line-height:1.15;color:#F4F4F0;text-shadow:0 4px 30px rgba(0,0,0,.6)}
+#hook{position:absolute;left:70px;right:70px;top:330px;font-family:"Inter Display";font-weight:800;font-size:112px;line-height:1.02;letter-spacing:-.035em;text-shadow:0 6px 40px rgba(0,0,0,.6)}
+#hook .lime{color:var(--lime)}
+#shade{position:absolute;left:0;top:0;width:1080px;height:1000px;background:linear-gradient(180deg,rgba(8,10,16,.72),rgba(8,10,16,.55) 60%,rgba(8,10,16,0));pointer-events:none}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+
+/* ---------- end ---------- */
+#sEnd{background:var(--bg)}
+#eq{position:absolute;left:70px;right:70px;top:560px;font-family:"Inter Display";font-weight:800;font-size:140px;line-height:1;letter-spacing:-.04em}
+#eq2{position:absolute;left:70px;right:70px;top:880px;font-size:60px;font-weight:700;color:#F4F4F0}
+#ebrand{position:absolute;left:70px;right:70px;top:1260px}
+#ebrand .h{font-size:46px;font-weight:800;color:var(--lime)}
+#ebrand .s{font-size:36px;color:var(--muted);margin-top:12px}
+</style></head><body><div class="stage">
+
+<div class="scene" id="sMain">
+  <div id="sky"></div>
+  <div id="stars"></div>
+  <div id="earth"><i class="land" style="left:22%;top:18%;width:30%;height:22%"></i><i class="land" style="left:58%;top:40%;width:22%;height:30%"></i><i class="land" style="left:28%;top:60%;width:18%;height:14%"></i></div>
+  <div id="moon"><i style="left:20%;top:25%;width:22%;height:22%"></i><i style="left:58%;top:52%;width:16%;height:16%"></i><i style="left:40%;top:70%;width:10%;height:10%"></i></div>
+  <div id="city"></div>
+  <div id="clouds"></div>
+  <div id="win"></div>
+  <div id="view"><div id="cam">
+    <div class="g" id="floorG"><div id="floor"></div></div>
+    <div class="g" id="pile"></div>
+    <div class="g" id="hero"></div>
+    <div class="g" id="bills"></div>
+  </div></div>
+  <div id="shade"></div><div id="hud"><div class="lbl" id="lbl">ЗАРПЛАТА · ДЕНЬ 1</div><div class="num" id="num">1 000 ₽</div>
+    <div class="cmp" id="cmp">шаурма и кофе</div><div class="tag">×2 КАЖДЫЙ ДЕНЬ</div></div>
+  <div id="say"></div>
+  <div id="hook">Что если зарплата <span class="lime">удваивается</span> каждый день?</div>
+  <div id="flash"></div>
+</div>
+
+<div class="scene" id="sEnd" style="display:none">
+  <div class="dots"></div><div class="glow" style="left:-110px;top:420px"></div>
+  <div id="eq">Что удвоить <span class="lime">завтра?</span></div>
+  <div id="eq2">Пишите в комментариях</div>
+  <div id="ebrand"><div class="h">@deploy_studio03</div><div class="s">А ещё мы делаем сайты<br>с онлайн-записью для студий</div></div>
+</div>
+
+</div>
+<script src="lib/ds.js"></script>
+<script>
+window.DUR = 24; window.BPM = 120;
+window.MUSIC = { drums_from: 1.5, drums_to: 21.5, breaks: [[19, 19.5]], fade_out: .6 };
+
+// ---------- 3D box helper (flat shading per face) ----------
+function box(w, h, d, color, { cls = '', topCls = '', front = '' } = {}) {
+  const sh = { fr: 1, bk: .55, lf: .62, rt: .78, tp: 1.12, bt: .4 };
+  const face = (k, fw, fh, tr, extra = '', inner = '') =>
+    `<div class="f ${extra}" style="width:${fw}px;height:${fh}px;left:${-fw / 2}px;top:${-fh / 2}px;transform:${tr};background-color:${color};filter:brightness(${sh[k]})">${inner}</div>`;
+  return `<div class="g">` +
+    face('fr', w, h, `translateZ(${d / 2}px)`, cls + ' face', front) +
+    face('bk', w, h, `rotateY(180deg) translateZ(${d / 2}px)`, cls) +
+    face('lf', d, h, `rotateY(-90deg) translateZ(${w / 2}px)`, cls) +
+    face('rt', d, h, `rotateY(90deg) translateZ(${w / 2}px)`, cls) +
+    face('tp', w, d, `rotateX(90deg) translateZ(${h / 2}px)`, topCls || cls) +
+    face('bt', w, d, `rotateX(-90deg) translateZ(${h / 2}px)`, cls) + `</div>`;
+}
+const at = (x, y, z, inner, id = '') => `<div class="g" ${id ? `id="${id}"` : ''} style="transform:translate3d(${x}px,${y}px,${z}px)">${inner}</div>`;
+
+// hero «Кубыч»: tracksuit, lime cap. Origin = feet on top of the pile (y up = negative)
+const SUIT = '#2E4FB8', LEG = '#1F2C5C', SKIN = '#F0BF8C';
+$('hero').innerHTML =
+  at(-34, -60, 0, box(54, 120, 56, LEG)) + at(34, -60, 0, box(54, 120, 56, LEG)) +
+  at(0, -190, 0, box(150, 140, 78, SUIT, { front: '<div style="width:10px;height:100%;background:#F4F4F0;opacity:.9"></div>' })) +
+  `<div class="g" id="armL" style="transform:translate3d(-98px,-250px,0)">${at(0, 62, 0, box(44, 128, 44, SUIT))}</div>` +
+  `<div class="g" id="armR" style="transform:translate3d(98px,-250px,0)">${at(0, 62, 0, box(44, 128, 44, SUIT))}</div>` +
+  `<div class="g" id="head">${at(0, -322, 0, box(118, 118, 118, SKIN, { front: '<div class="eyes"><i></i><i></i></div><div class="mouth" id="mouth"></div>' }))}` +
+  at(0, -394, 0, box(128, 30, 128, '#C6F432')) + at(0, -385, 84, box(128, 12, 50, '#C6F432')) + `</div>`;
+
+// pile of cash: top at y=0, height H goes down
+function setPile(H) {
+  const W = 330, D = 220;
+  $('pile').innerHTML = at(0, H / 2, 0, box(W, H, D, '#5DB86B', { cls: 'cash', topCls: 'cashTop' }));
+  $('floorG').style.transform = `translate3d(0,${H}px,0) rotateX(90deg)`;
+}
+
+// ---------- background content ----------
+(function () {
+  let s = '', r = 7;
+  const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280;
+  for (let i = 0; i < 140; i++) s += `<i style="left:${rnd() * 1080}px;top:${rnd() * 1920}px;opacity:${.3 + rnd() * .7};transform:scale(${.5 + rnd()})"></i>`;
+  $('stars').innerHTML = s;
+  let c = '';
+  const xs = [0, 120, 230, 380, 500, 640, 760, 900, 1010];
+  xs.forEach((x, i) => {
+    const h = 700 + rnd() * 1300, w = 110 + rnd() * 60;
+    let wins = '';
+    for (let y = 60; y < h - 40; y += 70) for (let k = 0; k < 3; k++) if (rnd() > .45) wins += `<b style="left:${18 + k * 34}px;top:${y}px"></b>`;
+    c += `<div class="bd" style="left:${x}px;width:${w}px;height:${h}px">${wins}</div>`;
+  });
+  $('city').innerHTML = c;
+  let w = '';
+  [[0, 120], [70, 200], [150, 90], [215, 160]].forEach(([x, h]) => w += `<i style="left:${x}px;width:70px;height:${h}px"></i>`);
+  [[20, 290], [100, 210], [170, 300]].forEach(([x, y]) => w += `<b style="left:${x}px;top:${y}px"></b>`);
+  $('win').innerHTML = w;
+  let cl = '';
+  [[60, 0, 360], [520, 380, 420], [-80, 760, 380], [600, 1140, 340], [140, 1500, 460], [700, 1820, 300]].forEach(([x, y, wd]) => cl += `<div class="cl" style="left:${x}px;top:${y}px;width:${wd}px"></div>`);
+  $('clouds').innerHTML = cl;
+  let b = '';
+  for (let i = 0; i < 16; i++) b += `<div class="bill" id="bl${i}"></div>`;
+  $('bills').innerHTML = b;
+})();
+
+// ---------- story ----------
+const STEPS = [
+  { d: 1, v: 1e3, cmp: 'шаурма и кофе', say: 'День 1. Тысяча рублей.<br>Негусто.' },
+  { d: 7, v: 64e3, cmp: 'как месячная зарплата', say: 'День 7. Начальник<br>что-то заподозрил.' },
+  { d: 11, v: 1024e3, cmp: 'первый миллион. за день', say: 'День 11. Кубыч<br>уволился.' },
+  { d: 15, v: 16384e3, cmp: 'квартира. наличными', say: 'День 15. Банкомат<br>просит пощады.' },
+  { d: 21, v: 1048576e3, cmp: 'миллиард рублей', say: 'День 21. Стопка выше<br>пятиэтажки.' },
+  { d: 31, v: 1073741824e3, cmp: 'больше бюджета республики', say: 'День 31. Стопка выше<br>облаков.' },
+  { d: 40, v: 549755813888e3, cmp: 'больше всех денег страны', say: 'День 40. Видно<br>из космоса.' },
+  { d: 45, v: 17592186044416e3, cmp: 'стопка пятитысячных', say: 'День 45. Почти<br>до Луны.' },
+];
+const T0 = 1.5, TS = [1.5, 3.0, 5.1, 7.2, 9.3, 11.4, 13.5, 15.6];   // step start times
+const HS = [44, 110, 230, 470, 1000, 2200, 3200, 3200];               // visible pile height
+const ROLL = .6;
+
+// sound
+sfx(0, 'hit', .8); sfx(.08, 'pop', .5);
+TS.forEach((t0, i) => {
+  if (i === 0) { sfx(t0, 'pop', .6); return }
+  sfx(t0 - .05, 'whoosh', .35);
+  for (let k = 0; k < 5; k++) sfx(t0 + k * .1, 'tick', .45);
+  sfx(t0 + ROLL, i >= 5 ? 'hit' : 'pop', i >= 5 ? .8 : .65);
+  if (i === 2 || i === 4) sfx(t0 + ROLL + .05, 'chime', .5);
+});
+sfx(10.9, 'riser', .35); sfx(15.1, 'riser2', .4);
+sfx(19.0, 'whoosh_down', .5);
+sfx(21.5, 'hit', .9); sfx(21.62, 'pop', .5);
+SFX.forEach(e => e.g *= .6);
+
+function fmt(v) { return Math.round(v).toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₽' }
+function stepAt(t) { let i = 0; for (let k = 0; k < TS.length; k++) if (t >= TS[k]) i = k; return i }
+// continuous "altitude" 0..7
+function alt(t) { const i = stepAt(t); const p = i < 7 ? eio(lin(t, TS[i], TS[i] + 1.2)) : 0; return i === 0 ? 0 : (i - 1) + eio(lin(t, TS[i], TS[i] + 1.2)) }
+const hexMix = (a, b, p) => { const A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16); const c = s => Math.round(mix((A >> s) & 255, (B >> s) & 255, p)); return `rgb(${c(16)},${c(8)},${c(0)})` };
+
+window.render = function (t) {
+  const main = t < 21.5; vis('sMain', main); vis('sEnd', !main);
+  if (main) {
+    const i = stepAt(t), s = alt(t);
+    // value roll (geometric)
+    const prev = i > 0 ? STEPS[i - 1].v : STEPS[0].v, cur = STEPS[i].v;
+    const pr = i > 0 ? eo(lin(t, TS[i], TS[i] + ROLL)) : 1;
+    const v = prev * Math.pow(cur / prev, pr);
+    const txt = fmt(v);
+    const n = $('num'); n.textContent = txt;
+    n.style.fontSize = Math.min(150, 760 / (txt.length * .56)) + 'px';
+    n.style.color = pr < 1 ? '#C6F432' : '#F4F4F0';
+    $('lbl').textContent = 'ЗАРПЛАТА · ДЕНЬ ' + (pr < 1 && i > 0 ? Math.round(mix(STEPS[i - 1].d, STEPS[i].d, pr)) : STEPS[i].d);
+    $('cmp').textContent = STEPS[i].cmp;
+    const land = i > 0 ? lin(t, TS[i] + ROLL, TS[i] + ROLL + .25) : 1;
+    n.style.transform = `scale(${1 + .08 * Math.sin(Math.PI * land)})`; n.style.transformOrigin = 'left center';
+
+    // hook then narration
+    const hk = 1 - lin(t, 1.35, 1.6);
+    $('hook').style.opacity = hk; $('hook').style.transform = `scale(${mix(1.06, 1, eo(lin(t, 0, .4)))})`;
+    $('hud').style.opacity = lin(t, 1.4, 1.7);
+    const sayStep = t < 19 ? i : -1;
+    $('say').innerHTML = sayStep >= 0 ? STEPS[sayStep].say : 'А что удвоить<br><span class="lime">завтра?</span>';
+    const st = sayStep >= 0 ? TS[i] + (i > 0 ? ROLL : .1) : 19.1;
+    $('say').style.opacity = t < 1.6 ? 0 : lin(t, st, st + .2);
+    $('say').style.transform = `translateY(${(1 - eo(lin(t, st, st + .3))) * 30}px)`;
+
+    // pile height and camera
+    const hp = i > 0 ? eio(lin(t, TS[i], TS[i] + 1.2)) : 1;
+    const H = i > 0 ? mix(HS[i - 1], HS[i], hp) : HS[0];
+    setPile(H);
+    const zoomOut = eio(lin(t, 19, 21.3));
+    const yaw = -36 + 8 * Math.sin(t * .35) - 40 * zoomOut;
+    $('cam').style.transform = `translateY(${-60 * zoomOut}px) scale(${mix(1.3, .62, zoomOut)}) rotateX(-18deg) rotateY(${yaw}deg)`;
+
+    // hero animation: bob, cheer on landing, look up later
+    const cheer = i > 0 ? Math.sin(Math.PI * lin(t, TS[i] + ROLL - .1, TS[i] + ROLL + .7)) : 0;
+    const bob = Math.abs(Math.sin(t * Math.PI * 2)) * 8;
+    $('hero').style.transform = `translate3d(0,${-bob - cheer * 40}px,0)`;
+    const armA = 12 + 150 * cheer + (t > 19 ? 150 * Math.abs(Math.sin((t - 19) * 6)) * (1 - lin(t, 20.8, 21.3)) : 0);
+    $('armL').style.transform = `translate3d(-98px,-250px,0) rotateZ(${armA}deg)`;
+    $('armR').style.transform = `translate3d(98px,-250px,0) rotateZ(${t > 19 ? 12 : -armA}deg)`;
+    $('mouth').style.height = (8 + 18 * cheer) + 'px';
+
+    // flying bills on each landing
+    for (let k = 0; k < 16; k++) {
+      const b = $('bl' + k), t0 = i > 0 ? TS[i] + ROLL - .05 : -9, p = lin(t, t0, t0 + .9);
+      if (p <= 0 || p >= 1) { b.style.display = 'none'; continue }
+      b.style.display = '';
+      const ang = k * 2.4, sp = 220 + (k * 37) % 160;
+      const x = Math.cos(ang) * sp * p, z = Math.sin(ang) * sp * p, y = -260 * p + 420 * p * p - 60;
+      b.style.transform = `translate3d(${x}px,${y}px,${z}px) rotateX(${p * 540 + k * 20}deg) rotateY(${k * 33}deg)`;
+      b.style.opacity = 1 - lin(p, .7, 1);
+    }
+
+    // backgrounds by altitude s (0..7)
+    const sky = s < 1.5 ? '#0F1115' : s < 3.6 ? hexMix('#0F1115', '#0E1A33', lin(s, 1.5, 2.4)) : s < 4.8 ? hexMix('#0E1A33', '#22355C', lin(s, 3.6, 4.2)) : hexMix('#22355C', '#03040A', lin(s, 4.6, 5.3));
+    $('sky').style.background = sky;
+    $('win').style.opacity = 1 - lin(s, 1.2, 1.9);
+    $('win').style.transform = `translateY(${eio(lin(s, 1.0, 2.0)) * 700}px)`;
+    const cityP = lin(s, 2.2, 4.4);
+    $('city').style.top = mix(1480, 3600, eio(cityP)) - 2200 + 'px';
+    $('city').style.opacity = lin(s, 1.8, 2.4) * (1 - lin(s, 4.2, 4.5));
+    $('clouds').style.opacity = lin(s, 3.9, 4.3) * (1 - lin(s, 5.0, 5.4));
+    $('clouds').style.transform = `translateY(${mix(-1700, 1900, lin(s, 3.9, 5.4))}px)`;
+    $('stars').style.opacity = lin(s, 4.8, 5.4);
+    $('stars').style.transform = `translateY(${s * 40}px)`;
+    const eP = lin(s, 5.0, 6.0);
+    const eR = mix(2600, 900, eio(lin(s, 5.4, 7)));
+    $('earth').style.width = $('earth').style.height = eR * 2 + 'px';
+    $('earth').style.left = 540 - eR + 'px';
+    $('earth').style.top = mix(1920 + 200, mix(1500, 1700, lin(s, 5.6, 7)), eio(eP)) + 'px';
+    $('earth').style.opacity = eP > 0 ? 1 : 0;
+    const mP = eio(lin(s, 5.8, 7));
+    const mR = mix(30, 150, mP);
+    Object.assign($('moon').style, { width: mR * 2 + 'px', height: mR * 2 + 'px', left: 850 - mR + 'px', top: mix(1000, 870, mP) - mR + 'px', opacity: lin(s, 5.8, 6.2) });
+
+    // flash on big jumps
+    $('flash').style.opacity = [5, 6, 7].includes(i) ? .2 * (1 - lin(t, TS[i] + ROLL, TS[i] + ROLL + .2)) * (t >= TS[i] + ROLL ? 1 : 0) : 0;
+  } else {
+    rise('eq', t, 21.55, 50, .4); rise('eq2', t, 21.8, 40, .4); rise('ebrand', t, 22.2, 40, .4);
+  }
+};
+render(0);
+</script></body></html>
