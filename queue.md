@@ -52,8 +52,8 @@ cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@739da118366
 
 ## 2026-11-13 | Рилс: Пиши ДЕМО
 
-video: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@739da1183663a68c0794b0d64221fb3c438b72cf/public/reels/reel2-pishi-demo.mp4
-cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@739da1183663a68c0794b0d64221fb3c438b72cf/public/reels/reel2-pishi-demo-cover.jpg
+video: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@2f8d2ac1ead630127f94dea4d35692d0dd2f7494/public/reels/reel9-pishi-demo-v2.mp4
+cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@2f8d2ac1ead630127f94dea4d35692d0dd2f7494/public/reels/reel9-pishi-demo-v2-cover.jpg
 
 ```text
 Клиент сам выбирает услугу и свободное время. Вам приходит уведомление в Telegram. Без переписки и двойных записей.
