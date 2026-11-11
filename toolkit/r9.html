@@ -1,0 +1,113 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>r9 · Пиши ДЕМО (Бюро записи)</title>
+<link rel="stylesheet" href="brand/brand.css"><link rel="stylesheet" href="lib/ds2.css">
+<style>
+#s4 .chat{font-family:var(--f-mono);font-size:46px;line-height:1.25;color:#CFC9BE}
+#s4 .chat div{position:relative;margin-bottom:34px;width:max-content;max-width:936px}
+#s3 .note .b{font-size:42px}
+#s4 .chat .x{position:absolute;left:-8px;top:52%;height:7px;background:var(--signal);transform-origin:0 50%}
+</style></head><body><div class="stage"><div class="cam" id="cam">
+
+<!-- 1 · хук: табло (ночь) -->
+<div class="sc night" id="s1">
+  <div class="pad" style="top:300px"><div class="runner"><span>Табло записей</span><span>23:40</span></div></div>
+  <div class="pad" style="top:430px" id="board"></div>
+  <div class="pad f-mono" style="top:1130px;font-size:38px;line-height:1.8;color:#9C978E" id="s1log">
+    <div>23:40&nbsp; Полировка&nbsp;&nbsp;&nbsp;сайт&nbsp; ✓</div>
+    <div>23:52&nbsp; Химчистка&nbsp;&nbsp;&nbsp;сайт&nbsp; ✓</div>
+    <div>00:15&nbsp; Комплекс&nbsp;&nbsp;&nbsp;&nbsp;сайт&nbsp; ✓</div></div>
+  <div class="grain"></div>
+</div>
+
+<!-- 2 · печать чека + штамп (бумага) -->
+<div class="sc" id="s2">
+  <div id="prn"></div>
+  <div class="stampbox" style="left:600px;top:930px" id="st2"><span class="stamp" style="font-size:64px;transform:none">ЗАПИСАН</span></div>
+  <div class="pad f-head" style="top:1190px;font-size:112px">
+    <span class="mask" id="h2a"><span>Услугу и время</span></span>
+    <span class="mask f-serif signal" id="h2b" style="font-size:116px"><span>выбирает сам</span></span></div>
+  <div class="grain"></div>
+</div>
+
+<!-- 3 · уведомление (бумага) -->
+<div class="sc" id="s3">
+  <div class="pad" style="top:300px"><div class="runner"><span>Входящие</span><span>14:02</span></div></div>
+  <div class="pad f-head" style="top:400px;font-size:112px">
+    <span class="mask" id="h3a"><span>А вам —</span></span>
+    <span class="mask f-serif signal" id="h3b" style="font-size:116px"><span>уведомление</span></span></div>
+  <div class="note" id="note" style="left:110px;width:860px;top:840px;padding:36px 40px">
+    <div class="h"><span>Telegram · бот студии</span><span>сейчас</span></div>
+    <div class="b"><b>Новая запись</b><br>Полировка кузова<br>пт, 14:00 · бокс 2<br><span style="color:var(--ink-2)">клиент записался на сайте</span></div>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<!-- 4 · без переписки и двойных записей (ночь) -->
+<div class="sc night" id="s4">
+  <div class="pad" style="top:300px"><div class="runner"><span>Директ · вчера</span><span>3 сообщения</span></div></div>
+  <div class="pad chat" style="top:420px" id="chat">
+    <div>— а есть окошко в пятницу?<span class="x"></span></div>
+    <div>— а на 14:00 можно?<span class="x"></span></div>
+    <div>— ой, на 14:00 уже записали<span class="x"></span></div>
+  </div>
+  <div class="pad f-head" style="top:900px;font-size:118px;color:#F2EEE6">
+    <span class="mask" id="h4a"><span>Без переписки</span></span>
+    <span class="mask f-serif" id="h4b" style="font-size:118px;color:#CFC9BE"><span>и двойных записей</span></span></div>
+  <div class="grain"></div>
+</div>
+
+</div></div>
+<script src="vendor/gsap.min.js"></script><script src="vendor/CustomEase.min.js"></script><script src="vendor/matter.min.js"></script>
+<script src="lib/ds2.js"></script>
+<script>
+const B = 60 / 110;                       // office110: 110 BPM, смена кадра в бит
+const T2 = 6 * B, T3 = 15 * B, T4 = 21 * B, T5 = 28 * B;
+window.BPM = 110; window.DUR = +(T5 + 2.35).toFixed(3);
+window.MUSIC = { preset: 'office110', drums_from: 2 * B, fade_out: .55 };
+document.querySelector('.cam').insertAdjacentHTML('beforeend', endCard2('end'));
+
+// 1 · табло
+const board = flapBoard($('board'), [{ text: 'КЛИЕНТ' }, { text: 'ЗАПИСАЛСЯ' }, { text: 'САМ', sig: true }], { t0: 0, per: .035, flip: .065, size: 92 });
+sfx(board.end + .02, 'ding', .35);
+[0, 1, 2].forEach(i => { sfx(1.25 + i * B / 2, 'type', .4); sfx(1.36 + i * B / 2, 'type', .3) });
+// 2 · чек
+const prn = printer($('prn'), ['title:СТУДИЯ «ГЛЯНЕЦ»', 'hr', ['Услуга', 'Полировка'], ['Время', 'пт 14:00'], ['Бокс', '2'], 'hr', ['Через', 'сайт'], ['Звонков', '0'], 'barcode'],
+  { x: 140, y: 250, w: 800, t0: T2 + .12, line: .3 });
+const st2 = stampHit($('st2'), 11 * B, { rot: -8 });
+sfx(T2, 'slide', .5);
+// 3 · уведомление
+sfx(T3, 'slide', .45); sfx(T3 + 2 * B, 'bell', .7); sfx(T3 + 2 * B - .25, 'rustle', .35);
+// 4 · директ зачёркивается
+const XS = [T4 + 1 * B, T4 + 2 * B, T4 + 3 * B];
+XS.forEach(t => sfx(t, 'tear', .35));
+sfx(T4, 'slide', .4);
+// 5 · финал
+endSfx2(T5);
+
+window.render = t => {
+  scenes([['s1', 0, T2], ['s2', T2, T3], ['s3', T3, T4], ['s4', T4, T5], ['end', T5, 99]], t);
+  grain(t);
+  let sh = [0, 0, 0];
+  // 1
+  board.render(t);
+  [...$('s1log').children].forEach((d, i) => { const a = 1.25 + i * B / 2; d.style.clipPath = `inset(0 ${(1 - lin(t, a, a + .22)) * 100}% 0 0)` });
+  // 2
+  prn.render(t); st2.render(t);
+  maskIn($('h2a'), t, T2 + 2 * B); maskIn($('h2b'), t, T2 + 3 * B);
+  if (t >= T2 && t < T3) sh = shake(t, 11 * B, 16);
+  // 3
+  maskIn($('h3a'), t, T3 + .05); maskIn($('h3b'), t, T3 + B);
+  const n = E.back(lin(t, T3 + 2 * B - .3, T3 + 2 * B + .15));
+  $('note').style.transform = `translateX(${(1 - n) * 900}px) rotate(${mix(6, -1.5, n)}deg)`;
+  // 4
+  [...$('chat').children].forEach((d, i) => {
+    const a = T4 + .05 + i * .18; d.style.opacity = E.out(lin(t, a, a + .2));
+    d.querySelector('.x').style.width = (d.offsetWidth + 16) + 'px';
+    d.querySelector('.x').style.transform = `scaleX(${E.expo(lin(t, XS[i], XS[i] + .2))})`;
+    d.style.color = t > XS[i] + .1 ? '#6E6A63' : '';
+  });
+  maskIn($('h4a'), t, T4 + 4 * B); maskIn($('h4b'), t, T4 + 5 * B);
+  // 5
+  if (t >= T5) sh = endAnim2('end', t, T5);
+  $('cam').style.transform = `translate(${sh[0]}px,${sh[1]}px) rotate(${sh[2]}deg)`;
+};
+</script></body></html>

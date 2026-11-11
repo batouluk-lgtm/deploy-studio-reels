@@ -1,0 +1,55 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Обложка рилса · Бюро записи</title>
+<!-- Обложка рилса в стиле STYLE.md. Добавить запись в C, вызвать setCover(n), снять 1080×1920 JPEG:
+     python3 lib/cover2.py N public/reels/<имя>-cover.jpg
+     Всё важное — в центральной зоне 3:4 (y 240–1680): так обложка читается и в сетке профиля. -->
+<link rel="stylesheet" href="brand/brand.css">
+<style>
+html,body{margin:0}
+#c{width:1080px;height:1920px;position:relative;overflow:hidden;background:var(--paper);color:var(--ink)}
+#c.night{background:var(--night);color:#F2EEE6}
+.pad{position:absolute;left:72px;right:72px}
+#c:not(.night):before{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 40%,transparent 60%,rgba(90,70,40,.10))}
+#title{top:520px;font-size:190px;line-height:.88}
+#serif{font-size:150px;line-height:1;display:block;margin-top:18px}
+#flaps{top:520px;font-size:118px}
+#flaps .flaps{gap:10px;margin-bottom:16px}
+#foot{top:1500px;display:flex;justify-content:space-between;align-items:end}
+#st{position:absolute}
+</style></head><body>
+<div id="c">
+  <div class="reg" style="left:40px;top:250px"></div><div class="reg" style="right:40px;top:250px"></div>
+  <div class="reg" style="left:40px;top:1636px"></div><div class="reg" style="right:40px;top:1636px"></div>
+  <div class="pad" style="top:330px"><div class="runner"><span id="run1"></span><span id="run2"></span></div></div>
+  <div class="pad f-head" id="title"></div>
+  <div class="pad" id="flaps"></div>
+  <div id="st"><span class="stamp" id="stamp"></span></div>
+  <div class="pad" id="foot"><span class="f-mono" style="font-size:34px" id="sub"></span><span class="logo" style="font-size:96px">ds<b>.</b></span></div>
+  <div class="grain"></div>
+</div>
+<script>
+const C = {
+  9: { night: true, run: ['Рилс № 09 · как это работает', 'Бюро записи'], flaps: [['КЛИЕНТ'], ['ЗАПИСАЛСЯ'], ['САМ', 1]],
+       stamp: 'ЗАПИСАН', st: { left: 560, top: 1110, size: 64, rot: -8 }, sub: 'без звонков и переписки' },
+  10: { night: false, run: ['Рилс № 10 · как мы работаем', 'Бюро записи'], title: 'Сайт<br>с&nbsp;записью', serif: 'за 7–12 дней',
+       stamp: 'ОПУБЛИКОВАН', st: { left: 380, top: 1160, size: 58, rot: 6 }, sub: 'бриф → сборка → тест → запуск' },
+};
+function setCover(n) {
+  const c = C[n], el = document.getElementById('c');
+  el.classList.toggle('night', !!c.night);
+  run1.textContent = c.run[0]; run2.textContent = c.run[1];
+  if (c.flaps) {
+    title.style.display = 'none';
+    flaps.innerHTML = c.flaps.map(([w, sig]) => `<div class="flaps">${[...w].map(ch => `<span class="flap${sig ? ' sig' : ''}">${ch}</span>`).join('')}</div>`).join('');
+    // ширина табло: самое длинное слово вписывается в поля 72 px
+    const max = Math.max(...c.flaps.map(f => f[0].length));
+    flaps.style.fontSize = Math.min(118, Math.floor((936 - (max - 1) * 10) / max)) + 'px';
+  } else {
+    flaps.style.display = 'none';
+    title.innerHTML = `${c.title}<span class="f-serif signal" id="serif">${c.serif}</span>`;
+  }
+  st.style.left = c.st.left + 'px'; st.style.top = c.st.top + 'px';
+  stamp.textContent = c.stamp; stamp.style.fontSize = c.st.size + 'px'; stamp.style.transform = `rotate(${c.st.rot}deg)`;
+  sub.textContent = c.sub; sub.style.color = c.night ? '#9C978E' : 'var(--ink-2)';
+}
+setCover(+(location.hash.slice(1) || 9));
+</script></body></html>
