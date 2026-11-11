@@ -1,0 +1,79 @@
+/* Deploy Studio — фирменный стиль «БЮРО ЗАПИСИ» (с 2026-11-12).
+   Подключать: <link rel="stylesheet" href="brand/brand.css"> (путь от toolkit/).
+   Шрифты лежат локально в brand/fonts — сеть не нужна. */
+
+@font-face{font-family:"Golos";src:url("fonts/GolosText-VF.ttf") format("truetype");font-weight:400 900}
+@font-face{font-family:"JBM";src:url("fonts/JetBrainsMono-Regular.ttf");font-weight:400}
+@font-face{font-family:"JBM";src:url("fonts/JetBrainsMono-Medium.ttf");font-weight:500}
+@font-face{font-family:"JBM";src:url("fonts/JetBrainsMono-Bold.ttf");font-weight:700}
+@font-face{font-family:"JBM";src:url("fonts/JetBrainsMono-ExtraBold.ttf");font-weight:800}
+@font-face{font-family:"JBM";src:url("fonts/JetBrainsMono-Italic.ttf");font-style:italic}
+@font-face{font-family:"Lora";src:url("fonts/Lora-VF.ttf");font-weight:400 700}
+@font-face{font-family:"Lora";src:url("fonts/Lora-Italic-VF.ttf");font-weight:400 700;font-style:italic}
+
+:root{
+  --paper:#ECE7DD;      /* основной фон — тёплая бумага */
+  --receipt:#FBF9F4;    /* термобумага чека */
+  --ink:#141414;        /* текст и «ночной» фон */
+  --ink-2:#55524C;      /* второстепенный текст */
+  --rule:#C9C2B5;       /* линии, пунктир */
+  --signal:#FF4A1C;     /* сигнальный оранжевый — ОДИН акцент на кадр */
+  --night:#121211;      /* тёмный режим (не больше 1 из 3 постов подряд) */
+  --f-head:"Golos",sans-serif;
+  --f-mono:"JBM",monospace;
+  --f-serif:"Lora",serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+.f-head{font-family:var(--f-head);font-weight:800;letter-spacing:-.035em;line-height:.92}
+.f-mono{font-family:var(--f-mono);letter-spacing:.02em}
+.f-serif{font-family:var(--f-serif);font-style:italic;font-weight:500;letter-spacing:-.02em}
+.signal{color:var(--signal)}
+
+/* Плёночное зерно поверх всего кадра: <div class="grain"></div> последним элементом */
+.grain{position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.35;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .45  0 0 0 0 .4  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.night .grain{mix-blend-mode:screen;opacity:.12}
+
+/* Служебная строка-колонтитул: № выпуска · рубрика · время */
+.runner{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:22px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2);border-top:2px solid var(--ink);padding-top:14px}
+.night .runner{color:#9C978E;border-color:#F2EEE6}
+
+/* Метки приводки по углам (типографский крест) */
+.reg{position:absolute;width:34px;height:34px}
+.reg:before,.reg:after{content:"";position:absolute;background:var(--ink)}
+.reg:before{left:16px;top:0;width:2px;height:34px}.reg:after{top:16px;left:0;height:2px;width:34px}
+.night .reg:before,.night .reg:after{background:#F2EEE6}
+
+/* Чек на термобумаге с зубчатыми краями */
+.receipt{background:var(--receipt);font-family:var(--f-mono);color:var(--ink);padding:44px 40px;position:relative;
+  box-shadow:0 30px 60px -20px rgba(40,30,10,.35),0 2px 0 rgba(0,0,0,.04);
+  -webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/28px 51% repeat-x,
+               conic-gradient(from 135deg at top,#0000,#000 1deg 89deg,#0000 90deg) top/28px 51% repeat-x}
+.receipt .row{display:flex;gap:10px;font-size:30px;line-height:1.55}
+.receipt .row .dots{flex:1;border-bottom:3px dotted var(--rule);transform:translateY(-12px)}
+.receipt hr{border:0;border-top:3px dashed var(--rule);margin:22px 0}
+.barcode{height:90px;background:repeating-linear-gradient(90deg,var(--ink) 0 3px,transparent 3px 6px,var(--ink) 6px 11px,transparent 11px 13px,var(--ink) 13px 14px,transparent 14px 19px)}
+
+/* Штамп: всегда сигнальный, повёрнут, с «непропечаткой» */
+.stamp{display:inline-block;font-family:var(--f-mono);font-weight:800;text-transform:uppercase;color:var(--signal);
+  border:7px solid var(--signal);border-radius:14px;padding:10px 26px;transform:rotate(-8deg);letter-spacing:.06em;
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='.55' numOctaves='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 1.6'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* Табло (split-flap): <span class="flap">А</span> по букве */
+.flaps{display:flex;gap:8px;flex-wrap:nowrap}
+.flap{position:relative;display:inline-grid;place-items:center;width:1.0em;height:1.32em;background:#1B1B1A;color:#F3EFE6;
+  font-family:var(--f-mono);font-weight:700;border-radius:.08em;box-shadow:inset 0 -2px 0 rgba(255,255,255,.04)}
+.flap:after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:#000;opacity:.7}
+.flap.sig{background:var(--signal);color:#141414}
+.flap.sp{background:transparent;box-shadow:none}
+.flap.sp:after{display:none}
+
+/* Галочка-чекбокс для чек-листов */
+.chk{display:inline-grid;place-items:center;width:1em;height:1em;border:.09em solid var(--ink);font-family:var(--f-mono);font-weight:800;line-height:1}
+.chk.on{background:var(--ink);color:var(--signal)}
+
+/* Логотип в кадре: «ds.» с сигнальной точкой */
+.logo{font-family:var(--f-head);font-weight:900;letter-spacing:-.05em}
+.logo b{color:var(--signal)}

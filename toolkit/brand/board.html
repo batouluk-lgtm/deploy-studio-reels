@@ -1,0 +1,101 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<link rel="stylesheet" href="brand.css">
+<style>
+body{background:#888;padding:40px;display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
+.card{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--paper);color:var(--ink)}
+.reel{width:1080px;height:1920px;position:relative;overflow:hidden;background:var(--paper);color:var(--ink)}
+.night{background:var(--night);color:#F2EEE6}
+.pad{position:absolute;left:72px;right:72px}
+</style></head><body>
+
+<!-- ПОСТ А · «Квитанция» -->
+<div class="card" id="post-receipt">
+  <div class="pad" style="top:64px"><div class="runner"><span>№ 014 · Боль</span><span>Бюро записи ds.</span></div></div>
+  <div class="pad f-head" style="top:150px;font-size:118px">Клиент ушёл<br>к соседу<br><span class="f-serif signal" style="font-size:124px">в 23:40</span></div>
+  <div class="receipt" style="position:absolute;left:150px;right:150px;top:640px;transform:rotate(-2.2deg)">
+    <div style="font-size:26px;letter-spacing:.2em;text-align:center;font-weight:700">СТУДИЯ «ГЛЯНЕЦ»</div><hr>
+    <div class="row"><span>Комплекс мойка</span><span class="dots"></span><span>от 2 500</span></div>
+    <div class="row"><span>Бокс 2</span><span class="dots"></span><span>Пт 10:30</span></div>
+    <div class="row"><span>Запись создана</span><span class="dots"></span><span>23:41</span></div><hr>
+    <div class="barcode"></div>
+  </div>
+  <div style="position:absolute;right:120px;top:1010px"><span class="stamp" style="font-size:52px">ЗАПИСАН</span></div>
+  <div class="pad" style="bottom:56px;font-family:var(--f-mono);font-size:26px;color:var(--ink-2)">Сайт записывает, пока вы спите →</div>
+  <div class="grain"></div>
+</div>
+
+<!-- ПОСТ Б · «Обложка» (журнальная) -->
+<div class="card night" id="post-cover">
+  <div class="reg" style="left:40px;top:40px"></div><div class="reg" style="right:40px;top:40px"></div>
+  <div class="reg" style="left:40px;bottom:40px"></div><div class="reg" style="right:40px;bottom:40px"></div>
+  <div class="pad" style="top:110px"><div class="runner"><span>№ 015 · Миф</span><span>ноябрь</span></div></div>
+  <div class="pad f-head" style="top:260px;font-size:200px;line-height:.86">Мне<br>хва&shy;тает<br>
+    <span style="text-decoration:line-through;text-decoration-color:var(--signal);text-decoration-thickness:16px">директа</span></div>
+  <div class="pad f-serif" style="top:930px;font-size:64px;line-height:1.1;color:#CFC9BE">— пока двое не записались<br>на одно <span class="signal">и то же</span> время.</div>
+  <div class="pad" style="bottom:110px;display:flex;justify-content:space-between;align-items:end">
+    <span class="f-mono" style="font-size:26px;color:#9C978E">Листайте →</span><span class="logo" style="font-size:64px">ds<b>.</b></span></div>
+  <div class="grain"></div>
+</div>
+
+<!-- ПОСТ В · «Чек-лист» -->
+<div class="card" id="post-check">
+  <div class="pad" style="top:64px"><div class="runner"><span>№ 016 · Чек-лист</span><span>Сохраните</span></div></div>
+  <div class="pad f-head" style="top:140px;font-size:96px">5 вещей,<br>без которых сайт<br><span class="f-serif signal">не записывает</span></div>
+  <div class="pad" style="top:560px;font-family:var(--f-mono);font-size:40px;line-height:2">
+    <div><span class="chk on">✓</span>&nbsp; Цены «от»</div>
+    <div><span class="chk on">✓</span>&nbsp; Свободные окна</div>
+    <div><span class="chk on">✓</span>&nbsp; Адрес и фото входа</div>
+    <div><span class="chk">&nbsp;</span>&nbsp; Отзывы с согласия</div>
+    <div><span class="chk">&nbsp;</span>&nbsp; Кнопка «Записаться»</div>
+  </div>
+  <div style="position:absolute;right:70px;bottom:180px"><span class="stamp" style="font-size:44px;transform:rotate(7deg)">3 из 5</span></div>
+  <div class="pad" style="bottom:56px;font-family:var(--f-mono);font-size:26px;color:var(--ink-2);display:flex;justify-content:space-between"><span>Проверьте свой сайт</span><span>ds.</span></div>
+  <div class="grain"></div>
+</div>
+
+<!-- РИЛС · кадр «Табло» (хук) -->
+<div class="reel night" id="reel-flap">
+  <div class="pad" style="top:300px"><div class="runner"><span>Табло записей</span><span>23:58</span></div></div>
+  <div class="pad" style="top:430px;font-size:90px">
+    <div class="flaps"><span class="flap">К</span><span class="flap">Л</span><span class="flap">И</span><span class="flap">Е</span><span class="flap">Н</span><span class="flap">Т</span></div>
+    <div class="flaps" style="margin-top:14px"><span class="flap">Н</span><span class="flap">Е</span><span class="flap sp"></span><span class="flap">П</span><span class="flap">Р</span><span class="flap">И</span><span class="flap">Ш</span><span class="flap">Ё</span><span class="flap">Л</span></div>
+    <div class="flaps" style="margin-top:14px"><span class="flap sig">О</span><span class="flap sig">П</span><span class="flap sig">Я</span><span class="flap sig">Т</span><span class="flap sig">Ь</span></div>
+  </div>
+  <div class="pad f-mono" style="top:1180px;font-size:34px;color:#9C978E;line-height:1.7">
+    <div>14:00&nbsp; Комплекс&nbsp;&nbsp;&nbsp;<span class="signal">НЕЯВКА</span></div>
+    <div>15:30&nbsp; Полировка&nbsp;&nbsp;<span class="signal">НЕЯВКА</span></div>
+    <div>17:00&nbsp; Химчистка&nbsp;&nbsp;—</div>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<!-- РИЛС · кадр «Печать чека» (решение) -->
+<div class="reel" id="reel-print">
+  <div style="position:absolute;left:140px;right:140px;top:250px;height:70px;background:#1B1B1A;border-radius:18px"></div>
+  <div style="position:absolute;left:170px;right:170px;top:282px;height:10px;background:#000;border-radius:6px"></div>
+  <div class="receipt" style="position:absolute;left:190px;right:190px;top:287px;padding-top:70px">
+    <div style="font-size:26px;letter-spacing:.2em;text-align:center;font-weight:700">НАПОМИНАНИЕ</div><hr>
+    <div class="row"><span>Завтра</span><span class="dots"></span><span>14:00</span></div>
+    <div class="row"><span>Комплекс</span><span class="dots"></span><span>Бокс 1</span></div><hr>
+    <div class="row"><span>Перенести?</span><span class="dots"></span><span>1 касание</span></div>
+    <div class="barcode" style="margin-top:20px"></div>
+  </div>
+  <div style="position:absolute;right:150px;top:930px"><span class="stamp" style="font-size:60px">ПРИДЁТ</span></div>
+  <div class="pad f-head" style="top:1170px;font-size:110px">Напомнили<br><span class="f-serif signal">за сутки</span></div>
+  <div class="pad f-mono" style="top:1440px;font-size:30px;color:var(--ink-2)">и за 2 часа — сами, без вас</div>
+  <div class="grain"></div>
+</div>
+
+<!-- РИЛС · финальная карточка -->
+<div class="reel" id="reel-end">
+  <div class="reg" style="left:60px;top:280px"></div><div class="reg" style="right:60px;top:280px"></div>
+  <div class="pad" style="top:360px"><div class="runner"><span>Бюро записи</span><span>ds.</span></div></div>
+  <div class="pad f-mono" style="top:470px;font-size:40px;color:var(--ink-2)">Напишите в комментариях</div>
+  <div class="pad f-head" style="top:540px;font-size:300px;letter-spacing:-.06em">ДЕМО</div>
+  <div class="pad f-serif" style="top:880px;font-size:64px">— покажем сайт <span class="signal">под вашу</span> нишу</div>
+  <div style="position:absolute;left:72px;top:1080px"><span class="stamp" style="font-size:46px;transform:rotate(-5deg)">ПОКАЖЕМ</span></div>
+  <div class="pad" style="top:1330px;display:flex;justify-content:space-between;align-items:end">
+    <span class="f-mono" style="font-size:36px">@deploy_studio03</span><span class="logo" style="font-size:90px">ds<b>.</b></span></div>
+  <div class="grain"></div>
+</div>
+</body></html>
