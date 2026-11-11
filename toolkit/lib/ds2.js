@@ -133,7 +133,7 @@ function stampHit(el, t0, { rot = -8, sound = true, g = .9 } = {}) {
 // верхний слой отрывается по пунктиру: зубчатый край + улетает вверх с поворотом
 function zigzag(yPct, teeth = 26, depth = 22) {
   const pts = ['0% 0%', '100% 0%'];
-  for (let i = teeth; i >= 0; i--) pts.push(`${(i / teeth) * 100}% calc(${yPct}% + ${i % 2 ? depth : 0}px)`);
+  for (let i = teeth; i >= 0; i--) pts.push(`${(i / teeth) * 100}% calc(${yPct}% - ${i % 2 ? depth : 0}px)`);
   return `polygon(${pts.join(',')})`;
 }
 function tearAway(el, t, t0, d = .55) {

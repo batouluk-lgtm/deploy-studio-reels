@@ -65,8 +65,8 @@ cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@2f8d2ac1ead
 
 ## 2026-11-17 | Рилс: Сайт с записью за 7 дней
 
-video: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@739da1183663a68c0794b0d64221fb3c438b72cf/public/reels/reel4-sait-za-7-dney.mp4
-cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@739da1183663a68c0794b0d64221fb3c438b72cf/public/reels/reel4-sait-za-7-dney-cover.jpg
+video: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@f27970f317311750b0c6bb12151bda9e3a3a92fc/public/reels/reel10-sait-7-12-dney.mp4
+cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@f27970f317311750b0c6bb12151bda9e3a3a92fc/public/reels/reel10-sait-7-12-dney-cover.jpg
 
 ```text
 Как мы делаем сайт с онлайн-записью: бриф, сборка под вашу нишу, тест на iPhone и Android, запуск. Обычно на всё уходит 7–12 дней.
