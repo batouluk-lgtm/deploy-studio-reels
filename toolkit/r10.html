@@ -1,0 +1,106 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>r10 · Сайт с записью за 7–12 дней (Бюро записи)</title>
+<link rel="stylesheet" href="brand/brand.css"><link rel="stylesheet" href="lib/ds2.css">
+<style>
+.k1{font-size:186px;line-height:.9;white-space:nowrap}
+.k1 .f-serif{font-size:190px}
+#s2 .journal{font-size:40px}
+#term{font-size:38px}
+#s2 .journal .jr,#s2 .journal .head{grid-template-columns:170px 1fr auto}
+</style></head><body><div class="stage"><div class="cam" id="cam">
+
+<!-- 1 · хук: кинетическая типографика (бумага) -->
+<div class="sc" id="s1">
+  <div class="reg" style="left:40px;top:250px"></div><div class="reg" style="right:40px;top:250px"></div>
+  <div class="pad" style="top:330px"><div class="runner"><span>Как мы работаем</span><span>Бюро записи ds.</span></div></div>
+  <div class="pad f-head k1" style="top:470px">
+    <span class="mask" id="k1"><span>Сайт</span></span>
+    <span class="mask" id="k2"><span>с записью</span></span>
+    <span class="mask f-serif signal" id="k3"><span>от 7 дней</span></span></div>
+  <div class="pad f-mono" style="top:1270px;font-size:36px;color:var(--ink-2)" id="k4">Показываем по дням →</div>
+  <div class="grain"></div>
+</div>
+
+<!-- 2 · журнал проекта (бумага) -->
+<div class="sc" id="s2">
+  <div class="pad" style="top:300px"><div class="runner"><span>Журнал проекта</span><span>студия «Глянец»</span></div></div>
+  <div class="pad f-head" style="top:390px;font-size:112px">
+    <span class="mask" id="h2a"><span>Что происходит</span></span>
+    <span class="mask f-serif" id="h2b" style="font-size:112px"><span>по дням</span></span></div>
+  <div class="pad" style="top:720px" id="jr"></div>
+  <div class="pad f-mono" style="top:1330px;font-size:30px;color:var(--ink-2)" id="fn">* обычно на всё уходит 7–12 дней</div>
+  <div class="grain"></div>
+</div>
+
+<!-- 3 · терминал deploy (ночь) -->
+<div class="sc night" id="s3">
+  <div class="pad" style="top:300px"><div class="runner"><span>День 7 · запуск</span><span>deploy</span></div></div>
+  <div class="pad" style="top:400px" id="term"></div>
+  <div class="pad f-head" style="top:1110px;font-size:120px;color:#F2EEE6">
+    <span class="mask" id="h3a"><span>Запуск.</span></span>
+    <span class="mask f-serif" id="h3b" style="font-size:72px;color:#CFC9BE;line-height:1.1"><span>Дальше сайт записывает<br>клиентов сам</span></span></div>
+  <div class="grain"></div>
+</div>
+
+<!-- 4 · итог: кинетика (бумага) -->
+<div class="sc" id="s4">
+  <div class="pad" style="top:330px"><div class="runner"><span>Срок</span><span>от брифа до запуска</span></div></div>
+  <div class="pad f-head" style="top:520px;font-size:150px">
+    <span class="mask" id="q1"><span>Обычно</span></span>
+    <span class="mask" id="q2" style="font-size:340px;letter-spacing:-.06em"><span>7–12</span></span>
+    <span class="mask f-serif signal" id="q3" style="font-size:150px"><span>дней</span></span></div>
+  <div class="grain"></div>
+</div>
+
+</div></div>
+<script src="vendor/gsap.min.js"></script><script src="vendor/CustomEase.min.js"></script><script src="vendor/matter.min.js"></script>
+<script src="lib/ds2.js"></script>
+<script>
+const B = 60 / 84;                        // lofi84: 84 BPM
+const T2 = 4 * B, T3 = 12 * B, T4 = 20 * B, T5 = 23 * B;
+window.BPM = 84; window.DUR = +(T5 + 2.35).toFixed(3);
+window.MUSIC = { preset: 'lofi84', drums_from: B * 2, fade_out: .6 };
+document.querySelector('.cam').insertAdjacentHTML('beforeend', endCard2('end', { stamp: 'ЗАПИШЕМ' }));
+
+// 1 · хук
+[0, B, 2 * B].forEach((t, i) => sfx(t + .02, 'drop', [.6, .55, .7][i]));
+sfx(3 * B, 'type', .3);
+// 2 · журнал
+sfx(T2, 'rustle', .45);
+const J = journal($('jr'), [['День 1', 'Бриф: услуги, цены', 'готово'], ['Дни 2–5', 'Сборка под нишу', 'готово'],
+  ['День 6', 'Тест iPhone/Android', 'готово'], ['День 7', 'Запуск', 'сегодня']],
+  { t0: T2 + 2 * B, step: B, hi: 3, tHi: T2 + 7 * B, head: ['День', 'Этап', 'Статус'] });
+// 3 · терминал
+sfx(T3, 'slide', .4);
+const L0 = T3 + .2;
+const TERM = terminal($('term'), [
+  { t: L0, cmd: 'deploy glyanets' },
+  { t: L0 + 1.0, out: 'сборка страниц ............ ok', cls: 'dim' },
+  { t: L0 + 1.35, out: 'запись: услуги и окна ..... ok', cls: 'dim' },
+  { t: L0 + 1.7, out: 'уведомления → Telegram .... ok', cls: 'dim' },
+  { t: L0 + 2.05, out: 'тест: iPhone, Android ..... ok', cls: 'dim' },
+  { t: L0 + 2.4, bar: true, d: 1.0 },
+  { t: L0 + 3.5, html: '<span class="p">✓ сайт опубликован</span>', snd: 'ding', g: .5 },
+]);
+// 4 · итог
+[T4, T4 + B, T4 + 2 * B].forEach((t, i) => sfx(t + .02, i === 1 ? 'stamp' : 'drop', [.55, .6, .6][i]));
+// 5 · финал
+endSfx2(T5);
+
+window.render = t => {
+  scenes([['s1', 0, T2], ['s2', T2, T3], ['s3', T3, T4], ['s4', T4, T5], ['end', T5, 99]], t);
+  grain(t);
+  let sh = [0, 0, 0];
+  maskIn($('k1'), t, 0, .38); maskIn($('k2'), t, B); maskIn($('k3'), t, 2 * B);
+  $('k4').style.clipPath = `inset(0 ${(1 - lin(t, 3 * B, 3 * B + .35)) * 100}% 0 0)`;
+  maskIn($('h2a'), t, T2 + .05); maskIn($('h2b'), t, T2 + B);
+  J.render(t);
+  $('fn').style.opacity = E.out(lin(t, T2 + 6.5 * B, T2 + 7 * B));
+  if (t >= T2 && t < T3) sh = shake(t, T2 + 7 * B, 8);
+  TERM.render(t);
+  maskIn($('h3a'), t, L0 + 3.6); maskIn($('h3b'), t, L0 + 3.6 + B * .75);
+  maskIn($('q1'), t, T4); maskIn($('q2'), t, T4 + B); maskIn($('q3'), t, T4 + 2 * B);
+  if (t >= T4 && t < T5) sh = shake(t, T4 + B, 10);
+  if (t >= T5) sh = endAnim2('end', t, T5);
+  $('cam').style.transform = `translate(${sh[0]}px,${sh[1]}px) rotate(${sh[2]}deg)`;
+};
+</script></body></html>
