@@ -75,3 +75,18 @@ cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@f27970f3173
 
 #сайтподключ #онлайнзапись #улануде
 ```
+
+## 2026-11-20 | Рилс: Галочка согласия уже стоит?
+
+video: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@5e4c0f9c5ce5ffab870995110b0f7dfda8b4c63d/public/reels/reel11-galochka-soglasiya.mp4
+cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@5e4c0f9c5ce5ffab870995110b0f7dfda8b4c63d/public/reels/reel11-galochka-soglasiya-cover.jpg
+
+```text
+Откройте форму записи на своём сайте и посмотрите на галочку согласия. Если она уже стоит, её поставил сайт, а не клиент.
+
+Согласие клиент даёт сам: пустая галочка, рядом ссылка на политику конфиденциальности, плюс уведомление о cookie. На наших сайтах с записью это настроено с запуска.
+
+Напишите ДЕМО в комментариях — покажем форму записи под вашу студию 📩
+
+#онлайнзапись #сайтдлябизнеса #персональныеданные
+```
