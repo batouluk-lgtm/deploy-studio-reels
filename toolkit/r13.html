@@ -1,0 +1,449 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>r13 · Студия в 3D, где запись работает сама (Бюро записи)</title>
+<!-- 3D-диорама детейлинг-студии «Глянец» (вымышленная) на three.js (vendor/three.r188.js, MIT).
+     Всё детерминировано от t: камера, свет, машины, табло-часы и кольца-статусы считаются в window.render(t), затем renderer.render().
+     Без HUD: время показывает табло в самой сцене, призыв переезжает вместе с текстом каждого бита (не прибит к одной точке). -->
+<link rel="stylesheet" href="brand/brand.css"><link rel="stylesheet" href="lib/ds2.css">
+<style>
+#gl{position:absolute;left:0;top:0;width:1080px;height:1920px;display:block}
+#hud{position:absolute;inset:0;color:#F2EEE6}
+#hud.day{color:var(--ink)}
+.blk{position:absolute;left:60px;right:60px;text-align:center}
+.hl{font-size:124px;line-height:.9;text-transform:uppercase}
+.cap{font-size:100px;line-height:.92}
+.mask{padding-bottom:.06em}
+/* Telegram-уведомление: бирка на термобумаге со штампом */
+#tg{position:absolute;left:110px;right:110px;top:330px;background:var(--receipt);color:var(--ink);font-family:var(--f-mono);padding:26px 34px 30px;
+  box-shadow:0 30px 50px -24px rgba(0,0,0,.7);border-radius:4px}
+#tg .h{display:flex;justify-content:space-between;font-size:34px;color:var(--ink-2);border-bottom:3px dashed var(--rule);padding-bottom:14px;margin-bottom:12px}
+#tg .t{font-family:var(--f-head);font-weight:800;font-size:66px;letter-spacing:-.03em;margin-bottom:4px}
+#tg .row{display:flex;gap:12px;font-size:40px;line-height:1.5}
+#tg .row .dots{flex:1;border-bottom:3px dotted var(--rule);transform:translateY(-13px)}
+#tg .stampbox{right:40px;top:96px}
+/* журнал: чек с событиями */
+#log{position:absolute;left:84px;right:84px;top:330px;background:var(--receipt);color:var(--ink);font-family:var(--f-mono);font-size:38px;line-height:1.55;padding:22px 32px 26px;
+  box-shadow:0 26px 44px -24px rgba(40,30,10,.55);border-radius:4px}
+#log div{white-space:nowrap}
+#log b{font-weight:700}
+#log .tm{color:var(--ink-2)}
+#cta{position:absolute;left:60px;right:60px;top:0;text-align:center;font-family:var(--f-mono);font-size:38px}
+#cta b{font-weight:800}
+#ctaF{font-size:76px;font-family:var(--f-head);font-weight:800;letter-spacing:-.035em;line-height:1}
+#ctaF2{font-family:var(--f-mono);font-size:38px;margin-top:14px}
+/* кольца-статусы над боксами */
+.tag{position:absolute;left:0;top:0;width:220px;display:flex;flex-direction:column;align-items:center;will-change:transform}
+.tag .disc{position:relative;width:150px;height:150px;border-radius:50%;background:var(--receipt);box-shadow:0 14px 26px -12px rgba(0,0,0,.55)}
+.tag svg{position:absolute;inset:0}
+.tag .c{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;font-size:36px;color:var(--ink);letter-spacing:-.02em}
+.tag .l{margin-top:10px;background:var(--receipt);color:var(--ink);font-family:var(--f-mono);font-weight:700;font-size:34px;padding:4px 16px 6px;white-space:nowrap;border-radius:4px;
+  box-shadow:0 10px 20px -12px rgba(0,0,0,.5)}
+.tag.sig .l{background:var(--signal);color:var(--ink)}
+.tag .stem{width:3px;height:44px;background:repeating-linear-gradient(var(--receipt) 0 6px,transparent 6px 11px)}
+#hud.day .tag .stem{background:repeating-linear-gradient(var(--ink) 0 6px,transparent 6px 11px)}
+</style></head><body><div class="stage" style="background:#141414"><div class="cam" id="cam">
+
+<canvas id="gl" width="1080" height="1920"></canvas>
+
+<div id="hud">
+  <!-- 0 · хук -->
+  <div class="blk f-head hl" style="top:300px" id="hook">
+    <span class="mask" id="h1"><span>Детейлинг,</span></span>
+    <span class="mask" id="h2"><span>где запись</span></span>
+    <span class="mask" id="h3"><span>работает <span class="signal">сама</span></span></span></div>
+
+  <!-- 1 · новая запись ночью -->
+  <div id="tg"><div class="h"><span>Telegram · Глянец</span><span>23:41</span></div>
+    <div class="t">Новая запись</div>
+    <div class="row"><span>Полировка</span><span class="dots"></span><span>бокс 2</span></div>
+    <div class="row"><span>Когда</span><span class="dots"></span><span><b>пт 10:30</b></span></div>
+    <div class="stampbox" id="tgst"><span class="stamp" style="font-size:40px;transform:none">ЗАПИСАН</span></div></div>
+
+  <!-- 2 · утро -->
+  <div class="blk f-head cap" style="top:300px" id="morn">
+    <span class="mask" id="m1"><span>Утро. Боксы</span></span>
+    <span class="mask" id="m2"><span>уже расписаны</span></span></div>
+
+  <!-- 3 · неподтверждённая запись -->
+  <div id="log"></div>
+
+  <!-- 4 · общий план -->
+  <div class="blk f-head cap" style="top:300px" id="fin">
+    <span class="mask" id="f1"><span>Бокс не простаивает,</span></span>
+    <span class="mask" id="f2"><span class="signal">пока вы спите</span></span></div>
+
+  <div id="cta"><div id="ctaS">Напишите <b>СТУДИЯ</b> в комментариях</div>
+    <div id="ctaB" style="display:none"><div id="ctaF">Напишите СТУДИЯ</div><div id="ctaF2">— соберём запись под ваши боксы</div></div></div>
+
+  <div id="tags"></div>
+  <div class="grain" id="gr"></div>
+</div>
+
+</div></div>
+<script src="vendor/gsap.min.js"></script><script src="vendor/CustomEase.min.js"></script><script src="vendor/matter.min.js"></script>
+<script src="lib/ds2.js"></script>
+<script src="vendor/three.r188.js"></script>
+<script>
+window.READY = false;
+const B = 60 / 132;                                   // garage132
+const T1 = 6 * B, T2 = 13 * B, T3 = 22 * B, T4 = 29 * B;   // 2.73 · 5.91 · 10.0 · 13.18
+const TEND = T4 + 2.6;
+window.BPM = 132; window.DUR = +TEND.toFixed(3); window.__duration = window.DUR;
+window.MUSIC = { preset: 'garage132', drums_from: 0, fade_out: .7 };
+
+const C3 = h => new THREE.Color(h);
+const sm = x => x * x * (3 - 2 * x);
+const NIGHT = { bg: C3('#141414') }, DAWN = { bg: C3('#3E3129') }, DAY = { bg: C3('#ECE7DD') };
+// день/ночь: 0 → 1 на перемотке
+const dayK = t => sm(lin(t, T2 + 1.3, T2 + 2.4));
+
+// ---------- часы ----------
+const M0 = 23 * 60 + 40 + 59.5 / 60;                   // 23:40:59 → на 0,5 с табло перещёлкивает на 23:41, чт
+const LAPSE_END = T2 + 3.6, M1 = 24 * 60 + 10 * 60 + 33; // → пт 10:33
+function clockMin(t) {
+  if (t < T2) return M0 + t / 60;
+  if (t < LAPSE_END) { const x = lin(t, T2, LAPSE_END); return mix(M0 + T2 / 60, M1, 1 - (1 - x) * (1 - x)) }
+  return M1 + (t - LAPSE_END) * 1.6;                     // дальше — спокойная минута за ~0,6 с
+}
+const hhmm = m => { m = ((m % 1440) + 1440) % 1440; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(Math.floor(m % 60)).padStart(2, '0') };
+const secs = m => String(Math.floor((m * 60) % 60)).padStart(2, '0');
+
+// ---------- сцена ----------
+const canvas = $('gl');
+const R = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, alpha: false });
+R.setPixelRatio(1); R.setSize(1080, 1920, false);
+R.shadowMap.enabled = true; R.shadowMap.type = THREE.PCFShadowMap;
+R.outputColorSpace = THREE.SRGBColorSpace; R.toneMapping = THREE.NoToneMapping;
+const S = new THREE.Scene();
+const FR = 10.6;                                       // половина высоты кадра в мировых единицах
+const cam = new THREE.OrthographicCamera(-FR * 1080 / 1920, FR * 1080 / 1920, FR, -FR, -100, 200);
+
+const mat = (c, o = {}) => new THREE.MeshStandardMaterial(Object.assign({ color: c, roughness: .92, metalness: 0, flatShading: true }, o));
+const box = (w, h, d, m, x = 0, y = 0, z = 0, sh = true) => { const g = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); g.position.set(x, y, z); g.castShadow = sh; g.receiveShadow = true; return g };
+
+function canvasTex(w, h, draw) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d'); draw(g, w, h);
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; tx.anisotropy = 4; return tx;
+}
+
+const BAYX = [-4.6, 0, 4.6], BW = 4.4;
+const M = {
+  slab: mat('#D9D2C4'), side: mat('#B5AB99'), side2: mat('#9C927F'), wall: mat('#E8E2D6'), wallTop: mat('#F4F0E7'),
+  base: mat('#3A3835'), line: mat('#F7F4EC', { roughness: .8 }), curb: mat('#CFC7B7'), dark: mat('#262523'),
+  lamp: new THREE.MeshStandardMaterial({ color: '#F4E6D0', emissive: '#FFC98A', emissiveIntensity: 1.4 }),
+  tire: mat('#2B2A28'), shelf: mat('#A59A86'), can: mat('#5E5A53'),
+};
+
+function build() {
+  const W = new THREE.Group(); S.add(W);
+  // основание-диорама: плита с «картонным» торцом
+  W.add(box(15.2, .5, 9.6, M.slab, 0, -.25, .2, false));
+  W.add(box(15.2, 2.1, 9.6, M.side, 0, -1.55, .2, false));
+  W.add(box(15.0, .08, 9.4, M.side2, 0, -2.64, .2, false));
+  // задняя и левая стены
+  W.add(box(15.2, 3.4, .3, M.wall, 0, 1.7, -4.45));
+  W.add(box(15.2, .08, .34, M.wallTop, 0, 3.43, -4.45, false));
+  W.add(box(.3, 3.4, 9.6, M.wall, -7.45, 1.7, .2));
+  W.add(box(.34, .08, 9.6, M.wallTop, -7.45, 3.43, .2, false));
+  W.add(box(15.2, .3, .04, M.base, 0, .15, -4.28, false));
+  // перегородки-«уши» у задней стены и бордюры
+  [-2.3, 2.3].forEach(x => { W.add(box(.22, 2.4, 2.6, M.wall, x, 1.2, -3.0)); W.add(box(.26, .06, 2.64, M.wallTop, x, 2.42, -3.0, false)); W.add(box(.14, .14, 6.0, M.curb, x, .07, 1.2)); });
+  // разметка боксов, номера на полу, лампы и таблички
+  BAYX.forEach((x, i) => {
+    [-BW / 2 + .25, BW / 2 - .25].forEach(dx => W.add(box(.1, .02, 7.4, M.line, x + dx, .01, .3, false)));
+    W.add(box(BW - .5, .02, .1, M.line, x, .01, -3.4, false));
+    const num = canvasTex(256, 256, (g, w, h) => { g.fillStyle = '#F7F4EC'; g.font = '800 170px JBM'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('0' + (i + 1), w / 2, h / 2 + 8) });
+    const p = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.7), new THREE.MeshStandardMaterial({ map: num, transparent: true, roughness: .8 }));
+    p.rotation.x = -Math.PI / 2; p.position.set(x, .025, 3.2); p.receiveShadow = true; W.add(p);
+    // настенная лампа-полоса
+    W.add(box(2.4, .16, .2, M.lamp, x, 3.0, -4.25, false));
+    // табличка «БОКС N»
+    const pl = canvasTex(512, 128, (g, w, h) => { g.fillStyle = '#141414'; g.fillRect(0, 0, w, h); g.fillStyle = '#F2EEE6'; g.font = '700 64px JBM'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('БОКС ' + (i + 1), w / 2, h / 2 + 4) });
+    const pm = new THREE.Mesh(new THREE.PlaneGeometry(1.6, .4), new THREE.MeshStandardMaterial({ map: pl, roughness: .9 }));
+    pm.position.set(x, 2.45, -4.29); W.add(pm);
+  });
+  // вывеска студии на левой стене
+  const sg = canvasTex(1024, 256, (g, w, h) => { g.fillStyle = '#ECE7DD'; g.fillRect(0, 0, w, h); g.fillStyle = '#141414'; g.font = '800 120px Golos'; g.textBaseline = 'middle'; g.fillText('Глянец', 40, h / 2 + 6); g.font = '500 40px JBM'; g.fillStyle = '#55524C'; g.fillText('детейлинг · демо', 560, h / 2 + 4) });
+  const sgm = new THREE.Mesh(new THREE.PlaneGeometry(4.8, 1.2), new THREE.MeshStandardMaterial({ map: sg, roughness: .9 }));
+  sgm.rotation.y = Math.PI / 2; sgm.position.set(-7.28, 2.3, -1.9); W.add(sgm);
+  // реквизит: стопка шин, стеллаж, канистры
+  for (let k = 0; k < 3; k++) { const ti = new THREE.Mesh(new THREE.CylinderGeometry(.42, .42, .26, 14), M.tire); ti.position.set(-6.85, .14 + k * .27, -3.55); ti.castShadow = ti.receiveShadow = true; W.add(ti) }
+  W.add(box(.6, 2.0, 2.0, M.shelf, -7.0, 1.0, 1.7));
+  [[-6.95, 1.4], [-6.95, 2.0]].forEach(([x, z]) => W.add(box(.34, .5, .3, M.can, x, 2.25, z)));
+  W.add(box(.5, .36, .5, M.can, 6.7, .18, -3.9));
+  // табло-часы студии (часть сцены, а не HUD)
+  CLK.cv = document.createElement('canvas'); CLK.cv.width = 1200; CLK.cv.height = 330; CLK.g = CLK.cv.getContext('2d');
+  CLK.tx = new THREE.CanvasTexture(CLK.cv); CLK.tx.colorSpace = THREE.SRGBColorSpace; CLK.tx.anisotropy = 8;
+  const face = new THREE.MeshBasicMaterial({ map: CLK.tx }), edge = mat('#1B1B1A');
+  // табло врезано в торец основания диорамы, как табличка макета
+  const bd = new THREE.Mesh(new THREE.BoxGeometry(7.6, 2.09, .16), [edge, edge, edge, edge, face, edge]); bd.position.set(-3.3, -1.5, 5.06); W.add(bd);
+  return W;
+}
+const CLK = {};
+const FLAP_D = .14;
+function drawClock(t) {
+  const g = CLK.g, W = 1200, H = 330, m = clockMin(t), sp = Math.max(1 / 60, (clockMin(t + .02) - m) / .02);
+  g.fillStyle = '#1B1B1A'; g.fillRect(0, 0, W, H);
+  const hh = hhmm(m), day = m >= 1440 ? 'ПТ' : 'ЧТ';
+  // день недели
+  g.fillStyle = '#2A2927'; g.fillRect(24, 40, 190, 250);
+  g.fillStyle = '#F3EFE6'; g.font = '700 120px JBM'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(day, 119, 170);
+  g.fillStyle = '#000'; g.fillRect(24, 163, 190, 4);
+  const units = [600, 60, 0, 10, 1];
+  let x = 236;
+  [...hh].forEach((ch, i) => {
+    if (ch === ':') { g.fillStyle = '#F3EFE6'; g.fillRect(x + 22, 120, 22, 22); g.fillRect(x + 22, 196, 22, 22); x += 66; return }
+    const since = ((m % units[i]) + units[i]) % units[i] / sp, ph = since < FLAP_D ? since / FLAP_D : 1;
+    const sq = 1 - Math.sin(ph * Math.PI) * .6;
+    g.fillStyle = '#2A2927'; g.fillRect(x, 40, 210, 250);
+    g.save(); g.translate(x + 105, 165); g.scale(1, sq);
+    g.fillStyle = '#F3EFE6'; g.font = '700 220px JBM'; g.fillText(ch, 0, 10); g.restore();
+    if (ph < 1) { g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(x, 40, 210, 125 * (1 - sq)) }
+    g.fillStyle = '#000'; g.fillRect(x, 163, 210, 4);
+    x += 226;
+  });
+  CLK.tx.needsUpdate = true;
+}
+
+// ---------- машины (low-poly, без марок) ----------
+function car(color) {
+  const g = new THREE.Group();
+  const body = mat(color), glass = mat('#2E2D2B', { roughness: .4 }), wheel = M.tire, trim = mat('#1E1D1C');
+  g.add(box(1.9, .55, 4.1, body, 0, .62, 0));
+  g.add(box(1.94, .22, 4.16, trim, 0, .38, 0));
+  // кабина-трапеция
+  const cg = new THREE.BoxGeometry(1.66, .58, 2.1); const pa = cg.attributes.position;
+  for (let i = 0; i < pa.count; i++) if (pa.getY(i) > 0) { pa.setX(i, pa.getX(i) * .84); pa.setZ(i, pa.getZ(i) * .7 - .05) }
+  cg.computeVertexNormals();
+  const cab = new THREE.Mesh(cg, glass); cab.position.set(0, 1.18, .15); cab.castShadow = true; g.add(cab);
+  g.add(box(1.36, .05, 1.42, body, 0, 1.49, .1));
+  [[-1, 1.35], [1, 1.35], [-1, -1.3], [1, -1.3]].forEach(([sx, z]) => {
+    const w = new THREE.Mesh(new THREE.CylinderGeometry(.36, .36, .3, 12), wheel); w.rotation.z = Math.PI / 2; w.position.set(sx * .92, .36, z); w.castShadow = true; g.add(w);
+  });
+  const hl = new THREE.MeshStandardMaterial({ color: '#FFF3DA', emissive: '#FFE2B0', emissiveIntensity: 0 });
+  [-.62, .62].forEach(x => g.add(box(.4, .12, .06, hl, x, .74, -2.06, false)));
+  g.userData.hl = hl;
+  g.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true } });
+  return g;
+}
+// «призрак» записи: прозрачный силуэт + пунктирный контур
+function ghost(hex) {
+  const g = new THREE.Group();
+  const fill = new THREE.MeshBasicMaterial({ color: hex, transparent: true, opacity: .16, depthWrite: false });
+  const line = new THREE.LineDashedMaterial({ color: hex, dashSize: .22, gapSize: .14, transparent: true });
+  const add = (geo, y, z = 0) => {
+    const m = new THREE.Mesh(geo, fill); m.position.set(0, y, z); g.add(m);
+    const e = new THREE.LineSegments(new THREE.EdgesGeometry(geo), line); e.position.copy(m.position); e.computeLineDistances(); g.add(e);
+  };
+  add(new THREE.BoxGeometry(1.9, .77, 4.1), .5);
+  const cg = new THREE.BoxGeometry(1.66, .58, 2.1); const pa = cg.attributes.position;
+  for (let i = 0; i < pa.count; i++) if (pa.getY(i) > 0) { pa.setX(i, pa.getX(i) * .84); pa.setZ(i, pa.getZ(i) * .7 - .05) }
+  add(cg, 1.18, .15);
+  g.userData = { fill, line };
+  return g;
+}
+
+let CARS, GH, LIGHTS;
+function lights() {
+  const L = {};
+  L.hemi = new THREE.HemisphereLight('#FFF6E8', '#6B6152', .2); S.add(L.hemi);
+  L.sun = new THREE.DirectionalLight('#FFF1DC', 0); L.sun.castShadow = true;
+  L.sun.shadow.mapSize.set(2048, 2048); Object.assign(L.sun.shadow.camera, { left: -11, right: 11, top: 11, bottom: -11, near: 1, far: 60 });
+  L.sun.shadow.bias = -.0006; L.sun.shadow.normalBias = .02; L.sun.shadow.radius = 4;
+  S.add(L.sun); S.add(L.sun.target);
+  L.spots = BAYX.map(x => {
+    const s = new THREE.SpotLight('#FFC98A', 60, 16, .78, .65, 1.6); s.position.set(x, 3.0, -3.9); s.target.position.set(x, 0, .6);
+    s.castShadow = true; s.shadow.mapSize.set(1024, 1024); s.shadow.bias = -.0008; s.shadow.radius = 5; S.add(s); S.add(s.target); return s;
+  });
+  L.amb = new THREE.AmbientLight('#6A5C4E', .9); S.add(L.amb);
+  return L;
+}
+
+// ---------- кольца-статусы (HTML поверх, позиции — проекция 3D-точек) ----------
+const TAGS = BAYX.map((x, i) => {
+  const d = document.createElement('div'); d.className = 'tag';
+  d.innerHTML = `<div class="disc"><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="62" fill="none" stroke="#C9C2B5" stroke-width="9" class="bg"/>
+    <circle cx="75" cy="75" r="62" fill="none" stroke="#141414" stroke-width="9" stroke-linecap="butt" class="arc" transform="rotate(-90 75 75)" stroke-dasharray="389.6" stroke-dashoffset="389.6"/></svg>
+    <div class="c"></div></div><div class="l"></div><div class="stem"></div>`;
+  $('tags').appendChild(d);
+  return { el: d, arc: d.querySelector('.arc'), bgc: d.querySelector('.bg'), c: d.querySelector('.c'), l: d.querySelector('.l'), x };
+});
+const V = new THREE.Vector3();
+function placeTag(tag, wx, wy, wz, { op = 1, s = 1, center = '', label = '', p = 0, dash = false, sig = false } = {}) {
+  V.set(wx, wy, wz).project(cam);
+  const sx = (V.x + 1) / 2 * 1080, sy = (1 - V.y) / 2 * 1920;
+  const el = tag.el; el.style.display = op <= .001 ? 'none' : 'flex';
+  el.style.opacity = op;
+  el.style.transform = `translate(${sx - 110}px, ${sy - el.offsetHeight}px) scale(${s})`; el.style.transformOrigin = '50% 100%';
+  tag.c.textContent = center; tag.l.textContent = label;
+  el.classList.toggle('sig', sig);
+  tag.arc.setAttribute('stroke', sig ? '#FF4A1C' : '#141414');
+  tag.arc.setAttribute('stroke-dashoffset', (389.6 * (1 - p)).toFixed(1));
+  tag.bgc.setAttribute('stroke-dasharray', dash ? '10 8' : 'none');
+  tag.bgc.setAttribute('stroke', sig ? '#FF4A1C' : '#C9C2B5');
+}
+
+
+// ---------- звук ----------
+for (let s = 1; s <= Math.floor(T2); s++) sfx(s - .5, 'tick', .18);      // ночная секундная стрелка
+sfx(.5, 'flap', .35); sfx(.57, 'flap_set', .3);                           // табло: 23:40 → 23:41
+sfx(T1, 'ding', .55); sfx(T1 + .05, 'slide', .35);                        // новая запись
+sfx(T1 + .55, 'stamp', .7);                                               // ЗАПИСАН
+sfx(T1 + .8, 'flap_set', .35);                                            // призрак в боксе 2
+sfx(T2, 'flap_set', .45); sfx(T2, 'riser', .22);                                                    // перемотка (единственный «цифровой» звук)
+for (let k = 0; k < 16; k++) sfx(T2 + .08 + k * .22 * (1 - k / 26), 'flap', .2);
+const ARR = [T2 + 2.25, T2 + 3.3];                                         // въезд: бокс 1, бокс 2
+ARR.forEach(a => { sfx(a - .5, 'slide', .5); sfx(a + .05, 'drop', .35) });
+sfx(T2 + 2.4, 'flap_set', .35);                                           // запись в бокс 3 на 12:00
+sfx(T2 + 2.0, 'rustle', .3);
+sfx(T3, 'stamp', .55); sfx(T3 + .05, 'printer', .35);                      // журнал: не подтвердил
+sfx(T3 + .75, 'bell', .45);                                               // напоминание
+sfx(T3 + 1.5, 'type', .4); sfx(T3 + 1.58, 'type', .3); sfx(T3 + 1.66, 'enter', .5);   // перенёс на сб
+sfx(T3 + 2.25, 'ding', .5); sfx(T3 + 2.3, 'flap_set', .35);               // окно занял другой
+sfx(T4, 'drop', .5); sfx(T4 + .02, 'slide', .35);
+sfx(T4 + 1.25, 'stamp', .6); sfx(T4 + 1.6, 'bell', .35);                  // призыв
+
+// ---------- журнал события ----------
+const LOG = [
+  [T3, 'бокс 3 · 12:00 · <b>не подтвердил</b>'],
+  [T3 + .75, 'напоминание отправлено'],
+  [T3 + 1.5, 'клиент перенёс на сб'],
+  [T3 + 2.25, 'окно 12:00 занял <b>другой</b>'],
+];
+$('log').innerHTML = LOG.map(l => `<div><span class="tm">${hhmm(clockMin(l[0]))}</span> ${l[1]}</div>`).join('');   // время = как на табло
+const LOGR = [...$('log').children];
+
+async function init() {
+  await document.fonts.load('800 100px Golos'); await document.fonts.load('700 100px JBM'); await document.fonts.load('500 40px JBM'); await document.fonts.ready;
+  build(); LIGHTS = lights();
+  CARS = [car('#E4DCCB'), car('#4A4743'), car('#B9A98E')];
+  CARS.forEach(c => S.add(c));
+  GH = [ghost('#F2EEE6'), ghost('#141414'), ghost('#FF4A1C'), ghost('#141414')];
+  GH.forEach(g => S.add(g));
+  window.READY = true;
+}
+init();
+
+// ---------- кадр ----------
+const fadeIn = (t, a, d = .3) => E.out(lin(t, a, a + d));
+// камера: облёт с первого кадра (в хуке быстрее), на T3 — жёсткая склейка на крупный план боксов 2–3, на T4 — склейка на общий план
+function azDeg(t) { return 20 + 3.0 * Math.min(t, T1) + .9 * clamp(t - T1, 0, T4 - T1) + 2.0 * Math.max(0, t - T4) }
+function shotAt(t) {
+  if (t >= T3 && t < T4) return { zoom: mix(.95, 1.02, lin(t, T3, T4)), tgt: [2.7, .4, .7], off: -430, el: 33 };
+  if (t >= T4) return { zoom: mix(.53, .5, lin(t, T4, TEND)), tgt: [0, .2, .4], off: -150, el: 37 };
+  return { zoom: .57 + .06 * E.io(lin(t, 0, T1 + .4)) + .02 * lin(t, T1, T3), tgt: [0, .2, .4], off: -205, el: 33 };
+}
+function blockBottom(id) { const e = $(id); return e.offsetTop + e.offsetHeight }
+window.render = t => {
+  if (!LIGHTS) return;
+  const k = dayK(t);
+  const sh0 = shotAt(t);
+  const az = THREE.MathUtils.degToRad(azDeg(t)), el = THREE.MathUtils.degToRad(sh0.el);
+  const D = 40, tgt = new THREE.Vector3(...sh0.tgt);
+  cam.position.set(tgt.x + D * Math.cos(el) * Math.sin(az), tgt.y + D * Math.sin(el), tgt.z + D * Math.cos(el) * Math.cos(az));
+  cam.lookAt(tgt);
+  cam.zoom = sh0.zoom;
+  cam.clearViewOffset(); cam.setViewOffset(1080, 1920, 0, sh0.off, 1080, 1920);
+  cam.updateProjectionMatrix();
+
+  // свет: ночь → рассвет → день
+  S.background = k < .5 ? NIGHT.bg.clone().lerp(DAWN.bg, k * 2) : DAWN.bg.clone().lerp(DAY.bg, (k - .5) * 2);
+  LIGHTS.hemi.intensity = mix(.5, 1.25, k);
+  LIGHTS.amb.intensity = mix(.55, .35, k);
+  const flick = 1 + .04 * Math.sin(t * 7.3) * (1 - k);
+  LIGHTS.spots.forEach(s => s.intensity = mix(38, 8, k) * flick);
+  M.lamp.emissiveIntensity = mix(.95, .35, k);
+  LIGHTS.sun.intensity = mix(0, 2.6, k);
+  LIGHTS.sun.position.set(14 * Math.cos(mix(-.4, 1.0, k) * .6), 6 + 14 * k, 10);
+
+  // табло-часы смотрят в камеру
+  drawClock(t);
+
+  // машины
+  const arrive = (c, i, a) => {
+    const p = E.out(lin(t, a - 1.0, a)); c.visible = t > a - 1.0;
+    c.position.set(BAYX[i], 0, mix(11, .2, p));
+    c.children.forEach(o => { if (o.geometry && o.geometry.type === 'CylinderGeometry') o.rotation.x = -(1 - p) * 14 });
+    c.userData.hl.emissiveIntensity = (1 - k * .6) * 1.5;
+  };
+  arrive(CARS[0], 0, ARR[0]); arrive(CARS[1], 1, ARR[1]); CARS[2].visible = false;
+
+  // призраки записей
+  const ghostAt = (g, i, a, b, out = 1e9) => {
+    const pIn = E.back(lin(t, a, a + .45)), pOut = E.in(lin(t, out, out + .4));
+    g.visible = t >= a && t < b && pOut < 1;
+    g.position.set(BAYX[i], 0, .2 + pOut * 3);
+    g.scale.set(1, Math.max(.001, pIn), 1);
+    g.userData.fill.opacity = .16 * (1 - pOut) * (i === 2 ? 1.3 : 1);
+    g.userData.line.opacity = 1 - pOut;
+  };
+  ghostAt(GH[0], 1, T1 + .8, ARR[1] - .3);
+  ghostAt(GH[3], 2, T2 + 2.4, T3 + .02);
+  ghostAt(GH[2], 2, T3, 99, T3 + 1.5);
+  ghostAt(GH[1], 2, T3 + 2.25, 99);
+
+  R.render(S, cam);
+
+  // ---------- текст ----------
+  $('hud').classList.toggle('day', k > .6);
+  grain(t);
+  let ctaTop = null, big = false;
+  // хук: кадр 0 — уже готовая композиция
+  const hk = t < T1 + .3;
+  $('hook').style.display = hk ? 'block' : 'none';
+  if (hk) { maskIn($('h1'), t, -1, .4, T1 - .12); maskIn($('h2'), t, -1, .4, T1 - .06); maskIn($('h3'), t, -1, .4, T1); if (t > .9 && t < T1) ctaTop = blockBottom('hook') + 30 }
+  // Telegram-уведомление со штампом
+  const tgIn = E.out(lin(t, T1, T1 + .3)), tgOut = E.in(lin(t, T2 - .3, T2));
+  $('tg').style.display = t >= T1 && t < T2 ? 'block' : 'none';
+  $('tg').style.transform = `translateY(${(1 - tgIn) * -90 - tgOut * 140}px) rotate(${(1 - tgIn) * -2.5}deg)`;
+  stampHit($('tgst'), T1 + .55, { rot: -8, sound: false }).render(t);
+  if (t >= T1 + .2 && t < T2 - .3) ctaTop = 330 + $('tg').offsetHeight + 34 + (1 - tgIn) * -90;
+  // утро
+  const MO = T2 + 2.0, mo = t >= MO && t < T3;
+  $('morn').style.display = mo ? 'block' : 'none';
+  if (mo) { maskIn($('m1'), t, MO, .4, T3 - .25); maskIn($('m2'), t, MO + B * .5, .4, T3 - .2); if (t > MO + .5 && t < T3 - .25) ctaTop = blockBottom('morn') + 30 }
+  // журнал-чек
+  const lgIn = E.out(lin(t, T3, T3 + .25)), lgOut = E.in(lin(t, T4 - .25, T4 + .05));
+  $('log').style.display = t >= T3 && t < T4 + .05 ? 'block' : 'none';
+  $('log').style.transform = `translateY(${(1 - lgIn) * -70 - lgOut * 120}px)`;
+  $('log').style.opacity = 1 - lgOut;
+  LOGR.forEach((r, i) => { const a = LOG[i][0], p = E.out(lin(t, a, a + .25)); r.style.display = t >= a ? 'block' : 'none'; r.style.clipPath = `inset(0 ${(1 - p) * 100}% 0 0)`; r.style.opacity = i < 3 && t > LOG[i + 1][0] ? .5 : 1 });
+  if (t >= T3 + .3 && t < T4 - .25) ctaTop = 330 + $('log').offsetHeight + 34;
+  // общий план + призыв
+  $('fin').style.display = t >= T4 ? 'block' : 'none';
+  if (t >= T4) { maskIn($('f1'), t, T4 + .1); maskIn($('f2'), t, T4 + .1 + B * 1.2); if (t >= T4 + 1.15) { ctaTop = blockBottom('fin') + 44; big = true } }
+  // призыв: переезжает с текстом бита, в финале — крупно
+  $('cta').style.display = ctaTop === null ? 'none' : 'block';
+  if (ctaTop !== null) $('cta').style.top = ctaTop + 'px';
+  $('ctaS').style.display = big ? 'none' : 'block'; $('ctaB').style.display = big ? 'block' : 'none';
+  if (big) { const p = E.out(lin(t, T4 + 1.15, T4 + 1.5)); $('ctaB').style.transform = `scale(${mix(1.25, 1, p)})`; $('ctaB').style.opacity = Math.min(1, p * 3) }
+  else { const p = E.out(lin(t, .9, 1.2)); $('ctaS').style.clipPath = `inset(0 ${(1 - p) * 100}% 0 0)` }
+
+  // кольца над боксами
+  const tagY = 1.85, tagOut = 1 - lin(t, T4 + .1, T4 + .45);
+  const r1 = remaining(t, ARR[0], 170);
+  placeTag(TAGS[0], BAYX[0], tagY, .2, { op: fadeIn(t, ARR[0] + .05) * tagOut, center: r1.c, label: 'в работе', p: r1.p });
+  if (t < ARR[1]) placeTag(TAGS[1], BAYX[1], tagY, .2, { op: fadeIn(t, T1 + .85), s: mix(.6, 1, E.out(lin(t, T1 + .85, T1 + 1.15))), center: '10:30', label: 'ждёт', dash: true });
+  else { const r2 = remaining(t, ARR[1], 150); placeTag(TAGS[1], BAYX[1], tagY, .2, { op: tagOut, center: r2.c, label: 'в работе', p: r2.p }) }
+  let o3 = { op: 0 };
+  if (t >= T2 + 2.4 && t < T3) o3 = { op: fadeIn(t, T2 + 2.4), center: '12:00', label: 'ждёт', dash: true };
+  else if (t >= T3 && t < T3 + .75) o3 = { op: 1, s: 1 + .1 * (1 - E.out(lin(t, T3, T3 + .2))), center: '12:00', label: 'не подтвердил', sig: true, dash: true };
+  else if (t >= T3 + .75 && t < T3 + 1.5) o3 = { op: 1, center: '12:00', label: 'напомнили', sig: true, dash: true, p: E.out(lin(t, T3 + .75, T3 + 1.2)) };
+  else if (t >= T3 + 1.5 && t < T3 + 2.25) o3 = { op: 1, center: 'сб', label: 'перенёс', dash: true };
+  else if (t >= T3 + 2.25) o3 = { op: tagOut, s: mix(.7, 1, E.out(lin(t, T3 + 2.25, T3 + 2.5))), center: '12:00', label: 'занято' };
+  placeTag(TAGS[2], BAYX[2], tagY, .2, o3);
+
+  let sh = [0, 0, 0];
+  if (t >= T1 + .55 && t < T1 + .7) sh = shake(t, T1 + .55, 6);
+  $('cam').style.transform = `translate(${sh[0]}px,${sh[1]}px) rotate(${sh[2]}deg)`;
+};
+window.__seek = t => window.render(t);
+// обложка: утренний кадр со статусами + заголовок хука. Снять: render-страница → cover() → скриншот 1080×1920 JPEG (см. отчёт/playbook)
+window.cover = () => {
+  window.render(9.75);
+  ['morn', 'cta', 'log', 'tg', 'fin'].forEach(id => $(id).style.display = 'none');
+  $('hook').style.display = 'block'; ['h1', 'h2', 'h3'].forEach(id => { $(id).style.visibility = 'visible'; $(id).firstElementChild.style.transform = 'none' });
+};
+function remaining(t, a, total) {
+  const el = Math.max(0, clockMin(t) - clockMin(a)), left = Math.max(0, total - el);
+  return { c: String(Math.floor(left / 60)).padStart(2, '0') + ':' + String(Math.floor(left % 60)).padStart(2, '0'), p: clamp(el / total) };
+}
+</script></body></html>

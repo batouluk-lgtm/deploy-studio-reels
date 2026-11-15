@@ -1,0 +1,363 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>r12 · Панель владельца детейлинга (Бюро записи)</title>
+<link rel="stylesheet" href="brand/brand.css"><link rel="stylesheet" href="lib/ds2.css">
+<style>
+/* мир с панелью: камера = transform на #world (без will-change, чтобы текст при зуме оставался чётким) */
+#world{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0}
+/* ---------- панель владельца (админка демо-студии «Глянец») ---------- */
+.pnl{position:absolute;left:72px;top:650px;width:936px;height:860px;background:var(--receipt);border:2px solid var(--ink);border-radius:18px;
+  box-shadow:0 30px 60px -28px rgba(40,30,10,.45);font-family:var(--f-mono);color:var(--ink)}
+.pnl .hd{position:absolute;left:22px;right:22px;top:22px;height:96px;display:flex;align-items:center;gap:16px;border-bottom:2px solid var(--ink)}
+.pnl .lg{width:52px;height:52px;border-radius:12px;background:var(--ink);color:#F3EFE6;display:grid;place-items:center;font-family:var(--f-head);font-weight:800;font-size:28px}
+.pnl .nm{font-family:var(--f-head);font-weight:800;font-size:32px;letter-spacing:-.03em;line-height:1}
+.pnl .nm small{display:block;font-family:var(--f-mono);font-weight:500;font-size:16px;letter-spacing:.06em;color:var(--ink-2);margin-top:6px}
+.pnl .demo{font-size:17px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:2px dashed var(--ink-2);color:var(--ink-2);border-radius:8px;padding:5px 10px;margin-left:6px}
+.pnl .tabs{margin-left:auto;display:flex;border:2px solid var(--ink);border-radius:10px;overflow:hidden;font-size:18px;font-weight:700}
+.pnl .tabs span{padding:8px 14px}.pnl .tabs .on{background:var(--ink);color:#F3EFE6}
+.pnl .clk{font-size:22px;font-weight:700;display:flex;align-items:center;gap:10px;min-width:180px;justify-content:flex-end}
+.pnl .clk i{font-style:normal}
+.blk{position:absolute;width:437px;height:342px;padding:16px 18px;overflow:hidden}
+#bA,#bC{border-right:2px solid var(--rule)}#bC,#bD{border-top:2px solid var(--ink)}
+.blk .tt{display:flex;justify-content:space-between;align-items:baseline;font-size:17px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding-bottom:10px;border-bottom:2px dashed var(--rule);margin-bottom:12px}
+.blk .tt em{font-style:normal;font-weight:500;letter-spacing:.02em;text-transform:none;color:var(--ink-2);font-size:16px}
+#bA{left:22px;top:136px}#bB{left:477px;top:136px}#bC{left:22px;top:496px}#bD{left:477px;top:496px}
+/* A · загрузка боксов */
+.bx{margin-bottom:12px}
+.bx .l{display:flex;align-items:baseline;gap:10px;height:30px}
+.bx .l b{font-family:var(--f-head);font-weight:700;font-size:22px;letter-spacing:-.01em}
+.bx .l .add{font-size:16px;font-weight:700;color:var(--ink);white-space:nowrap}
+.bx .l .pc{margin-left:auto;font-size:26px;font-weight:800}
+.bar{position:relative;height:26px;background:#E7E2D7;border-radius:5px;margin-top:4px;overflow:hidden}
+.bar .sg{position:absolute;top:0;bottom:0;background:var(--ink);border-right:2px solid var(--receipt)}
+.bar .sg.sig{background:var(--signal)}
+.bar .now{position:absolute;top:-2px;bottom:-2px;width:0;border-left:2px dashed var(--ink);z-index:2}
+.tk{display:flex;justify-content:space-between;font-size:16px;color:var(--ink-2);margin-top:2px}
+/* B · ночью */
+.big{display:flex;align-items:center;gap:14px;height:140px}
+.big .n{font-family:var(--f-head);font-weight:800;font-size:150px;letter-spacing:-.04em;line-height:.9;width:98px;text-align:center}
+.big .lb{font-size:17px;line-height:1.3;color:var(--ink);width:120px}
+.rows .r{display:grid;grid-template-columns:80px 1fr auto;gap:14px;align-items:center;font-size:19px;height:38px;border-bottom:2px dotted var(--rule)}
+.rows .r span:last-child{color:var(--ink-2);font-size:18px}
+/* C · неявки */
+.st2{display:flex;gap:34px;height:66px;align-items:center}
+.st2 div{display:flex;align-items:baseline;gap:10px}
+.st2 b{font-size:50px;font-weight:800;line-height:1}
+.st2 span{font-size:17px;color:var(--ink-2)}
+.log .r{position:relative;font-size:18px;height:41px;display:flex;align-items:center;gap:12px;padding:0 8px;border-bottom:2px dotted var(--rule);white-space:nowrap}
+.log .r .nw{background:var(--signal);color:var(--ink);font-weight:700;border-radius:5px;padding:3px 8px;transform-origin:0 50%}
+.log .r span{position:relative;z-index:1}
+.log .r .d{color:var(--ink-2)}
+/* D · выручка */
+.rev{font-size:52px;font-weight:800;letter-spacing:-.02em;line-height:1;margin-top:4px}
+.rev small{font-size:17px;font-weight:500;color:var(--ink-2);display:flex;align-items:center;gap:10px;margin-top:10px;letter-spacing:.02em}
+.rev small i{font-style:normal;font-size:13px;font-weight:700;border:1.5px dashed var(--ink-2);border-radius:5px;padding:2px 6px}
+.wk div{position:relative}
+#chip{position:absolute;left:50%;bottom:100%;margin-bottom:6px;transform-origin:50% 100%;white-space:nowrap;font-size:14px;font-weight:800;color:var(--signal);background:none}
+.wk{display:flex;align-items:flex-end;gap:14px;height:108px;margin-top:18px;padding:0 4px;border-bottom:2px solid var(--ink)}
+.wk div{flex:1;background:#CFC8BA;border-radius:4px 4px 0 0}
+.wk div.td{background:var(--ink)}
+.wk div.fu{background:transparent;border:2px dashed var(--rule);border-bottom:0}
+.wkl{display:flex;gap:14px;padding:4px 4px 0;font-size:15px;color:var(--ink-2)}.wkl span{flex:1;text-align:center}
+/* ---------- хук ---------- */
+#mast{position:absolute;left:0;top:0;width:1080px;height:646px;z-index:10;pointer-events:none;background:var(--paper)}
+#hook{position:absolute;left:72px;right:72px;top:258px;line-height:1}
+#hook .mask{padding-bottom:.02em}
+#k2{margin-top:6px}#k3{margin-top:-6px;padding-top:.15em}
+/* ярлык-чек: печатный слип, прилетает к событию и уходит */
+.lbl{position:absolute;z-index:11;background:var(--ink);color:#F3EFE6;padding:30px 34px;font-family:var(--f-head);font-weight:800;font-size:60px;letter-spacing:-.03em;line-height:1;
+  box-shadow:0 26px 40px -22px rgba(40,30,10,.55);transform-origin:0 50%;
+  -webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/24px 51% repeat-x,conic-gradient(from 135deg at top,#0000,#000 1deg 89deg,#0000 90deg) top/24px 51% repeat-x}
+.lbl span{display:block}
+/* ---------- телефон (плоский, Telegram) ---------- */
+#phone{position:absolute;left:150px;top:290px;width:780px;height:1250px;background:var(--ink);border-radius:70px;padding:18px;z-index:5;
+  box-shadow:0 40px 70px -30px rgba(40,30,10,.55)}
+#phone .scr{width:100%;height:100%;border-radius:54px;background:#E9E4D9;overflow:hidden;position:relative}
+#phone .tg{height:136px;position:relative;z-index:3;background:var(--receipt);border-bottom:2px solid var(--rule);display:flex;align-items:center;gap:18px;padding:0 30px}
+#phone .av{width:68px;height:68px;border-radius:50%;background:var(--ink);color:#F3EFE6;display:grid;place-items:center;font-family:var(--f-head);font-weight:800;font-size:34px}
+#phone .who{font-family:var(--f-head);font-weight:800;font-size:40px;letter-spacing:-.02em;line-height:1.1}
+#phone .who small{display:block;font-family:var(--f-mono);font-weight:500;font-size:34px;color:var(--ink-2);letter-spacing:0}
+.msg{position:absolute;left:26px;right:26px;background:var(--receipt);border-radius:28px 28px 28px 8px;padding:24px 28px;font-family:var(--f-mono);
+  box-shadow:0 10px 20px -14px rgba(40,30,10,.5)}
+.msg .h{font-family:var(--f-head);font-weight:800;font-size:46px;letter-spacing:-.03em;margin-bottom:12px;line-height:1}
+.msg .ln{font-size:36px;line-height:1.45}
+.msg .tm{font-size:34px;color:var(--ink-2);text-align:right;margin-top:6px}
+.msg.old{opacity:.6}
+#inp{position:absolute;left:0;right:0;bottom:0;height:110px;background:var(--receipt);border-top:2px solid var(--rule);display:flex;align-items:center;padding:0 40px;font-family:var(--f-mono);font-size:34px;color:var(--ink-2);z-index:3}
+.kb{position:absolute;left:26px;right:26px;top:985px;display:flex;gap:12px}
+.kb span{flex:1;text-align:center;background:rgba(20,20,20,.08);border-radius:18px;padding:18px 0;font-family:var(--f-mono);font-weight:700;font-size:34px}
+#cta{position:absolute;left:72px;right:72px;top:1434px;height:82px;background:var(--ink);color:#F3EFE6;z-index:12;display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;font-family:var(--f-mono);font-size:40px;border-radius:12px}
+#cta b{font-weight:800;letter-spacing:.06em}
+/* ---------- финал ---------- */
+#end .rule{border-top:3px dashed var(--rule)}
+</style></head><body><div class="stage"><div class="cam" id="cam">
+
+<div id="world">
+ <div class="pnl" id="pnl" data-ui>
+  <div class="hd">
+   <div class="lg">Г</div><div class="nm">Глянец<small>детейлинг · 3 бокса</small></div><span class="demo">демо-данные</span>
+   <div class="tabs"><span class="on">Сегодня</span><span>Неделя</span></div>
+   <div class="clk"><span id="clock">чт 14:32:07</span></div>
+  </div>
+  <!-- A -->
+  <div class="blk" id="bA"><div class="tt">Загрузка боксов<em>09:00–21:00</em></div>
+   <div class="bx"><div class="l"><b>Бокс 1</b><span class="pc" id="pc0">0%</span></div><div class="bar" id="br0"></div></div>
+   <div class="bx"><div class="l"><b>Бокс 2</b><span class="add" id="add">+ 15:00 Полировка</span><span class="pc" id="pc1">0%</span></div><div class="bar" id="br1"></div></div>
+   <div class="bx"><div class="l"><b>Бокс 3</b><span class="pc" id="pc2">0%</span></div><div class="bar" id="br2"></div></div>
+   <div class="tk"><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span></div>
+  </div>
+  <!-- B -->
+  <div class="blk" id="bB"><div class="tt">Записались ночью<em>демо-данные</em></div>
+   <div class="big"><span class="n" id="nN">3</span><span class="lb"><span id="nW">записи</span><br>ночью, пока<br>студия<br>закрыта</span></div>
+   <div class="rows" id="nr">
+    <div class="r"><span>23:41</span><span>Полировка</span><span>Бокс 1</span></div>
+    <div class="r"><span>00:15</span><span>Комплекс</span><span>Бокс 3</span></div>
+    <div class="r"><span>01:02</span><span>Химчистка</span><span>Бокс 2</span></div>
+   </div>
+  </div>
+  <!-- C -->
+  <div class="blk" id="bC"><div class="tt">Неявки и переносы<em>демо-данные</em></div>
+   <div class="st2"><div><b>1</b><span>неявка</span></div><div><b id="nP">2</b><span>переноса</span></div></div>
+   <div class="log" id="lg">
+    <div class="r"><span>✓</span><span>за сутки</span><span class="d">· напоминание ушло</span></div>
+    <div class="r"><span>✓</span><span>за 2 часа</span><span class="d">· напоминание ушло</span></div>
+    <div class="r"><span>чт 16:30</span><span>→ перенёс на сб 12:00</span></div>
+    <div class="r"><span>✓</span><span>чт 16:30 занято:</span><span class="nw" id="nw">новый клиент</span></div>
+   </div>
+  </div>
+  <!-- D -->
+  <div class="blk" id="bD"><div class="tt">Выручка по записям<em>сегодня</em></div>
+   <div class="rev"><span id="rev">48 600 ₽</span><small><span id="revs">7 записей</span><i>демо-данные</i></small></div>
+   <div class="wk" id="wk"><div></div><div></div><div></div><div class="td" id="td"><span id="chip">+ 3 500 ₽</span></div><div class="fu"></div><div class="fu"></div><div class="fu"></div></div>
+   <div class="wkl"><span>пн</span><span>вт</span><span>ср</span><span>чт</span><span>пт</span><span>сб</span><span>вс</span></div>
+  </div>
+ </div>
+</div>
+
+<!-- телефон с уведомлением бота -->
+<div id="phone" data-ui><div class="scr" data-ui>
+  <div class="tg"><div class="av">Г</div><div class="who">Глянец · запись<small>бот в Telegram</small></div></div>
+  <div class="msg old" style="top:240px"><div class="ln">Новая запись<br>Химчистка · пт 09:00</div></div>
+  <div class="msg old" style="top:455px"><div class="ln">Перенос · Полировка<br>чт 16:30 → сб 12:00</div></div>
+  <div class="msg" id="msg" style="top:680px">
+    <div class="h">Новая запись</div>
+    <div class="ln">Комплекс · Бокс 2</div>
+    <div class="ln"><b>пт 10:30</b> · онлайн</div>
+    <div class="tm"><span id="msgt">14:33</span></div>
+  </div>
+  <div class="kb" id="kb"><span>В панель</span><span>Позвонить</span></div>
+  <div id="inp">Сообщение</div>
+</div></div>
+
+<!-- хук -->
+<div id="mast">
+  <div class="f-head" id="hook" style="font-size:112px">
+    <span class="mask" id="k1"><span>ПАНЕЛЬ</span></span>
+    <span class="mask" id="k2"><span>ВЛАДЕЛЬЦА</span></span>
+    <span class="mask" id="k3"><span class="signal">ДЕТЕЙЛИНГА</span></span>
+  </div>
+</div>
+<!-- ярлыки к событиям -->
+<div class="lbl" id="l1" style="left:72px;top:1196px"><span>Запись встала</span><span>в свободный бокс</span></div>
+<div class="lbl" id="l3" style="left:72px;top:1196px"><span>Клиент перенёс —</span><span>окно сразу заняли</span></div>
+
+<div id="cta"><span>Напишите в комментариях</span><b>ПАНЕЛЬ</b></div>
+
+<!-- финал -->
+<div class="sc" id="end" style="z-index:20;background:transparent">
+  <div class="pad f-head" style="top:290px;font-size:82px">
+    <span class="mask" id="e1"><span>Перешлите партнёру&nbsp;—</span></span>
+    <span class="mask" id="e2" style="color:var(--ink-2)"><span>у&nbsp;вас так&nbsp;же?</span></span></div>
+  <div class="pad rule" style="top:520px" id="e_rule"></div>
+  <div class="pad f-mono" style="top:566px;font-size:42px;color:var(--ink-2)" id="e_a"><span class="mask"><span>Напишите в комментариях</span></span></div>
+  <div class="pad f-head signal" style="top:626px;font-size:232px;letter-spacing:-.05em"><span class="mask" id="e_d"><span>ПАНЕЛЬ</span></span></div>
+  <div class="pad f-mono" style="top:900px;font-size:42px" id="e_s"><span class="mask"><span>— покажем на вашей студии</span></span></div>
+  <div class="pad rule" style="top:1000px" id="e_rule2"></div>
+  <div class="pad f-head" style="top:1044px;font-size:62px;line-height:1.08;font-weight:700;letter-spacing:-.025em" id="e_o">
+    <span class="mask"><span>Сайт с&nbsp;записью</span></span>
+    <span class="mask"><span>+ такая панель + бот —</span></span>
+    <span class="mask"><span>под вашу студию</span></span>
+    <span class="mask"><span>за 7–12 дней</span></span></div>
+  <div class="pad f-mono" style="top:1410px;font-size:42px;color:var(--ink-2)" id="e_h"><span class="mask"><span>@deploy_studio03</span></span></div>
+</div>
+
+<div class="grain" style="z-index:95"></div>
+</div></div>
+<script src="vendor/gsap.min.js"></script><script src="vendor/CustomEase.min.js"></script><script src="vendor/matter.min.js"></script>
+<script src="lib/ds2.js"></script>
+<script>
+const B = 60 / 122;                                   // house122: смена кадра в бит
+// биты: хук (цифра) → ночные строки → боксы → выручка → неявки → телефон → финал
+const T1 = 4 * B, T2 = 7 * B, T3 = 12 * B, T4 = 16 * B, T5 = 21 * B, T6 = 25 * B;
+window.BPM = 122; window.DUR = +(T6 + 2.6).toFixed(3);
+// разреженное вступление (без ударных), грув входит на отъезде, пауза перед финалом, финал без ударных
+window.MUSIC = { preset: 'house122', drums_from: T1, drums_to: T6 - B, fade_out: .6 };
+
+// ---- данные панели (демо) ----
+const H0 = 9, HSPAN = 12;
+const BOX = [
+  [[9, 11], [11.5, 14], [14.5, 17], [17.5, 19.5]],
+  [[9, 11.5], [12, 14.5], [18, 20]],
+  [[10, 13], [13.5, 16], [16.5, 19]],
+];
+const NEW = [15, 18], NEW2 = [19.5, 21];
+const tNew = T2 + 1.2 * B, tNew2 = T2 + 3.4 * B;
+BOX.forEach((segs, i) => {
+  $('br' + i).innerHTML = segs.map(s => `<div class="sg" style="left:${(s[0] - H0) / HSPAN * 100}%;width:${(s[1] - s[0]) / HSPAN * 100}%"></div>`).join('')
+    + (i === 1 ? `<div class="sg sig" id="sgN" style="left:${(NEW[0] - H0) / HSPAN * 100}%;width:${(NEW[1] - NEW[0]) / HSPAN * 100}%"></div>` : '')
+    + (i === 0 ? `<div class="sg" id="sgN2" style="left:${(NEW2[0] - H0) / HSPAN * 100}%;width:${(NEW2[1] - NEW2[0]) / HSPAN * 100}%"></div>` : '')
+    + `<div class="now" id="now${i}"></div>`;
+});
+const WK = [.58, .74, .52, .7];
+const booked = (segs, upto) => segs.reduce((a, s) => a + Math.max(0, Math.min(s[1], upto) - s[0]), 0);
+
+// ---- камера ----
+const P = { x: 72, y: 650 }, BL = { bA: [22, 136], bB: [477, 136], bC: [22, 496], bD: [477, 496] };
+const VY = 1080, ZY = 790;
+const focus = id => { const [bx, by] = BL[id]; return { s: 960 / 437, cx: P.x + bx + 437 / 2, cy: P.y + by + 342 / 2, vy: ZY } };
+const OV = { s: 1, cx: 540, cy: VY, vy: VY };
+const HOOK = { s: 4.15, cx: P.x + 477 + 135, cy: P.y + 136 + 130, vy: 1024 };   // цифра «записи ночью» ~25% высоты кадра
+const REV = { s: 2.95, cx: P.x + 477 + 176, cy: P.y + 496 + 162, vy: 850 };     // «48 600 ₽» + столбик дня
+const BACK = { s: .9, cx: 540, cy: 1080, vy: 1080 };
+const KEYS = [[0, 0, OV], [.1, .55, HOOK], [T1 - .12, .55, focus('bB')], [T2 - .12, .55, focus('bA')], [T3 - .12, .6, REV], [T4 - .12, .6, focus('bC')], [T5 - .1, .5, BACK]];
+function cam(t) {
+  let st = KEYS[0][2];
+  for (let i = 1; i < KEYS.length; i++) {
+    const [a, d, to] = KEYS[i];
+    if (t < a) break;
+    const p = E.io(lin(t, a, a + d));
+    st = { s: Math.exp(mix(Math.log(st.s), Math.log(to.s), p)), cx: mix(st.cx, to.cx, p), cy: mix(st.cy, to.cy, p), vy: mix(st.vy, to.vy, p) };
+  }
+  const sc = [[.65, T1 - .12, .06], [T1 + .45, T2 - .12, .04], [T2 + .45, T3 - .12, .05], [T3 + .5, T4 - .12, .06], [T4 + .5, T5 - .1, .05]];
+  let k = 1; sc.forEach(([a, b, z]) => { if (t >= a && t < b) k = 1 + z * lin(t, a, b) });
+  const s = st.s * k;
+  return `translate(${540 - s * st.cx}px, ${st.vy - s * st.cy}px) scale(${s})`;
+}
+// ярлык: влетает слева, стоит ровно (не обрезан), уходит вниз с ускорением
+function label(el, t, a, b) {
+  const pin = E.out(lin(t, a, a + .25)), pout = E.in(lin(t, b - .22, b));
+  el.style.display = t >= a && t < b ? 'block' : 'none';
+  el.style.transform = `translate(${(1 - pin) * -1000}px, ${pout * 800}px) rotate(${mix(-8, -2, pin) - pout * 5}deg)`;
+}
+
+// ---- события и звук ----
+const CNT = [1.5 * B, 2.6 * B];                      // счёт 1→2→3 в хуке
+sfx(0, 'flap_set', .5); sfx(.12, 'slide', .4);
+CNT.forEach(t => { sfx(t, 'flap', .5); sfx(t + .05, 'flap_set', .6) });
+[T1 - .1, T2 - .1, T3 - .1, T4 - .1].forEach(t => sfx(t, 'slide', .45));
+const NR = [T1 + 1 * B, T1 + 1.6 * B, T1 + 2.2 * B];
+NR.forEach(t => { sfx(t, 'type', .45); sfx(t + .07, 'flap_set', .3) });
+const tCta = 6 * B;
+sfx(tNew, 'drop', .6); sfx(tNew2, 'drop', .45);
+const L1 = [T2 + 2 * B, T3 - .06], L3 = [T4 + 2.4 * B, T5 - .04];
+sfx(L1[0], 'printer', .4); sfx(L3[0], 'printer', .4);
+const tRev = T3 + 1.4 * B;
+sfx(tRev, 'ding', .55); for (let k = 0; k < 5; k++) sfx(tRev + .06 + k * .07, 'flap', .25);
+const LG = [T4 + .7 * B, T4 + 1.2 * B, T4 + 1.7 * B, T4 + 2.2 * B];
+LG.forEach((t, i) => { if (i < 2) sfx(t, 'type', .4); else if (i === 2) sfx(t, 'rustle', .5); else sfx(t, 'flap_set', .5) });
+sfx(T5 - .05, 'slide', .5);
+const tMsg = T5 + 1.2 * B, tRead = T5 + 2.8 * B;
+sfx(tMsg, 'ding', .7); sfx(tRead, 'type', .3);
+sfx(T6 - .05, 'slide', .45);
+sfx(T6 + .62, 'drop', .7); sfx(T6 + .95, 'bell', .4); sfx(T6 + 1.1, 'type', .3);
+
+const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+window.__duration = window.DUR;
+window.__seek = t => window.render(t);
+const FOC = [['bB', .1, T2 - .12], ['bA', T2 - .12, T3 - .12], ['bD', T3 - .12, T4 - .12], ['bC', T4 - .12, T5 - .1]];
+
+window.render = t => {
+  grain(Math.floor(t * 15) / 15);                    // зерно раз в 2 кадра
+  // ---------- панель «живёт» ----------
+  const sec = 7 + Math.floor(t + .4);
+  $('clock').textContent = `чт 14:32:${String(sec % 60).padStart(2, '0')}`;
+  const fill = .6 + .4 * E.out(lin(t, 0, 1.2));
+  const upto = H0 + HSPAN * fill;
+  BOX.forEach((segs, i) => {
+    $('br' + i).style.clipPath = `inset(0 ${(1 - fill) * 100}% 0 0 round 5px)`;
+    let b = booked(segs, upto);
+    if (i === 1) b += (NEW[1] - NEW[0]) * E.out(lin(t, tNew, tNew + .5));
+    if (i === 0) b += (NEW2[1] - NEW2[0]) * E.out(lin(t, tNew2, tNew2 + .4));
+    $('pc' + i).textContent = Math.round(b / HSPAN * 100) + '%';
+    $('now' + i).style.left = ((14.53 - H0) / HSPAN * 100) + '%';
+  });
+  [['sgN', tNew], ['sgN2', tNew2]].forEach(([id, a]) => {
+    const p = E.out(lin(t, a, a + .22));
+    $(id).style.visibility = t < a ? 'hidden' : 'visible';
+    $(id).style.transform = `translateY(${(1 - p) * -40}px)`;
+  });
+  $('add').style.clipPath = `inset(0 ${(1 - E.out(lin(t, tNew + .1, tNew + .4))) * 100}% 0 0)`;
+  // ночные записи: большая цифра считает 1→3, щелчок на каждую
+  const n = 1 + CNT.filter(x => t >= x).length;
+  $('nN').textContent = n; $('nW').textContent = n === 1 ? 'запись' : 'записи';
+  const lastC = [0, ...CNT].filter(x => t >= x).pop();
+  $('nN').style.transform = `translateY(${(1 - E.out(lin(t, lastC, lastC + .16))) * (lastC ? -26 : 0)}px) scaleY(${lastC ? 1 - .3 * Math.sin(Math.PI * lin(t, lastC, lastC + .12)) : 1})`;
+  [...$('nr').children].forEach((r, i) => {
+    const p = t < .5 ? (i < 1 ? 1 : 0) : E.out(lin(t, NR[i], NR[i] + .2));
+    r.style.clipPath = `inset(0 ${(1 - p) * 100}% 0 0)`;
+  });
+  // выручка: новая запись → цифра и столбик дня растут
+  const rp = E.out(lin(t, tRev, tRev + .55));
+  $('rev').textContent = fmt(Math.round(mix(45100, 48600, rp) / 100) * 100) + ' ₽';
+  $('revs').textContent = (t >= tRev ? 7 : 6) + ' записей';
+  [...$('wk').children].forEach((d, i) => d.style.height = (i < 3 ? WK[i] * 100 : i === 3 ? mix(.7, .93, rp) * 100 : 70) + '%');
+  const cpop = E.out(lin(t, tRev, tRev + .2));
+  $('chip').style.opacity = t < tRev ? 0 : 1; $('chip').style.transform = `translateX(-50%) scale(${mix(1.8, 1, cpop)})`;
+  // журнал неявок
+  [...$('lg').children].forEach((r, i) => {
+    const p = t >= T4 - .3 ? E.out(lin(t, LG[i], LG[i] + .22)) : 1;
+    r.style.clipPath = `inset(0 ${(1 - p) * 100}% 0 0)`;
+  });
+  $('nw').style.transform = `scale(${t >= T4 - .3 ? mix(1.5, 1, E.out(lin(t, LG[3] + .1, LG[3] + .32))) : 1})`;
+  // ---------- камера: блок в фокусе чёткий, соседи уходят на второй план ----------
+  const wf = ([, a, b]) => E.io(lin(t, a, a + .4)) * (1 - E.io(lin(t, b, b + .4)));
+  const any = Math.max(...FOC.map(wf));
+  const BELOW = { bB: 'bD', bA: 'bC' };               // блок под фокусом гаснет совсем: на него ложатся ярлык и плашка
+  ['bA', 'bB', 'bC', 'bD'].forEach(id => {
+    let o = 1; FOC.forEach(f => { if (f[0] !== id) o = Math.min(o, 1 - (BELOW[f[0]] === id ? 1 : .82) * wf(f)) });
+    $(id).style.opacity = o;
+  });
+  document.querySelector('.pnl .hd').style.opacity = 1 - .85 * Math.max(wf(FOC[0]), wf(FOC[2]));   // шапка не торчит обрезком в правой колонке
+  $('world').style.transform = cam(t);
+  $('pnl').style.opacity = 1 - lin(t, T5 - .1, T5 + .3);
+  $('world').style.display = t < T5 + .35 ? 'block' : 'none';
+  // ---------- хук: заголовок с первого кадра, держится над цифрой, уходит на отъезде ----------
+  const hookOut = T1 - .16;
+  maskIn($('k1'), t, -1, .4, hookOut); maskIn($('k2'), t, -1, .4, hookOut + .03); maskIn($('k3'), t, -1, .4, hookOut + .06);
+  const mo = E.in(lin(t, hookOut + .1, hookOut + .42));
+  $('mast').style.display = t < hookOut + .45 ? 'block' : 'none';
+  $('mast').style.transform = `translateY(${-mo * 700}px)`;
+  // ---------- ярлыки и призыв ----------
+  label($('l1'), t, L1[0], L1[1]); label($('l3'), t, L3[0], L3[1]);
+  const cp = E.out(lin(t, tCta, tCta + .3)), co = E.in(lin(t, T5 - .25, T5 + .05));
+  $('cta').style.display = t >= tCta && t < T5 + .05 ? 'flex' : 'none';
+  $('cta').style.clipPath = `inset(0 ${(1 - cp) * 100}% 0 0 round 12px)`;
+  $('cta').style.transform = `translateY(${co * 520}px)`;
+  // ---------- телефон ----------
+  const ph = E.out(lin(t, T5, T5 + .45)), pe = E.in(lin(t, T6 - .12, T6 + .22));
+  const pd = lin(t, T5 + .3, T6);
+  $('phone').style.display = t >= T5 - .05 && t < T6 + .22 ? 'block' : 'none';
+  $('phone').style.transform = `translateY(${(1 - ph) * 1500 + pe * 1700 - pd * 30}px) rotate(${mix(6, -1.2, ph) + pe * 5 + pd * .8}deg) scale(${1 + pd * .05})`;
+  const cs = E.out(lin(t, tMsg, tMsg + .4));
+  document.querySelectorAll('#phone .msg.old').forEach(m => m.style.transform = `translateY(${-cs * 90}px)`);
+  const mp = E.out(lin(t, tMsg, tMsg + .25));
+  $('msg').style.opacity = t < tMsg ? 0 : 1;
+  $('msg').style.transform = `translateY(${(1 - mp) * 90 - cs * 90}px) scale(${mix(1.08, 1, mp)})`;
+  $('kb').style.clipPath = `inset(0 0 ${(1 - E.out(lin(t, tMsg + .2, tMsg + .45))) * 100}% 0)`; $('kb').style.transform = `translateY(${-cs * 90}px)`;
+  $('msgt').textContent = t >= tRead ? '14:33 ✓✓' : '14:33 ✓';
+  // ---------- финал ----------
+  $('end').style.display = t >= T6 ? 'block' : 'none';
+  if (t >= T6) {
+    const e0 = T6;
+    maskIn($('e1'), t, e0 + .04, .32); maskIn($('e2'), t, e0 + .16, .32);
+    $('e_rule').style.transformOrigin = '0 0'; $('e_rule').style.transform = `scaleX(${E.out(lin(t, e0 + .3, e0 + .6))})`;
+    maskIn($('e_a').firstElementChild, t, e0 + .4, .3);
+    maskIn($('e_d'), t, e0 + .52, .36);
+    maskIn($('e_s').firstElementChild, t, e0 + .72, .3);
+    $('e_rule2').style.transformOrigin = '0 0'; $('e_rule2').style.transform = `scaleX(${E.out(lin(t, e0 + .8, e0 + 1.05))})`;
+    [...$('e_o').children].forEach((m, i) => maskIn(m, t, e0 + .86 + i * .07, .3));
+    maskIn($('e_h').firstElementChild, t, e0 + 1.12, .3);
+  }
+  $('cam').style.transform = '';
+};
+</script></body></html>
