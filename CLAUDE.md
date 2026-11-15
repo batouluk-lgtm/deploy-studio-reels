@@ -2,6 +2,8 @@
 
 **Перед любой работой прочитай `STYLE.md` и `playbook.md`.** Если в `tasks/` есть файл с невыполненными пунктами [ ] для монтажёра — сначала выполни их.
 
+**Навыки моушн-дизайна (обязательны, лежат в репозитории):** `toolkit/skills/motionmaxxing/` (SKILL.md, references/slop.md, judgment.md, motion.md, type.md, transitions.md, sound-sync.md; скрипты look.py, lint.mjs, render.mjs — работают на Node 22 + Chrome + ffmpeg без npm) и `toolkit/skills/business-motion-film/` (SKILL.md, references/motion-grammar.md, audio.md, quality-bar.md, three-js-patterns.md, gauntlet.md, critic-prompts.md). Прочитай их SKILL.md перед сценарием, прогоняй slop-проверку на плане и на рендере. Если правило из них противоречит STYLE.md — побеждает навык (см. поправку в STYLE.md).
+
 `playbook.md` — общая база знаний: что работает, рубрики, технические правила публикации, ограничения. Новые выводы (что зашло, что сломалось) дописывай в его «Журнал находок» с датой.
 
 **Навыки.** Если в сессии доступны скиллы плагина Social Media Skills, перед сценарием загрузи через инструмент Skill: `social-media-skills:reels-script`, `social-media-skills:hook-writer`, `social-media-skills:instagram-reels-publishing`. Применяй их методики, но этот файл и `playbook.md` главнее. Музыка только своя (`toolkit/lib/audio.py`). Упоминания WoopSocial в навыках игнорируй: рилс передаётся через `queue.md`. Если навыков нет — работай без них.
