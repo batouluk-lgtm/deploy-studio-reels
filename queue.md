@@ -76,6 +76,22 @@ cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@f27970f3173
 #сайтподключ #онлайнзапись #улануде
 ```
 
+## 2026-11-18 | Рилс: Панель владельца детейлинга
+
+video: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@4292f212fb435ef9066b31c98967d2113bdf627b/public/reels/reel12-panel-vladeltsa.mp4
+cover: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@4292f212fb435ef9066b31c98967d2113bdf627b/public/reels/reel12-panel-vladeltsa-cover.jpg
+
+```text
+Три записи за ночь, пока студия закрыта. Так выглядит панель владельца детейлинга.
+Напишите ПАНЕЛЬ в комментариях — покажем такую же на примере вашей студии.
+
+Загрузка боксов, ночные записи, переносы и уведомления в Telegram — в одном месте. В ролике демо-данные вымышленной студии.
+
+Делаем сайт с онлайн-записью, панелью и ботом под вашу студию за 7–12 дней.
+
+#онлайнзапись #детейлинг #сайтдлябизнеса
+```
+
 ## 2026-11-20 | Рилс: Галочка согласия уже стоит?
 
 video: https://cdn.jsdelivr.net/gh/batouluk-lgtm/deploy-studio-reels@5e4c0f9c5ce5ffab870995110b0f7dfda8b4c63d/public/reels/reel11-galochka-soglasiya.mp4
