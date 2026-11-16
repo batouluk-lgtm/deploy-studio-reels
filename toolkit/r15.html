@@ -280,7 +280,7 @@ window.render=function(t){
     $('sh3').style.transform=`scaleX(${0.9+0.1*Math.sin(lt*4)})`;
   }
   if(id==='s_ico'){
-    const s=ease(lt/0.12); sc.querySelector('.ico').style.transform=`scale(${0.9+0.1*s})`;
+    const s=ease(lt/0.1), o=lt<0.1?0:0.04*Math.exp(-(lt-0.1)*30); sc.querySelector(".ico").style.transform=`scale(${0.9+0.14*s-0.04*clamp((lt-0.1)/0.07)+0})`;
   }
 };
 render(0);

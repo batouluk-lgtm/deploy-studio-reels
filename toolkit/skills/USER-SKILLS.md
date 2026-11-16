@@ -1,0 +1,89 @@
+# Навыки из Claude Code Бато (78)
+
+Получить: `bash toolkit/skills/fetch-user-skills.sh` → `/tmp/ds-skills/<owner>__<repo>/…/SKILL.md`.
+
+**Обязательные для каждого рилса:** motion-art-direction (спека моушн-языка до анимации), beat-sync-editing (склейки в бит, дуга темпа), short-form-video, shot-composition, transitions-dev, kinetic-typography, soundtrack, video-delivery-specs. По задаче: logo-animation, gsap-timeline/gsap-core (GSAP уже лежит в toolkit/vendor), threejs-*, particle-system, shader-glsl, text-message-animation, caption-animation, wrapped-video, ad-creative-video, promo-video, launch-video, design-taste-frontend.
+
+remotion-video и after-effects в облаке не запустить (npm закрыт) — брать из них только приёмы, рендер через lib/render.py.
+
+| навык | репозиторий | путь |
+|---|---|---|
+| 60fps-animation | iart-ai/web-animation-skills | skills/60fps-animation/SKILL.md |
+| accessible-animation | iart-ai/web-animation-skills | skills/accessible-animation/SKILL.md |
+| ad-creative-video | iart-ai/ad-video-skills | skills/ad-creative-video/SKILL.md |
+| after-effects | iart-ai/motion-design-skills | skills/after-effects/SKILL.md |
+| animated-infographic | iart-ai/data-animation-skills | skills/animated-infographic/SKILL.md |
+| animation-principles | iart-ai/motion-design-skills | skills/animation-principles/SKILL.md |
+| ascii-animation | iart-ai/web-animation-skills | skills/ascii-animation/SKILL.md |
+| audiogram | iart-ai/youtube-video-skills | skills/audiogram/SKILL.md |
+| beat-sync-editing | iart-ai/motion-design-skills | skills/beat-sync-editing/SKILL.md |
+| brand-motion-guidelines | iart-ai/freelance-motion-skills | skills/brand-motion-guidelines/SKILL.md |
+| canvas-design | anthropics/skills | skills/canvas-design/SKILL.md |
+| caption-animation | iart-ai/tiktok-video-skills | skills/caption-animation/SKILL.md |
+| chart-animation | iart-ai/data-animation-skills | skills/chart-animation/SKILL.md |
+| client-revisions | iart-ai/freelance-motion-skills | skills/client-revisions/SKILL.md |
+| color-motion | iart-ai/motion-design-skills | skills/color-motion/SKILL.md |
+| countdown-video | iart-ai/tiktok-video-skills | skills/countdown-video/SKILL.md |
+| creative-brief | iart-ai/freelance-motion-skills | skills/creative-brief/SKILL.md |
+| design-taste-frontend | Leonxlnx/taste-skill | skills/taste-skill/SKILL.md |
+| diagram-animation | iart-ai/explainer-video-skills | skills/diagram-animation/SKILL.md |
+| explainer-video | iart-ai/explainer-video-skills | skills/explainer-video/SKILL.md |
+| find-skills | vercel-labs/skills | skills/find-skills/SKILL.md |
+| generative-illustration | iart-ai/generative-illustration-skills | skills/generative-illustration/SKILL.md |
+| glassmorphism | iart-ai/web-animation-skills | skills/glassmorphism/SKILL.md |
+| gsap-core | greensock/gsap-skills | skills/gsap-core/SKILL.md |
+| gsap-frameworks | greensock/gsap-skills | skills/gsap-frameworks/SKILL.md |
+| gsap-performance | greensock/gsap-skills | skills/gsap-performance/SKILL.md |
+| gsap-plugins | greensock/gsap-skills | skills/gsap-plugins/SKILL.md |
+| gsap-react | greensock/gsap-skills | skills/gsap-react/SKILL.md |
+| gsap-scrolltrigger | greensock/gsap-skills | skills/gsap-scrolltrigger/SKILL.md |
+| gsap-timeline | greensock/gsap-skills | skills/gsap-timeline/SKILL.md |
+| gsap-utils | greensock/gsap-skills | skills/gsap-utils/SKILL.md |
+| gsap-web | iart-ai/web-animation-skills | skills/gsap-web/SKILL.md |
+| isometric-animation | iart-ai/explainer-video-skills | skills/isometric-animation/SKILL.md |
+| javascript-animation | iart-ai/javascript-animation-skills | skills/javascript-animation/SKILL.md |
+| kinetic-typography | iart-ai/kinetic-typography-skills | skills/kinetic-typography/SKILL.md |
+| launch-video | iart-ai/ad-video-skills | skills/launch-video/SKILL.md |
+| logo-animation | iart-ai/motion-design-skills | skills/logo-animation/SKILL.md |
+| lottie-animation | iart-ai/web-animation-skills | skills/lottie-animation/SKILL.md |
+| lower-thirds | iart-ai/lower-thirds-skills | skills/lower-thirds/SKILL.md |
+| manim | iart-ai/manim-skills | skills/manim/SKILL.md |
+| map-animation | iart-ai/map-animation-skills | skills/map-animation/SKILL.md |
+| micro-interaction | iart-ai/web-animation-skills | skills/micro-interaction/SKILL.md |
+| motion-art-direction | iart-ai/motion-design-skills | skills/motion-art-direction/SKILL.md |
+| motion-background | iart-ai/motion-design-skills | skills/motion-background/SKILL.md |
+| motion-pricing | iart-ai/freelance-motion-skills | skills/motion-pricing/SKILL.md |
+| page-transition-animation | iart-ai/web-animation-skills | skills/page-transition-animation/SKILL.md |
+| particle-system | iart-ai/webgl-animation-skills | skills/particle-system/SKILL.md |
+| photo-slideshow | iart-ai/ecommerce-video-skills | skills/photo-slideshow/SKILL.md |
+| presentation-video | iart-ai/data-animation-skills | skills/presentation-video/SKILL.md |
+| promo-video | iart-ai/ecommerce-video-skills | skills/promo-video/SKILL.md |
+| remotion-video | iart-ai/motion-design-skills | skills/remotion-video/SKILL.md |
+| shader-glsl | iart-ai/webgl-animation-skills | skills/shader-glsl/SKILL.md |
+| short-form-video | iart-ai/tiktok-video-skills | skills/short-form-video/SKILL.md |
+| shot-composition | iart-ai/motion-design-skills | skills/shot-composition/SKILL.md |
+| slide-maker | addsumtech/slides_maker | skills/slide-maker/SKILL.md |
+| soundtrack | iart-ai/javascript-animation-skills | skills/soundtrack/SKILL.md |
+| svg-animation | iart-ai/web-animation-skills | skills/svg-animation/SKILL.md |
+| talking-head | iart-ai/talking-head-skills | skills/talking-head/SKILL.md |
+| talking-head-b-roll | iart-ai/b-roll-skills | skills/talking-head-b-roll/SKILL.md |
+| testimonial-video | iart-ai/ad-video-skills | skills/testimonial-video/SKILL.md |
+| text-message-animation | iart-ai/text-message-video-skills | skills/text-message-animation/SKILL.md |
+| threejs-animation | iart-ai/webgl-animation-skills | skills/threejs-animation/SKILL.md |
+| threejs-asset-pipeline | CloudAI-X/threejs-skills | skills/threejs-asset-pipeline/SKILL.md |
+| threejs-fundamentals | CloudAI-X/threejs-skills | skills/threejs-fundamentals/SKILL.md |
+| threejs-geometry | CloudAI-X/threejs-skills | skills/threejs-geometry/SKILL.md |
+| threejs-interaction | CloudAI-X/threejs-skills | skills/threejs-interaction/SKILL.md |
+| threejs-lighting | CloudAI-X/threejs-skills | skills/threejs-lighting/SKILL.md |
+| threejs-loaders | CloudAI-X/threejs-skills | skills/threejs-loaders/SKILL.md |
+| threejs-materials | CloudAI-X/threejs-skills | skills/threejs-materials/SKILL.md |
+| threejs-performance | CloudAI-X/threejs-skills | skills/threejs-performance/SKILL.md |
+| threejs-postprocessing | CloudAI-X/threejs-skills | skills/threejs-postprocessing/SKILL.md |
+| threejs-react-three-fiber | CloudAI-X/threejs-skills | skills/threejs-react-three-fiber/SKILL.md |
+| threejs-shaders | CloudAI-X/threejs-skills | skills/threejs-shaders/SKILL.md |
+| threejs-textures | CloudAI-X/threejs-skills | skills/threejs-textures/SKILL.md |
+| transitions-dev | jakubantalik/transitions.dev | skills/transitions-dev/SKILL.md |
+| video-delivery-specs | iart-ai/freelance-motion-skills | skills/video-delivery-specs/SKILL.md |
+| whiteboard-animation | iart-ai/explainer-video-skills | skills/whiteboard-animation/SKILL.md |
+| wrapped-video | iart-ai/explainer-video-skills | skills/wrapped-video/SKILL.md |
+| youtube-intro-outro | iart-ai/youtube-video-skills | skills/youtube-intro-outro/SKILL.md |
