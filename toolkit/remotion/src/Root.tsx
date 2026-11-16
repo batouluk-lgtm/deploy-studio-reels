@@ -1,5 +1,6 @@
 import React from 'react';
 import {R15} from './R15';
+import {R16, R16_DUR} from './R16';
 import {Composition, AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig} from 'remotion';
 const Test: React.FC = () => {
   const f = useCurrentFrame(); const {fps} = useVideoConfig();
@@ -10,5 +11,6 @@ const Test: React.FC = () => {
 };
 export const Root: React.FC = () => <>
   <Composition id="Test" component={Test} durationInFrames={45} fps={30} width={1080} height={1920}/>
+  <Composition id="R16" component={R16} durationInFrames={R16_DUR} fps={30} width={1080} height={1920}/>
   <Composition id="R15" component={R15} durationInFrames={192} fps={30} width={1080} height={1920}/>
 </>;
