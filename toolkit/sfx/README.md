@@ -1,0 +1,1 @@
+Звуки из github.com/wyzowl/sfx-kit (CC0, 320 штук). Здесь — только использованные в r14. Полный набор: git clone --depth 1 https://github.com/wyzowl/sfx-kit (catalogue.md, GUIDE.md, sounds.json с точками синхронизации sync.at). Использовать вместо синтезированных звуков из audio.py.

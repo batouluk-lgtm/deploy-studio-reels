@@ -1,0 +1,172 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>r14 · Обзор сайта «Наверное» (Apple-style)</title>
+<style>
+@font-face{font-family:"InterD";src:url("/usr/share/fonts/truetype/inter/InterDisplay-Bold.ttf")}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(120% 70% at 50% 62%,#16161a 0%,#050506 60%,#000 100%);font-family:"Inter Display","Inter",sans-serif;color:#f5f5f7}
+#cam{position:absolute;inset:0;transform-origin:540px 1000px}
+#win{position:absolute;left:153px;top:470px;width:774px;border-radius:44px;overflow:hidden;background:#1c1c1e;
+ box-shadow:0 0 0 1.5px rgba(255,255,255,.14),0 2px 0 0 rgba(255,255,255,.18) inset,0 60px 120px -30px rgba(0,0,0,.9),0 30px 60px -20px rgba(0,0,0,.7);transform-origin:50% 0%}
+#bar{height:84px;display:flex;align-items:center;gap:14px;padding:0 26px;background:linear-gradient(#2c2c2e,#232325);border-bottom:1px solid rgba(255,255,255,.08)}
+#bar i{width:16px;height:16px;border-radius:50%;display:block}
+#url{margin-left:auto;margin-right:auto;transform:translateX(-30px);background:rgba(255,255,255,.08);border-radius:14px;padding:12px 30px;font-size:26px;color:#d1d1d6;letter-spacing:-.01em;display:flex;gap:10px;align-items:center}
+#vp{position:relative;width:774px;height:1152px;overflow:hidden}
+#fr{position:absolute;left:0;top:0;width:430px;height:640px;border:0;transform:scale(1.8);transform-origin:0 0;background:#F1ECE2}
+#cap{position:absolute;left:80px;right:80px;top:268px;text-align:center}
+#cap .l{display:block;font-weight:700;font-size:60px;line-height:1.06;letter-spacing:-.035em}
+#cap .s{color:#86868b}
+.w{display:inline-block;will-change:transform,filter,opacity}
+#hook{position:absolute;left:70px;right:70px;top:720px;text-align:center}
+#hook .l{display:block;font-weight:700;font-size:112px;line-height:1.0;letter-spacing:-.045em}
+#hook .s{color:#86868b}
+#cur{position:absolute;left:0;top:0;width:56px;height:56px;pointer-events:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.45))}
+#end{position:absolute;inset:0;background:#000;display:none;text-align:center;font-family:"Inter Display","Inter",sans-serif;color:#f5f5f7}
+#end .a{position:absolute;left:60px;right:60px;top:640px;font-weight:700;font-size:104px;letter-spacing:-.045em;line-height:1.02}
+#end .b{position:absolute;left:60px;right:60px;top:900px;font-weight:700;font-size:70px;letter-spacing:-.035em;line-height:1.08;color:#86868b}
+#end .b em{font-style:normal;color:#FF4A1C}
+#end .c{position:absolute;left:0;right:0;top:1150px;font-size:40px;color:#86868b;letter-spacing:-.01em}
+</style></head><body>
+<div id="stage">
+ <div id="cam">
+  <div id="win">
+   <div id="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i>
+    <div id="url"><svg width="20" height="22" viewBox="0 0 20 22"><rect x="3" y="9" width="14" height="11" rx="2.5" fill="#d1d1d6"/><path d="M6 9V6.5a4 4 0 0 1 8 0V9" stroke="#d1d1d6" stroke-width="2.2" fill="none"/></svg>navernoe.ru</div></div>
+   <div id="vp"><iframe id="fr" src="r14site/index.html" scrolling="no"></iframe></div>
+  </div>
+ </div>
+ <div id="hook"></div>
+ <div id="cap"></div>
+ <svg id="cur" viewBox="0 0 28 28"><path d="M5 2.5 L5 22 L10.2 17.4 L13.6 25 L17 23.5 L13.7 16 L20.8 16 Z" fill="#fff" stroke="#000" stroke-width="1.6" stroke-linejoin="round"/></svg>
+</div>
+<div id="end"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lin=(t,a,b)=>clamp((t-a)/(b-a));
+const mix=(a,b,p)=>a+(b-a)*p;
+const io=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;      // ease-in-out cubic
+const out=p=>1-Math.pow(1-p,4);
+// Apple-style spring (damping ratio z, response r seconds) — value from 0 to 1 at time dt
+function spring(dt,r=.5,z=.8){ if(dt<=0) return 0; const w=2*Math.PI/r; if(z>=1){return 1-(1+w*dt)*Math.exp(-w*dt)}
+ const wd=w*Math.sqrt(1-z*z); return 1-Math.exp(-z*w*dt)*(Math.cos(wd*dt)+z*w/wd*Math.sin(wd*dt)); }
+
+window.DUR=24.6; window.BPM=122; window.MUSIC={preset:"house122"}; window.SFX=[]; window.READY=false;
+const S=(t,k,g=1)=>SFX.push({t:+t.toFixed(3),k,g});
+
+// ---- captions: words spring in with blur (Apple keynote text) ----
+function setLines(el,lines){ el.innerHTML=lines.map(([txt,cls])=>`<span class="l ${cls||''}">`+txt.split(' ').map(w=>`<span class="w">${w}</span>`).join(' ')+`</span>`).join(''); return [...el.querySelectorAll('.w')]; }
+const CAPS=[ // [start,end,lines]
+ [2.6,5.15,[["Студия «Наверное»."],["Запись — только в директе.","s"]]],
+ [5.3,8.0,[["Отвечают,"],["когда проснутся.","s"]]],
+ [8.15,12.55,[["Калькулятор:"],["сколько ушло к соседу.","s"]]],
+ [12.7,15.55,[["Двойная запись — бонус."],["Напоминаний — нет.","s"]]],
+ [15.7,18.15,[["Три шага"],["до потери клиента.","s"]]],
+];
+let capIdx=-1, capWords=[];
+function captions(t){
+  const i=CAPS.findIndex(c=>t>=c[0]&&t<c[1]);
+  if(i!==capIdx){capIdx=i; capWords=i<0?[]:setLines($('cap'),CAPS[i][2]); if(i<0) $('cap').innerHTML='';}
+  if(i<0) return;
+  const [a,b]=CAPS[i];
+  capWords.forEach((w,k)=>{const d=t-(a+k*.055); const p=spring(d,.55,.85); const o=clamp(d/.18);
+    const ex=lin(t,b-.22,b); w.style.opacity=o*(1-ex); w.style.transform=`translateY(${(1-p)*38 - ex*20}px)`; w.style.filter=`blur(${(1-clamp(d/.3))*10+ex*8}px)`;});
+}
+// ---- hook ----
+const hookWords=setLines($('hook'),[["Мы сделали","s"],["самый честный"],["сайт студии."]]);
+function hook(t){
+  const H=$('hook'); if(t>2.55){H.style.display='none';return} H.style.display='block';
+  hookWords.forEach((w,k)=>{const st=k<4?-1:.42+(k-4)*.12; const d=t-st; const p=spring(d,.5,.82);
+    w.style.opacity=clamp(d/.15); w.style.transform=`translateY(${(1-p)*60}px) scale(${.96+.04*p})`; w.style.filter=`blur(${(1-clamp(d/.28))*12}px)`;});
+  const ex=lin(t,2.05,2.5); H.style.opacity=1-ex; H.style.transform=`translateY(${-io(ex)*140}px) scale(${1-.25*io(ex)})`; H.style.filter=`blur(${ex*10}px)`;
+}
+S(0,'pop-small-in',.5); S(.42,'impact-light-soft',.8); S(.58,'pop-small-in',.4);
+
+// ---- iframe helpers ----
+let F,D,Y={},R1,R2,BUBS=[],CARDS=[],STEPS=[];
+const fr=$('fr');
+fr.addEventListener('load',async()=>{
+  F=fr.contentWindow; D=fr.contentDocument; await D.fonts.ready;
+  D.querySelector('.toast').style.display='none';
+  const top=sel=>{const e=D.querySelector(sel);return e.getBoundingClientRect().top+F.scrollY};
+  Y.hero=0; Y.phone=top('.phone')-40; Y.calc=top('.panel')-110; Y.cards=top('section:nth-of-type(2) h2')-30; Y.steps=top('.steps')-200; Y.quote=top('.big-quote')-60;
+  R1=D.getElementById('r1'); R2=D.getElementById('r2');
+  BUBS=[...D.querySelectorAll('.bub')]; CARDS=[...D.querySelectorAll('.card')]; STEPS=[...D.querySelectorAll('.step')];
+  window.READY=true;
+});
+const scrollKeys=()=>[[0,0],[5.0,0],[5.6,Y.phone],[8.0,Y.phone],[8.7,Y.calc],[12.55,Y.calc],[13.2,Y.cards],[15.55,Y.cards],[16.15,Y.steps],[18.1,Y.steps],[18.7,Y.quote]];
+function scrollAt(t){const K=scrollKeys(); for(let i=1;i<K.length;i++){ if(t<=K[i][0]){const [a,ya]=K[i-1],[b,yb]=K[i]; return mix(ya,yb,io(lin(t,a,b)))} } return K[K.length-1][1];}
+S(5.0,'swipe-medium-soft',.6); S(8.05,'swipe-slow-soft',.6); S(12.6,'swipe-medium-soft',.6); S(15.6,'swipe-medium-soft',.6);
+
+// rect of an element inside the iframe → stage coords (without camera)
+function inStage(el){const r=el.getBoundingClientRect(); const s=1.8; const wx=153, wy=470+84; return {x:wx+r.left*s,y:wy+r.top*s,w:r.width*s,h:r.height*s};}
+
+// ---- calculator drag ----
+const v1=t=>Math.round(mix(12,48,io(lin(t,9.35,10.9)))), v2=t=>Math.round(mix(40,75,io(lin(t,11.35,12.2))));
+let last1=-1,last2=-1;
+for(let t=9.35;t<10.95;t+=.09) S(t,'click-hover-medium',.35);
+for(let t=11.35;t<12.25;t+=.08) S(t,'click-hover-medium',.35);
+S(9.25,'click-mouse-soft',.8); S(11.25,'click-mouse-soft',.8); S(11.0,'click-mouse-soft',.5); S(12.25,'click-mouse-soft',.5);
+S(10.95,'tone-ding-low',.45);
+
+// bubbles, cards, steps
+const BT=[5.75,6.2,6.65,7.1,7.55];
+BT.forEach((t,i)=>S(t,i<4?'notification-message-in-soft':'notification-failure-wobble',i<4?.55:.6));
+const CT=[13.35,13.85,14.35]; CT.forEach((t,i)=>{S(t,'pop-medium-in',.8); S(t,'tone-step-'+(i+1),.45)});
+const ST=[16.35,16.85,17.35]; ST.forEach((t,i)=>{S(t,'impact-light-firm',.8); S(t,'tone-step-'+(i+3),.4)});
+
+// window entry & exits
+S(2.05,'whoosh-slow-soft',.7); S(2.98,'impact-medium-soft',.7);
+S(5.05,'move-zoom-in',.6);
+S(8.0,'move-zoom-out',.5);
+S(18.25,'riser-1s-soft',.6); S(19.2,'boom-hit-soft',.9);
+S(21.05,'reverse-whoosh-short-soft',.6); S(21.3,'sting-bright-short',.9);
+S(22.15,'pop-small-in',.5); S(22.9,'pop-small-in',.5);
+
+const END=21.3;
+window.render=t=>{
+  if(!F) return;
+  hook(t); captions(t);
+  F.scrollTo(0,scrollAt(t));
+  // window entry spring
+  const e=spring(t-2.15,.62,.78);
+  const W=$('win'), C=$('cam');
+  // camera per section
+  let cs=1, cx=0, cy=0, rx=0, ry=0;
+  const ph=lin(t,5.1,5.65), phOut=lin(t,7.95,8.6);
+  const zPhone=io(ph)*(1-io(phOut));
+  const push=io(ph)*(1-io(phOut)); cs=mix(1,1.05,push);
+  // cards tilt
+  const tilt=io(lin(t,12.7,13.3))*(1-io(lin(t,15.4,15.9)));
+  ry=mix(0,-9,tilt); rx=mix(0,6,tilt);
+  // quote: camera pushes in on the orange block
+  const q=io(lin(t,18.6,19.25)); const qOut=lin(t,20.9,21.3);
+  const qe=D.querySelector('.big-quote'); const qr=inStage(qe); const qs=1.38;
+  const tx=540-540-qs*(qr.x+qr.w/2-540), ty=960-1000-qs*(qr.y+qr.h/2-1000);
+  cs=mix(cs,qs,q); cx=mix(cx,tx,q); cy=mix(cy,ty,q);
+  C.style.transform=`perspective(2600px) translate(${cx}px,${cy}px) scale(${cs}) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  W.style.transform=`translateY(${(1-e)*1300}px) perspective(2200px) rotateX(${(1-e)*24}deg) scale(${mix(.9,1,e)})`;
+  W.style.opacity=t<2.1?0:1;
+  $('stage').style.filter=`blur(${qOut*14}px)`; $('stage').style.opacity=1;
+  // iframe state
+  F.scrollTo(0,scrollAt(t));
+  const a=v1(t), b=v2(t); if(a!==last1){R1.value=a;last1=a} if(b!==last2){R2.value=b;last2=b} F.calc&&F.calc();
+  R1.dispatchEvent(new Event('input'));
+  BUBS.forEach((el,i)=>{const d=t-BT[i]; const p=spring(d,.45,.7); el.style.opacity= t<4.9?1:clamp(d/.12); el.style.transform=t<4.9?'':`translateY(${(1-p)*30}px) scale(${.9+.1*p})`;});
+  CARDS.forEach((el,i)=>{const d=t-CT[i]; const p=spring(d,.5,.72); el.style.opacity=t<12.6?1:clamp(d/.12); el.style.transform=t<12.6?'':`translateY(${(1-p)*60}px) scale(${.92+.08*p})`;});
+  STEPS.forEach((el,i)=>{const d=t-ST[i]; const p=spring(d,.5,.8); el.style.opacity=t<15.6?1:clamp(d/.15); el.style.transform=t<15.6?'':`translateY(${(1-p)*40}px)`;});
+  // cursor over slider thumbs
+  const cur=$('cur'); const showC=(t>8.75&&t<12.45);
+  cur.style.display=showC?'block':'none';
+  if(showC){ const R=t<11.05?R1:R2; const rr=inStage(R); const val=t<11.05?(+R1.value-1)/59:(+R2.value)/100;
+    let x=rr.x+12*1.8+val*(rr.w-24*1.8), y=rr.y+rr.h/2;
+    if(t<9.25){const p=io(lin(t,8.75,9.25)); x=mix(980,x,p); y=mix(1500,y,p)}
+    if(t>11.0&&t<11.25){const p=io(lin(t,11.0,11.25)); const r1=inStage(R1); const x1=r1.x+12*1.8+((+R1.value-1)/59)*(r1.w-24*1.8); x=mix(x1,x,p); y=mix(r1.y+r1.h/2,y,p);}
+    const press=(t>9.25&&t<11.0)||(t>11.25&&t<12.25);
+    cur.style.transform=`translate(${x-6+cx}px,${y-4}px) scale(${press?.9:1})`; }
+  // end card
+  const E=$('end'); if(t>=END){E.style.display='block';
+    const set=(c,txt,st)=>{const el=E.querySelector(c); if(el.dataset.t!==txt){el.innerHTML=txt.split(' ').map(w=>`<span class="w">${w}</span>`).join(' ');el.dataset.t=txt}
+      [...el.querySelectorAll('.w')].forEach((w,k)=>{const d=t-(st+k*.06); const p=spring(d,.55,.85); w.style.opacity=clamp(d/.18); w.style.transform=`translateY(${(1-p)*40}px)`; w.style.filter=`blur(${(1-clamp(d/.3))*10}px)`;});};
+    set('.a','Узнали свою студию?',END+.1); set('.b','Напишите <em>СТРЕСС</em> — сделаем наоборот.',END+.85); set('.c','@deploy_studio03',END+1.6);
+  } else E.style.display='none';
+};
+</script></body></html>
