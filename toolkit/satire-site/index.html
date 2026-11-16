@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Студия «Наверное» — запись только в директе</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;700&family=Golos+Text:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--o:#FF4A1C;--k:#111;--p:#F1ECE2;--g:#8A857C}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--p);color:var(--k);font-family:"Golos Text",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.d{font-family:Unbounded,sans-serif;font-weight:900;letter-spacing:-.03em;line-height:.92;text-transform:uppercase}
+.m{font-family:"JetBrains Mono",monospace}
+nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+.logo{font-family:Unbounded;font-weight:900;font-size:22px;letter-spacing:-.02em}.logo b{color:var(--o)}
+nav .links{display:flex;gap:28px;font-size:15px;color:#555}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--k);color:#fff;border:0;border-radius:999px;padding:16px 26px;font:600 16px "Golos Text";cursor:pointer;text-decoration:none}
+.btn.o{background:var(--o);color:#111}
+/* HERO */
+.hero{background:var(--o);border-radius:28px;padding:64px 56px;display:grid;grid-template-columns:1.25fr .9fr;gap:40px;align-items:center;position:relative;overflow:hidden}
+.hero h1{font-size:clamp(46px,7vw,104px)}
+.hero h1 s{text-decoration-thickness:10px;text-decoration-color:#111}
+.hero h1 .ghost{color:#FFD3C4}
+.hero p{font-size:20px;line-height:1.4;margin:28px 0 30px;max-width:520px}
+.hero .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.chip{font:700 13px "JetBrains Mono";background:#111;color:#fff;border-radius:6px;padding:6px 10px}
+.phone{background:#111;border-radius:34px;padding:16px;color:#eee;box-shadow:0 40px 80px -30px rgba(0,0,0,.6);transform:rotate(3deg)}
+.phone .top{font:700 14px "JetBrains Mono";color:#aaa;display:flex;justify-content:space-between;padding:6px 8px 14px}
+.bub{background:#2A2A2A;border-radius:18px 18px 18px 4px;padding:12px 16px;margin:8px 0;font-size:16px;max-width:85%}
+.bub small{display:block;color:#888;font:12px "JetBrains Mono";margin-top:4px}
+.bub.me{background:#3B3B3B;margin-left:auto;border-radius:18px 18px 4px 18px;color:#aaa;font-style:italic}
+.stamp{position:absolute;right:42px;top:34px;font:900 26px Unbounded;color:#111;border:5px solid #111;border-radius:12px;padding:6px 16px;transform:rotate(-9deg);background:var(--o)}
+section{padding:96px 0}
+h2{font-size:clamp(36px,5vw,72px)}
+/* CALC */
+.calc{background:#111;color:#F1ECE2;border-radius:28px;padding:56px;display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.calc h2 em{font-style:normal;color:var(--o)}
+.calc .sub{color:#aaa;margin-top:18px;font-size:18px;line-height:1.4}
+.panel{background:#1C1C1C;border-radius:20px;padding:28px}
+.row{margin-bottom:26px}
+.row label{display:flex;justify-content:space-between;font:14px "JetBrains Mono";color:#bbb;margin-bottom:10px}
+.row label b{color:#fff;font-size:18px}
+input[type=range]{width:100%;accent-color:var(--o)}
+.res{border-top:1px dashed #444;padding-top:22px;display:flex;justify-content:space-between;align-items:end}
+.res .big{font:900 56px Unbounded;color:var(--o);letter-spacing:-.04em}
+.res .lbl{font:14px "JetBrains Mono";color:#999;max-width:200px}
+.fine{font:12px "JetBrains Mono";color:#777;margin-top:14px}
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px}
+.card{background:#fff;border-radius:22px;padding:30px;min-height:260px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid #E2DBCD}
+.card .e{font-size:40px}
+.card h3{font:900 24px Unbounded;text-transform:uppercase;letter-spacing:-.02em;margin:18px 0 10px}
+.card p{color:#555;line-height:1.45}
+.card .tag{font:700 12px "JetBrains Mono";color:var(--o)}
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid #111;margin-top:44px}
+.step{padding:28px 28px 0 0}
+.step .n{font:900 56px Unbounded;letter-spacing:-.04em}
+.step h4{font:700 20px "Golos Text";margin:14px 0 8px}
+.step p{color:#555;line-height:1.45}
+/* QUOTE */
+.big-quote{background:var(--o);border-radius:28px;padding:80px 56px;text-align:center}
+.big-quote h2{font-size:clamp(40px,6.4vw,96px)}
+.big-quote p{margin:26px auto 0;max-width:620px;font-size:19px}
+/* REAL */
+.real{border:2px dashed #111;border-radius:28px;padding:44px 48px;display:flex;justify-content:space-between;gap:30px;align-items:center;flex-wrap:wrap}
+.real h3{font:900 30px Unbounded;text-transform:uppercase;letter-spacing:-.02em}
+.real p{color:#444;margin-top:10px;max-width:640px;line-height:1.5}
+footer{padding:40px 0 60px;display:flex;justify-content:space-between;color:#777;font:13px "JetBrains Mono";flex-wrap:wrap;gap:10px}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(120px);background:#111;color:#fff;padding:16px 22px;border-radius:14px;font:15px "Golos Text";transition:.35s;max-width:90vw;z-index:9}
+.toast.on{transform:translateX(-50%) translateY(0)}
+@media(max-width:860px){.hero,.calc{grid-template-columns:1fr;padding:36px 26px}.cards,.steps{grid-template-columns:1fr}.stamp{display:none}nav .links{display:none}}
+</style></head><body>
+<div class="wrap">
+<nav><div class="logo">Наверное<b>.</b></div>
+<div class="links"><span>Услуги</span><span>Цены (в директе)</span><span>Контакты (тоже)</span></div>
+<button class="btn" data-t="Онлайн-записи нет. Напишите в директ — ответим. Наверное.">Записаться ↗</button></nav>
+
+<header class="hero">
+  <div class="stamp">НЕ ПРОЧИТАНО</div>
+  <div>
+    <h1 class="d">Ваши клиенты.<br>Наш <span class="ghost">хаос</span>.<br>Ваш тоже.</h1>
+    <p>Студия, где запись только в директе. Отвечаем, когда проснёмся. Свободные окна — по настроению администратора.</p>
+    <button class="btn" data-t="Вы в очереди на ответ. Позиция в очереди: 37.">Написать в директ и ждать →</button>
+    <div class="chips"><span class="chip">−3 клиента за ночь</span><span class="chip">двойная запись в комплекте</span><span class="chip">напоминаний нет</span></div>
+  </div>
+  <div class="phone">
+    <div class="top"><span>Директ</span><span>23:40</span></div>
+    <div class="bub">А на завтра есть окошко?<small>23:40</small></div>
+    <div class="bub">А сколько стоит полировка?<small>23:52</small></div>
+    <div class="bub">Ау?<small>00:31</small></div>
+    <div class="bub">Всё, записалась к соседям 👋<small>00:33</small></div>
+    <div class="bub me">Доброе утро! Уточню и напишу<small>10:14</small></div>
+  </div>
+</header>
+
+<section>
+  <div class="calc">
+    <div>
+      <h2 class="d">Посчитайте, сколько клиентов <em>ушло</em> к&nbsp;соседу.</h2>
+      <p class="sub">Подвигайте ползунки — это ваши цифры, не наши. Мы считать не умеем, у нас директ.</p>
+    </div>
+    <div class="panel">
+      <div class="row"><label>Пишут после закрытия, в неделю <b id="v1">12</b></label><input id="r1" type="range" min="1" max="60" value="12"></div>
+      <div class="row"><label>Не дожидаются ответа до утра, % <b id="v2">40</b></label><input id="r2" type="range" min="0" max="100" value="40"></div>
+      <div class="row"><label>Средний чек, ₽ <b id="v3">3 500</b></label><input id="r3" type="range" min="500" max="15000" step="500" value="3500"></div>
+      <div class="res"><div class="lbl">столько уходит к соседу за месяц, если верить вашим ползункам</div><div class="big" id="out">−67 200 ₽</div></div>
+      <div class="fine">Расчёт: обращения × доля ушедших × чек × 4 недели. Это ваша оценка, а не статистика.</div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <h2 class="d">Ваш минус —<br>наша традиция.</h2>
+  <div class="cards">
+    <div class="card"><div><div class="e">🗓️</div><h3>Двое на 14:00</h3><p>Записали обоих, потому что в тетрадке было плохо видно. Разбирайтесь на месте.</p></div><span class="tag">бесплатно, всегда</span></div>
+    <div class="card"><div><div class="e">🫠</div><h3>Сюрприз-неявка</h3><p>Напоминаний не отправляем. Клиент сам вспомнит. Или не вспомнит. Интрига.</p></div><span class="tag">в каждом тарифе</span></div>
+    <div class="card"><div><div class="e">🌙</div><h3>Админ — это вы</h3><p>В 23:40, в 01:15, в отпуске и на свадьбе у брата. Директ не спит. Вы тоже.</p></div><span class="tag">бонус: бессонница</span></div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <h2 class="d">Три шага до&nbsp;потери клиента.</h2>
+  <div class="steps">
+    <div class="step"><div class="n">01.</div><h4>Клиент пишет в директ</h4><p>Вечером, когда у него наконец есть время выбрать.</p></div>
+    <div class="step"><div class="n">02.</div><h4>Ждёт до утра</h4><p>Смотрит на «не прочитано». Открывает карты.</p></div>
+    <div class="step"><div class="n">03.</div><h4>Записывается к соседу</h4><p>У соседа кнопка «Записаться». Три касания. Всё.</p></div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="big-quote">
+    <h2 class="d">Клиенты любят скорость.<br>Мы — «уточню и&nbsp;напишу».</h2>
+    <p>Студия «Наверное». С 2019 года теряем записи по-честному, вручную.</p>
+    <p style="margin-top:30px"><button class="btn" data-t="Кнопка не работает. Как и запись. Мы же «Наверное».">Попробовать нашу запись →</button></p>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="real">
+    <div><h3>Узнали себя?</h3>
+    <p>Это сатира, студии «Наверное» не существует. А вот сайт, где клиент записывается сам в 23:40, получает напоминание и не попадает в занятое окно, — существует. Делаем такой под вашу студию за 7–12 дней.</p></div>
+    <a class="btn o" href="https://www.instagram.com/deploy_studio03/">Напишите СТРЕСС — @deploy_studio03</a>
+  </div>
+</section>
+
+<footer><span>© Студия «Наверное». Все записи утеряны.</span><span>Сатирический сайт · сделано в Deploy Studio</span></footer>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const f=n=>n.toLocaleString('ru-RU').replace(/,/g,' ');
+const r1=document.getElementById('r1'),r2=document.getElementById('r2'),r3=document.getElementById('r3');
+function calc(){const a=+r1.value,b=+r2.value,c=+r3.value;
+document.getElementById('v1').textContent=a;document.getElementById('v2').textContent=b;document.getElementById('v3').textContent=f(c);
+document.getElementById('out').textContent='−'+f(Math.round(a*b/100*c*4))+' ₽';}
+[r1,r2,r3].forEach(e=>e.addEventListener('input',calc));calc();
+const t=document.getElementById('toast');let h;
+document.querySelectorAll('[data-t]').forEach(b=>b.addEventListener('click',()=>{t.textContent=b.dataset.t;t.classList.add('on');clearTimeout(h);h=setTimeout(()=>t.classList.remove('on'),2600)}));
+</script>
+</body></html>
