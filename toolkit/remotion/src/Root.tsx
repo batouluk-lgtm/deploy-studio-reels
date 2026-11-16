@@ -1,4 +1,5 @@
 import React from 'react';
+import {R15} from './R15';
 import {Composition, AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig} from 'remotion';
 const Test: React.FC = () => {
   const f = useCurrentFrame(); const {fps} = useVideoConfig();
@@ -7,4 +8,7 @@ const Test: React.FC = () => {
     <div style={{fontFamily: 'Golos Text, sans-serif', fontWeight: 800, fontSize: 178, letterSpacing: '-.055em', color: '#ECE7DD', transform: `scale(${0.8 + 0.2 * s})`, opacity: interpolate(f, [0, 8], [0, 1])}}>deploy<span style={{color: '#FF4A1C'}}>.</span></div>
   </AbsoluteFill>;
 };
-export const Root: React.FC = () => <Composition id="Test" component={Test} durationInFrames={45} fps={30} width={1080} height={1920}/>;
+export const Root: React.FC = () => <>
+  <Composition id="Test" component={Test} durationInFrames={45} fps={30} width={1080} height={1920}/>
+  <Composition id="R15" component={R15} durationInFrames={192} fps={30} width={1080} height={1920}/>
+</>;
