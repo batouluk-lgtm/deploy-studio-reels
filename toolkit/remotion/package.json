@@ -1,0 +1,11 @@
+{
+  "name": "ds-remotion",
+  "private": true,
+  "scripts": {"studio": "remotion studio", "render": "remotion render"},
+  "dependencies": {
+    "remotion": "4.0.544", "@remotion/cli": "4.0.544", "@remotion/motion-blur": "4.0.544",
+    "@remotion/three": "4.0.544", "@react-three/fiber": "^9", "three": "^0.180.0",
+    "react": "^19", "react-dom": "^19", "gsap": "^3"
+  },
+  "devDependencies": {"typescript": "^5", "@types/react": "^19", "@types/three": "^0.180.0"}
+}

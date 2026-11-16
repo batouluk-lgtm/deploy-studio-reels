@@ -4,7 +4,7 @@
 
 **Обязательные для каждого рилса:** motion-art-direction (спека моушн-языка до анимации), beat-sync-editing (склейки в бит, дуга темпа), short-form-video, shot-composition, transitions-dev, kinetic-typography, soundtrack, video-delivery-specs. По задаче: logo-animation, gsap-timeline/gsap-core (GSAP уже лежит в toolkit/vendor), threejs-*, particle-system, shader-glsl, text-message-animation, caption-animation, wrapped-video, ad-creative-video, promo-video, launch-video, design-taste-frontend.
 
-remotion-video и after-effects в облаке не запустить (npm закрыт) — брать из них только приёмы, рендер через lib/render.py.
+remotion-video — рабочий: проект `toolkit/remotion` (Remotion 4.0.544). after-effects — только приёмы.
 
 | навык | репозиторий | путь |
 |---|---|---|
